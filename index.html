@@ -63,9 +63,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 .cols label{display:block;font-size:12.5px;color:var(--ink2);margin-bottom:2px}
 select,input[type=search],textarea,input[type=text]{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:18px 0}
-.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.tile{min-width:0;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
 .tile .l{font-size:13px;color:var(--ink2)}
 .tile .v{font-family:var(--font-display);font-size:26px;line-height:1.3;font-variant-numeric:tabular-nums}
+.tile .v .bn{white-space:normal;overflow-wrap:anywhere}
 .tile .s{font-size:12.5px;color:var(--ink2)}
 .tool{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
 .tool .grow{flex:1 1 240px}
@@ -144,7 +145,7 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 #hist h2{margin:0 0 4px;font-family:var(--font-display);font-size:22px;font-weight:700}
 #hist .sub{margin:0 0 16px;color:var(--ink2);font-size:14px}
 .h-it input.nm{width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-weight:700;font-family:inherit;margin-bottom:6px}
-.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.hgrid{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
 .h-it{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel);display:flex;flex-direction:column;gap:4px;align-items:flex-start}
 .h-it.on{border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
 .h-n{font-weight:700;font-size:16.5px;overflow-wrap:anywhere}
@@ -207,7 +208,9 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   :root{--bg:#fff;--panel:#fff;--panel2:#eef0f2;--line:#c9cdd2;--ink:#111;--ink2:#555;--accent:#c52b22;--good:#1f9d55;--bad:#c62828}
   html,body{background:#fff!important;color:#111!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .shell{display:block}
-  .side,.tool,.file,.files,.tabs,#acct,#hist,.toast,dialog,.drop,.note,.cat .cg,.btn{display:none!important}
+  .side,.tool,.file,.files,.tabs,#acct,.toast,dialog,.drop,.note,.cat .cg,.btn{display:none!important}
+  #hist[hidden]{display:none!important}
+  #hist>:not(.mcmp){display:none!important}
   .main{padding:0;max-width:none}
   .brand{display:block!important;width:140px;margin:0 0 8px}
   .tiles{grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px}
@@ -262,11 +265,20 @@ const store = { get() { try { return localStorage.getItem(KEY); } catch (e) { re
 /* ---------- تطبيع النصوص وقراءة الأرقام ---------- */
 const MARKS = /[ً-ٰٟـ]/g;
 const normAr = s => String(s ?? '').toLowerCase().replace(MARKS, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
-const codeKey = s => { const m = String(s ?? '').toUpperCase().match(/^\s*([A-Z0-9]{5})[-\s]?([A-Z0-9]{5})/); return m ? m[1] + m[2] : normNo(s); };
+/* يستخرج رقم الوكالة (5 خانات - 5 خانات) ولو سبقه اسم ماركة (CTR 48069-06100) أو لحقته رموز أو رقم زائد */
+const oemRaw = v => { const t = String(v ?? '').toUpperCase().replace(/^[\s\u200E\u200F]*[A-Z]{2,5}[-\s_:\/]*(?=\d)/, ''); const m = t.match(/(?<![A-Z0-9])([A-Z0-9]{5})[-\s_]?([A-Z0-9]{5})/); return m && /\d.*\d.*\d/.test(m[1]) && /\d/.test(m[2]) ? m[1] + m[2] : ''; };
+const codeKey = s => oemRaw(s) || normNo(s);
 const headOf = d => (normAr(d).split(/\s+/)[0] || '').replace(/^ال/, '');
 const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'باكم': 'قماش', 'مساعدات': 'مساعد' };
 const CAT_NAME = { 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك' };
-const catOf = d => { const h = headOf(d); return CAT_MAP[h] || h || 'أخرى'; };
+const EN_CAT = { arm: 'مقص', arms: 'مقص', shock: 'مساعد', absorber: 'مساعد', strut: 'مساعد', filter: 'فلتر', pump: 'طرمبه', pad: 'فحمات', pads: 'فحمات', disc: 'دسك', rotor: 'دسك', belt: 'سير', radiator: 'لديتر', starter: 'سلف', alternator: 'دينمو', coil: 'كويل', sensor: 'حساس', fan: 'مروحه', compressor: 'كمبروسر', tensioner: 'شداد', pulley: 'بكره', bush: 'جلبه', bushing: 'جلبه', cylinder: 'سلندر', clutch: 'دسك', screw: 'مسمار', bolt: 'مسمار', gasket: 'جلده', seal: 'جلده' };
+const catOf = d => {
+  const h = headOf(d); if (CAT_MAP[h] || /[\u0600-\u06FF]/.test(h)) return CAT_MAP[h] || h || 'أخرى';
+  for (const w of String(d).toLowerCase().split(/[^a-z]+/)) if (EN_CAT[w]) return EN_CAT[w];
+  return 'أخرى';
+};
+/* رقم الوكالة (تويوتا/نيسان): 5 خانات - 5 خانات، ويُهمل ما بعده من رموز الشركة مثل SSS أو YMC */
+const oemNo = v => { const k = oemRaw(v); return k ? k.slice(0, 5) + '-' + k.slice(5) : ''; };
 const normNo = s => String(s ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 const toks = s => new Set(normAr(s).split(' ').filter(w => w.length > 1));
 const sideOf = s => { const n = normAr(s); return n.includes('يمين') ? 'يمين' : (n.includes('يسار') ? 'يسار' : ''); };
@@ -310,13 +322,15 @@ function guessMap(rows) {
   let bl = 0; for (let c = 0; c < n; c++) { if (c === map.price) continue; const s = stat(c); if (s.num < 0.5 && s.len > bl) { bl = s.len; map.desc = c; } }
   return { hdr: -1, map };
 }
+/* توحيد شكل الحروف: أشكال العرض العربية (ﻓ ﻻ) تتحول لحروفها العادية، وتُحذف علامات الاتجاه الخفية والتطويل */
+const cleanTxt = v => String(v ?? '').normalize('NFKC').replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF\u0640]/g, '').replace(/\s+/g, ' ').trim();
 function itemsOf(f) {
   const m = f.map, out = [];
   for (let i = f.hdr + 1; i < f.rows.length; i++) {
     const r = f.rows[i], g = k => m[k] >= 0 ? (r[m[k]] ?? '') : '';
-    const price = toNum(g('price')), no = String(g('no')).trim(), desc = String(g('desc')).trim();
+    const price = toNum(g('price')), no = cleanTxt(g('no')), desc = cleanTxt(g('desc'));
     if (!(no || desc) || !(price > 0)) continue;
-    out.push({ no, desc: desc || no, brand: String(g('brand')).trim(), price });
+    out.push({ no, desc: desc || no, brand: cleanTxt(g('brand')), price });
   }
   return out;
 }
@@ -399,19 +413,24 @@ async function pdfToRows(buf) {
 }
 
 /* ---------- الحالة ---------- */
-let saved = [], files = [];
+let saved = [], files = [], filesC = [], filesM = [], ctxMine = false;
 try { saved = JSON.parse(store.get() || '[]'); if (!Array.isArray(saved)) saved = []; } catch (e) { saved = []; }
 const PAL = ['#5aa9ff', '#f2b14a', '#b58cff', '#2fc7c0', '#ff7eb6', '#c9d65a', '#ff9166', '#8fa1ff'];
 const colorOf = f => PAL[(f.ci || 0) % PAL.length];
 const sync = () => {
-  /* لون مختلف لكل شركة داخل المقارنة: لا يحجز اللون إلا الملفات الفعّالة */
-  files = saved.filter(f => f.active !== false && !f.mine); const used = new Set(); let ch = false;
-  files.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
-  files.forEach(f => { if (f.ci === -1) { let i = 0; while (used.has(i) && i < PAL.length - 1) i++; f.ci = i; used.add(i); ch = true; } });
+  /* لون مختلف لكل شركة داخل المقارنة: لا يحجز اللون إلا الملفات الفعّالة. ولعروضي مقارنتها الخاصة */
+  filesC = saved.filter(f => f.active !== false && !f.mine); filesM = saved.filter(f => f.active !== false && f.mine); let ch = false;
+  [filesC, filesM].forEach(list => {
+    const used = new Set();
+    list.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
+    list.forEach(f => { if (f.ci === -1) { let i = 0; while (used.has(i) && i < PAL.length - 1) i++; f.ci = i; used.add(i); ch = true; } });
+  });
+  files = ctxMine ? filesM : filesC;
   if (ch) { try { store.set(JSON.stringify(saved)); } catch (e) { } }
 };
 sync();
-const ui = { q: '', sort: 'diff', single: false, paste: false, open: new Set() };
+const uiC = { q: '', sort: 'diff', single: false, paste: false, open: new Set() }, uiM = { q: '', sort: 'diff', single: true, paste: false, open: new Set() };
+let ui = uiC;
 let cloudTouch = () => { };
 const save = () => { store.set(JSON.stringify(saved)); cloudTouch(); };
 
@@ -429,7 +448,8 @@ function viewMine() {
   const list = saved.filter(f => f.mine).sort((a, b) => (b.date || 0) - (a.date || 0));
   return `<h2>عروضي</h2><p class="sub">عروض شركتك الخاصة، مثل عروض أصول. تُحفظ هنا وحدها، ولا تدخل في مقارنة الشركات الموردة. وتظهر على أجهزتك عند تسجيل الدخول بحسابكم.</p>
   <div class="drop mini"><p>أضف عرضاً بصيغة PDF أو Excel أو CSV. يمكنك أيضاً سحب الملفات وإفلاتها في هذه الصفحة.</p><div><button class="btn primary" id="pick-mine">إضافة عرض</button></div></div>
-  ${list.length ? '<div class="hgrid">' + list.map(f => `<div class="h-it on"><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم العرض"><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div><div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`).join('') + '</div>' : '<p class="note">لا توجد عروض بعد. أضف أول عرض لشركتك.</p>'}`;
+  ${list.length ? '<div class="hgrid">' + list.map(f => `<div class="h-it ${f.active !== false ? 'on' : ''}"><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم العرض"><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div>${f.active !== false ? `<span class="chip lo"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${colorOf(f)};margin-inline-end:6px"></i>في المقارنة</span>` : ''}<div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm" data-toggle="${f.id}">${f.active !== false ? 'إزالة من المقارنة' : 'إضافة للمقارنة'}</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`).join('') + '</div>' : '<p class="note">لا توجد عروض بعد. أضف أول عرض لشركتك.</p>'}
+  ${list.length ? `<h2 style="margin-top:30px">مقارنة عروضي</h2><p class="sub">قارن عروضك ببعضها، مثل عرض تويوتا مع عرض نيسان، والأصناف مقسمة إلى أقسام (المقصات والفلاتر وغيرها). اختر العروض التي تريد مقارنتها بزر «إضافة للمقارنة» في بطاقاتها.</p>${filesM.length ? `<div class="mcmp"><div id="res">${viewResults()}</div></div>` : '<p class="note">لا يوجد عرض في المقارنة. أضف عرضاً من البطاقات أعلاه.</p>'}` : ''}`;
 }
 let toastT; const toast = m => { const t = $('#toast'); t.innerHTML = `<span>${esc(m)}</span>`; clearTimeout(toastT); toastT = setTimeout(() => t.innerHTML = '', 2600); };
 
@@ -438,28 +458,34 @@ function build() {
   const groups = [], byNo = new Map(), inv = new Map();
   const reg = g => g.t.forEach(w => { if (!inv.has(w)) inv.set(w, []); inv.get(w).push(g); });
   files.forEach(f => itemsOf(f).forEach(it => {
-    const n = codeKey(it.no); let g = null;
+    const n = codeKey(it.no), ok = oemRaw(it.no); let g = null;
     if (n.length >= 3 && byNo.has(n)) g = byNo.get(n);
     if (!g) {
       const t = toks(it.desc);
       if (t.size >= 2) {
         const cnt = new Map(); t.forEach(w => (inv.get(w) || []).forEach(x => cnt.set(x, (cnt.get(x) || 0) + 1)));
-        const ds = sideOf(it.desc), hd = headOf(it.desc); let bs = 0;
+        const ds = sideOf(it.desc), hd = headOf(it.desc), nm = [...t].filter(w => /\d/.test(w)).sort().join(','); let bs = 0;
         cnt.forEach((inter, x) => {
           if (inter < 2 || x.cells[f.id] || x.head !== hd || (ds && x.side && ds !== x.side)) return;
+          /* أصناف برقمي وكالة مختلفين، أو بسنوات/موديلات مختلفة، هي قطع مختلفة فلا تُدمج بالتشابه */
+          if (ok && x.keys && x.keys.size && !x.keys.has(ok)) return;
+          if (nm && x.nm && nm !== x.nm) return;
           const s = Math.max(inter / (t.size + x.t.size - inter), inter / Math.min(t.size, x.t.size) * 0.8);
           if (s > bs) { bs = s; g = x; }
         });
-        if (bs < 0.6) g = null;
+        if (bs < 0.7) g = null;
       }
     }
-    if (!g) { g = { desc: it.desc, no: it.no, t: toks(it.desc), side: sideOf(it.desc), head: headOf(it.desc), cells: {} }; groups.push(g); reg(g); }
+    if (!g) { g = { desc: it.desc, no: it.no, t: toks(it.desc), side: sideOf(it.desc), head: headOf(it.desc), cells: {}, keys: new Set(), nm: [...toks(it.desc)].filter(w => /\d/.test(w)).sort().join(',') }; groups.push(g); reg(g); }
     if (n.length >= 3 && !byNo.has(n)) byNo.set(n, g);
     if (!g.no && it.no) g.no = it.no;
+    if (ok) g.keys.add(ok);
+    if (it.no) { (g.nos = g.nos || new Set()).add(it.no); if (!g.oem) g.oem = oemNo(it.no); }
     const c = g.cells[f.id]; if (!c || it.price < c.price) g.cells[f.id] = { price: it.price, brand: it.brand };
   }));
   return groups.map(g => {
     const list = Object.entries(g.cells), prices = list.map(([, c]) => c.price);
+    if (g.oem) g.no = g.oem;
     g.count = list.length; g.min = Math.min(...prices); g.max = Math.max(...prices);
     g.diff = g.max - g.min; g.pct = g.min ? g.diff / g.min * 100 : 0;
     g.best = list.filter(([, c]) => c.price === g.min).map(([id]) => id);
@@ -482,7 +508,7 @@ function viewFiles() {
 }
 function resultsData() {
   const q = normAr(ui.q), all = build(), multi = files.length > 1 && !ui.single;
-  let rows = all.filter(g => (!multi || g.count >= 2) && (!q || normAr(g.desc + ' ' + g.no).includes(q)));
+  let rows = all.filter(g => (!multi || g.count >= 2) && (!q || normAr(g.desc + ' ' + g.no + ' ' + [...(g.nos || [])].join(' ')).includes(q)));
   rows.sort({ diff: (a, b) => b.pct - a.pct || b.diff - a.diff, name: (a, b) => a.desc.localeCompare(b.desc, 'ar'), amount: (a, b) => b.diff - a.diff }[ui.sort]);
   return { all, rows, multi };
 }
@@ -506,7 +532,7 @@ function viewResults() {
     }).join('');
     const cls = g.pct >= 30 ? 'hi' : (g.pct >= 10 ? 'mid' : 'lo');
     const names = g.best.map(id => files.find(f => f.id === id)).filter(Boolean).map(f => `<span class="bn" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(f.name)}</span>`).join('');
-    return `<tr><td><div>${esc(g.desc)}</div>${g.no ? `<div class="no">${esc(g.no)}</div>` : ''}</td>${cells}${files.length > 1 ? `<td class="diff">${g.count > 1 ? `<b>${nf.format(g.diff)}</b> <span class="chip ${cls}">${g.pct.toFixed(0)}%</span>` : '<span class="mut">—</span>'}</td><td>${g.count > 1 ? names : '<span class="mut">—</span>'}</td>` : ''}</tr>`;
+    return `<tr><td><div>${esc(g.desc)}</div>${g.no ? `<div class="no"${g.nos && g.nos.size > 1 ? ` title="${esc([...g.nos].join(' | '))}"` : ''}>${esc(g.no)}</div>` : ''}</td>${cells}${files.length > 1 ? `<td class="diff">${g.count > 1 ? `<b>${nf.format(g.diff)}</b> <span class="chip ${cls}">${g.pct.toFixed(0)}%</span>` : '<span class="mut">—</span>'}</td><td>${g.count > 1 ? names : '<span class="mut">—</span>'}</td>` : ''}</tr>`;
   };
   const thead = `<thead><tr><th>الصنف</th>${head}${files.length > 1 ? '<th>الفرق</th><th>الأرخص عند</th>' : ''}</tr></thead>`;
   /* تجميع الأصناف في أقسام: قسم لكل نوع، مغلق افتراضياً */
@@ -527,14 +553,16 @@ function viewResults() {
   <p class="note">لكل شركة لون ثابت، المربع الأخضر بجانب السعر يدل على الأرخص، والمثلث الأحمر على الأغلى، والنسبة بجانب بقية الأسعار هي زيادتها عن الأرخص. اضغط على اسم القسم لفتح جدوله. يُعرض ${rows.length} صنف.</p>` : `<div class="drop mini"><p>${files.length > 1 ? 'لا توجد أصناف مشتركة بين الملفات بهذا البحث. جرّب «إظهار الأصناف الموجودة عند شركة واحدة».' : 'لا توجد أصناف مطابقة.'}</p></div>`}`;
 }
 function render() {
+  ctxMine = page === 'mine'; ui = ctxMine ? uiM : uiC; files = ctxMine ? filesM : filesC;
   const a = document.activeElement, keep = a && a.id === 'q' ? [a.selectionStart, a.selectionEnd] : null;
-  const dz = !files.length
+  const dz = page !== 'compare' ? '' : !files.length
     ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض الأسعار</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
     : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة للمقارنة.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
-  $('#app').innerHTML = dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
-  $('#tabs').innerHTML = `<button data-page="compare" class="${page === 'compare' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${files.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button>`;
+  $('#app').innerHTML = page !== 'compare' ? '' : dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
+  $('#tabs').innerHTML = `<button data-page="compare" class="${page === 'compare' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesC.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button>`;
   $('#app').hidden = page !== 'compare'; $('#hist').hidden = page === 'compare';
-  if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine();
+  if (page === 'compare') $('#hist').innerHTML = '';
+  else if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine();
   renderAcct();
   if (keep) { const q = $('#q'); if (q) { q.focus(); try { q.setSelectionRange(...keep); } catch (e) { } } }
 }
