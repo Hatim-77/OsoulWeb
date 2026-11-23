@@ -62,6 +62,16 @@ button,input,select,textarea{font:inherit;color:inherit}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
 .cols label{display:block;font-size:12.5px;color:var(--ink2);margin-bottom:2px}
 select,input[type=search],textarea,input[type=text]{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.kseg{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;margin:0 0 14px;width:max-content;max-width:100%}
+.kseg button{background:none;border:0;color:var(--ink2);font:inherit;font-weight:700;padding:8px 22px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.kseg button.on{background:var(--accent);color:#fff}
+.kseg .n{font-size:12px;opacity:.85}
+.cat .ct{text-transform:capitalize}
+.sn{display:inline-block;min-width:26px;margin-inline-end:6px;padding:1px 6px;border-radius:6px;background:var(--panel2);color:var(--ink2);font-size:12px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+td.p.has{cursor:pointer}
+#pop{position:fixed;z-index:60;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#pop .btn{white-space:nowrap}
+#offer tr.hl td,#offer tr.hl td:first-child{background:color-mix(in srgb,var(--accent) 28%,var(--panel))!important}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:18px 0}
 .tile{min-width:0;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
 .tile .l{font-size:13px;color:var(--ink2)}
@@ -205,6 +215,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 @media (min-width:1500px){.main{max-width:1500px}}
 @page{size:A4 landscape;margin:9mm}
 @media print{
+  #pop{display:none!important}
+  .kseg{display:none!important}
   :root{--bg:#fff;--panel:#fff;--panel2:#eef0f2;--line:#c9cdd2;--ink:#111;--ink2:#555;--accent:#c52b22;--good:#1f9d55;--bad:#c62828}
   html,body{background:#fff!important;color:#111!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .shell{display:block}
@@ -264,18 +276,30 @@ const store = { get() { try { return localStorage.getItem(KEY); } catch (e) { re
 
 /* ---------- تطبيع النصوص وقراءة الأرقام ---------- */
 const MARKS = /[ً-ٰٟـ]/g;
-const normAr = s => String(s ?? '').toLowerCase().replace(MARKS, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+const normAr = s => String(s ?? '').normalize('NFKC').toLowerCase().replace(MARKS, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
 /* يستخرج رقم الوكالة (5 خانات - 5 خانات) ولو سبقه اسم ماركة (CTR 48069-06100) أو لحقته رموز أو رقم زائد */
-const oemRaw = v => { const t = String(v ?? '').toUpperCase().replace(/^[\s\u200E\u200F]*[A-Z]{2,5}[-\s_:\/]*(?=\d)/, ''); const m = t.match(/(?<![A-Z0-9])([A-Z0-9]{5})[-\s_]?([A-Z0-9]{5})/); return m && /\d.*\d.*\d/.test(m[1]) && /\d/.test(m[2]) ? m[1] + m[2] : ''; };
+const oemRaw = v => {
+  const t = String(v ?? '').toUpperCase().replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[\u2010-\u2015\u2212]/g, '-').replace(/(?<=[A-Z0-9])[.\/](?=[A-Z0-9])/g, '-');
+  for (const x of [t, t.replace(/^[\s\u200E\u200F]*[A-Z]{1,5}[-\s_:\/]*(?=\d)/, '')]) {
+    const m = x.match(/(?<![A-Z0-9])([A-Z0-9]{5})[-\s_]?([A-Z0-9]{5})/);
+    if (m && /\d.*\d.*\d/.test(m[1]) && /\d/.test(m[2])) return m[1] + m[2];
+  }
+  return '';
+};
 const codeKey = s => oemRaw(s) || normNo(s);
 const headOf = d => (normAr(d).split(/\s+/)[0] || '').replace(/^ال/, '');
 const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'باكم': 'قماش', 'مساعدات': 'مساعد' };
 const CAT_NAME = { 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك' };
 const EN_CAT = { arm: 'مقص', arms: 'مقص', shock: 'مساعد', absorber: 'مساعد', strut: 'مساعد', filter: 'فلتر', pump: 'طرمبه', pad: 'فحمات', pads: 'فحمات', disc: 'دسك', rotor: 'دسك', belt: 'سير', radiator: 'لديتر', starter: 'سلف', alternator: 'دينمو', coil: 'كويل', sensor: 'حساس', fan: 'مروحه', compressor: 'كمبروسر', tensioner: 'شداد', pulley: 'بكره', bush: 'جلبه', bushing: 'جلبه', cylinder: 'سلندر', clutch: 'دسك', screw: 'مسمار', bolt: 'مسمار', gasket: 'جلده', seal: 'جلده' };
 const catOf = d => {
-  const h = headOf(d); if (CAT_MAP[h] || /[\u0600-\u06FF]/.test(h)) return CAT_MAP[h] || h || 'أخرى';
-  for (const w of String(d).toLowerCase().split(/[^a-z]+/)) if (EN_CAT[w]) return EN_CAT[w];
-  return 'أخرى';
+  const toks = String(d ?? '').split(/[^\w\u0600-\u06FF]+/).filter(Boolean), h = headOf(d);
+  if (CAT_MAP[h] || CAT_NAME[h]) return CAT_MAP[h] || h;
+  { const pk = Object.keys(CAT_NAME).find(k => k.length >= 3 && h.startsWith(k)); if (pk) return pk; }
+  /* أي كلمة في الوصف تدل على نوع معروف (عربي أو إنجليزي) */
+  for (const w of toks) { const n = normAr(w).replace(/^ال/, ''); if (CAT_MAP[n]) return CAT_MAP[n]; if (CAT_NAME[n]) return n; const e = EN_CAT[n]; if (e) return e; }
+  /* وإلا فأول كلمة حروف فقط (ليست رقماً ولا كوداً) هي اسم القسم كما في العرض */
+  const w = toks.map(x => normAr(x).replace(/^ال/, '')).find(x => x.length >= 3 && !/\d/.test(x));
+  return w || 'أخرى';
 };
 /* رقم الوكالة (تويوتا/نيسان): 5 خانات - 5 خانات، ويُهمل ما بعده من رموز الشركة مثل SSS أو YMC */
 const oemNo = v => { const k = oemRaw(v); return k ? k.slice(0, 5) + '-' + k.slice(5) : ''; };
@@ -324,13 +348,22 @@ function guessMap(rows) {
 }
 /* توحيد شكل الحروف: أشكال العرض العربية (ﻓ ﻻ) تتحول لحروفها العادية، وتُحذف علامات الاتجاه الخفية والتطويل */
 const cleanTxt = v => String(v ?? '').normalize('NFKC').replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF\u0640]/g, '').replace(/\s+/g, ' ').trim();
+/* إصلاح العروض المحفوظة بقراءة قديمة خاطئة: السعر في عمود الرقم، والتسلسل في عمود السعر، والرقم ملتصق بالوصف */
+const fixCache = new WeakMap();
+function repaired(f) {
+  if (fixCache.has(f.rows)) return fixCache.get(f.rows);
+  const rs = f.rows.slice(f.hdr + 1, f.hdr + 13), CODE = /^([A-Za-z]{0,3}\d[A-Za-z0-9]*-[A-Za-z0-9]+)\s+(\S.*)$/;
+  const bad = rs.length >= 3 && rs.filter(r => /^\d+(\.\d+)?$/.test(String(r[0]).trim()) && /^\d{1,5}$/.test(String(r[3]).trim()) && CODE.test(String(r[1]).trim())).length >= rs.length * 0.8;
+  const out = bad ? f.rows.map((r, i) => { if (i <= f.hdr) return r; const m = String(r[1]).trim().match(CODE); return m ? [m[1], m[2], r[2], r[0]] : r; }) : f.rows;
+  fixCache.set(f.rows, out); return out;
+}
 function itemsOf(f) {
-  const m = f.map, out = [];
-  for (let i = f.hdr + 1; i < f.rows.length; i++) {
-    const r = f.rows[i], g = k => m[k] >= 0 ? (r[m[k]] ?? '') : '';
+  const m = f.map, out = [], rows = repaired(f);
+  for (let i = f.hdr + 1; i < rows.length; i++) {
+    const r = rows[i], g = k => m[k] >= 0 ? (r[m[k]] ?? '') : '';
     const price = toNum(g('price')), no = cleanTxt(g('no')), desc = cleanTxt(g('desc'));
     if (!(no || desc) || !(price > 0)) continue;
-    out.push({ no, desc: desc || no, brand: cleanTxt(g('brand')), price });
+    out.push({ no, desc: desc || no, brand: cleanTxt(g('brand')), price, i });
   }
   return out;
 }
@@ -413,35 +446,45 @@ async function pdfToRows(buf) {
 }
 
 /* ---------- الحالة ---------- */
-let saved = [], files = [], filesC = [], filesM = [], ctxMine = false;
+let saved = [], files = [], filesN = [], filesT = [], filesM = [], ctxPage = 'nissan';
 try { saved = JSON.parse(store.get() || '[]'); if (!Array.isArray(saved)) saved = []; } catch (e) { saved = []; }
 const PAL = ['#5aa9ff', '#f2b14a', '#b58cff', '#2fc7c0', '#ff7eb6', '#c9d65a', '#ff9166', '#8fa1ff'];
 const colorOf = f => PAL[(f.ci || 0) % PAL.length];
+/* نوع العرض: نيسان أو تويوتا. العروض القديمة بلا نوع تُصنَّف من كلمات أوصافها */
+const TOY_W = /(تويوتا|هايلكس|كورولا|كرولا|كامري|لاندكروزر|لاند كروزر|بريوس|يارس|افالون|فورتشنر|سيكويا|تاكوما|راف|انوفا|كوستر|هايس|كراون|اف جي|toyota|hilux|corolla|camry|yaris|prado|prius|fortuner)/i, NIS_W = /(نيسان|باترول|صني|التيما|ماكسيما|سنترا|داتسون|ددسن|نافارا|باثفندر|اكستيرا|اورفان|تيدا|قاشقاي|ستيما|nissan|patrol|sunny|altima|maxima|sentra|navara|datsun)/i;
+function guessKind(f) {
+  let t = 0, n = 0; (f.rows || []).slice(0, 4000).forEach(r => { const x = normAr((r || []).join(' ')); if (TOY_W.test(x)) t++; if (NIS_W.test(x)) n++; });
+  return t > n ? 'toyota' : 'nissan';
+}
+saved.forEach(f => { if (!f.mine && f.kind !== 'nissan' && f.kind !== 'toyota') f.kind = guessKind(f); });
 const sync = () => {
-  /* لون مختلف لكل شركة داخل المقارنة: لا يحجز اللون إلا الملفات الفعّالة. ولعروضي مقارنتها الخاصة */
-  filesC = saved.filter(f => f.active !== false && !f.mine); filesM = saved.filter(f => f.active !== false && f.mine); let ch = false;
-  [filesC, filesM].forEach(list => {
+  /* لون مختلف لكل شركة داخل المقارنة: لا يحجز اللون إلا الملفات الفعّالة. ولكل قسم مقارنته الخاصة */
+  const act = f => f.active !== false;
+  filesN = saved.filter(f => act(f) && !f.mine && f.kind !== 'toyota'); filesT = saved.filter(f => act(f) && !f.mine && f.kind === 'toyota'); filesM = saved.filter(f => act(f) && f.mine); let ch = false;
+  [filesN, filesT, filesM].forEach(list => {
     const used = new Set();
     list.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
     list.forEach(f => { if (f.ci === -1) { let i = 0; while (used.has(i) && i < PAL.length - 1) i++; f.ci = i; used.add(i); ch = true; } });
   });
-  files = ctxMine ? filesM : filesC;
+  files = ctxPage === 'mine' ? filesM : ctxPage === 'toyota' ? filesT : filesN;
   if (ch) { try { store.set(JSON.stringify(saved)); } catch (e) { } }
 };
 sync();
-const uiC = { q: '', sort: 'diff', single: false, paste: false, open: new Set() }, uiM = { q: '', sort: 'diff', single: true, paste: false, open: new Set() };
-let ui = uiC;
+const uiN = { q: '', sort: 'diff', single: true, paste: false, open: new Set() }, uiT = { q: '', sort: 'diff', single: true, paste: false, open: new Set() }, uiM = { q: '', sort: 'diff', single: true, paste: false, open: new Set() };
+let ui = uiN;
 let cloudTouch = () => { };
 const save = () => { store.set(JSON.stringify(saved)); cloudTouch(); };
 
 /* ---------- العروض السابقة ---------- */
-let armed = null, armT, page = ['history', 'mine'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'compare';
+let armed = null, armT, page = ['history', 'mine', 'toyota'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan';
+let lastCmp = 'nissan';
+const isCmp = p => p === 'nissan' || p === 'toyota', KIND_AR = { nissan: 'نيسان', toyota: 'تويوتا' };
 function fmtWhen(ts) { if (!ts) return 'تاريخ غير معروف'; const d = new Date(ts), p = n => String(n).padStart(2, '0'); return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}`; }
 function viewHistory() {
   const list = saved.filter(f => !f.mine).sort((a, b) => (b.date || 0) - (a.date || 0));
   return `<h2>العروض السابقة</h2><p class="sub">كل ملف رفعته محفوظ هنا. أضف أي عرض إلى المقارنة أو أزله منها دون حذفه.</p>${list.length ? '<div class="hgrid">' + list.map(f => {
     const on = f.active !== false;
-    return `<div class="h-it ${on ? 'on' : ''}"><div class="h-n">${esc(f.name)}</div><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div>${on ? '<span class="chip lo">في المقارنة</span>' : ''}<div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm" data-toggle="${f.id}">${on ? 'إزالة من المقارنة' : 'إضافة للمقارنة'}</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`;
+    return `<div class="h-it ${on ? 'on' : ''}"><div class="h-n">${esc(f.name)}</div><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div>${on ? '<span class="chip lo">في المقارنة</span>' : ''} <span class="chip">${KIND_AR[f.kind === 'toyota' ? 'toyota' : 'nissan']}</span><div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm" data-toggle="${f.id}">${on ? 'إزالة من المقارنة' : 'إضافة للمقارنة'}</button><button class="btn sm" data-kind="${f.id}">نقل إلى ${f.kind === 'toyota' ? 'نيسان' : 'تويوتا'}</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`;
   }).join('') + '</div>' : '<p class="note">لا توجد عروض محفوظة بعد. كل ملف ترفعه يُحفظ هنا تلقائياً لتعود إليه لاحقاً.</p>'}`;
 }
 function viewMine() {
@@ -458,7 +501,10 @@ function build() {
   const groups = [], byNo = new Map(), inv = new Map();
   const reg = g => g.t.forEach(w => { if (!inv.has(w)) inv.set(w, []); inv.get(w).push(g); });
   files.forEach(f => itemsOf(f).forEach(it => {
-    const n = codeKey(it.no), ok = oemRaw(it.no); let g = null;
+    const ok = oemRaw(it.no); let n = codeKey(it.no);
+    /* رقم ضعيف (قصير أو أرقام فقط، مثل سعر قُرئ خطأً) لا يصلح لدمج صنفين */
+    if (!ok && !(n.length >= 5 && /\d/.test(n) && /[A-Z]/.test(n))) n = '';
+    let g = null;
     if (n.length >= 3 && byNo.has(n)) g = byNo.get(n);
     if (!g) {
       const t = toks(it.desc);
@@ -481,7 +527,7 @@ function build() {
     if (!g.no && it.no) g.no = it.no;
     if (ok) g.keys.add(ok);
     if (it.no) { (g.nos = g.nos || new Set()).add(it.no); if (!g.oem) g.oem = oemNo(it.no); }
-    const c = g.cells[f.id]; if (!c || it.price < c.price) g.cells[f.id] = { price: it.price, brand: it.brand };
+    const c = g.cells[f.id]; if (!c || it.price < c.price) g.cells[f.id] = { price: it.price, brand: it.brand, i: it.i };
   }));
   return groups.map(g => {
     const list = Object.entries(g.cells), prices = list.map(([, c]) => c.price);
@@ -509,8 +555,13 @@ function viewFiles() {
 function resultsData() {
   const q = normAr(ui.q), all = build(), multi = files.length > 1 && !ui.single;
   let rows = all.filter(g => (!multi || g.count >= 2) && (!q || normAr(g.desc + ' ' + g.no + ' ' + [...(g.nos || [])].join(' ')).includes(q)));
-  rows.sort({ diff: (a, b) => b.pct - a.pct || b.diff - a.diff, name: (a, b) => a.desc.localeCompare(b.desc, 'ar'), amount: (a, b) => b.diff - a.diff }[ui.sort]);
+  rows.sort({ diff: (a, b) => (b.count > 1) - (a.count > 1) || b.pct - a.pct || b.diff - a.diff, name: (a, b) => a.desc.localeCompare(b.desc, 'ar'), amount: (a, b) => b.diff - a.diff }[ui.sort]);
   return { all, rows, multi };
+}
+function groupCats(rows) {
+  const cnt = {}; rows.forEach(g => { const k = catOf(g.desc); cnt[k] = (cnt[k] || 0) + 1; });
+  const cats = new Map(); rows.forEach(g => { let k = catOf(g.desc); if (cnt[k] < 3 && !CAT_NAME[k]) k = 'أخرى'; if (!cats.has(k)) cats.set(k, []); cats.get(k).push(g); });
+  return [...cats.entries()].sort((a, b) => (a[0] === 'أخرى') - (b[0] === 'أخرى') || b[1].length - a[1].length);
 }
 function viewResults() {
   if (!files.length) return '';
@@ -524,25 +575,23 @@ function viewResults() {
     <div class="tile"><div class="l">الأرخص في أكثر الأصناف</div><div class="v" style="font-size:20px">${tf ? `<span class="bn" style="--c:${colorOf(tf)}"><span class="dot"></span>${esc(tf.name)}</span>` : '—'}</div><div class="s">${top ? top[1] + ' صنف' : ''}</div></div>
     <div class="tile"><div class="l">متوسط الفرق بين أرخص وأغلى سعر</div><div class="v">${avg.toFixed(0)}%</div><div class="s">نسبة الزيادة عن الأرخص</div></div></div>` : '';
   const head = files.map(f => `<th class="co" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(fileHead(f))}</th>`).join('');
-  const rowHtml = g => {
+  const rowHtml = (g, ix) => {
     const cells = files.map(f => {
       const c = g.cells[f.id]; if (!c) return '<td class="p"><span class="mut">—</span></td>';
       const best = c.price === g.min && g.count > 1;
-      return `<td class="p has ${best ? 'best' : ''}" style="--c:${colorOf(f)}"><b>${nf.format(c.price)}</b>${best ? '<span class="mk sq" title="الأرخص" aria-label="الأرخص"></span>' : ''}${!best && g.count > 1 && c.price === g.max ? '<span class="mk tri" title="الأغلى" aria-label="الأغلى"></span>' : ''}${!best && g.count > 1 ? `<span class="u">+${((c.price - g.min) / g.min * 100).toFixed(0)}%</span>` : ''}<div class="b">${esc(c.brand || '')}</div></td>`;
+      return `<td class="p has ${best ? 'best' : ''}" data-src="${f.id}:${c.i}" style="--c:${colorOf(f)}"><b>${nf.format(c.price)}</b>${best ? '<span class="mk sq" title="الأرخص" aria-label="الأرخص"></span>' : ''}${!best && g.count > 1 && c.price === g.max ? '<span class="mk tri" title="الأغلى" aria-label="الأغلى"></span>' : ''}${!best && g.count > 1 ? `<span class="u">+${((c.price - g.min) / g.min * 100).toFixed(0)}%</span>` : ''}<div class="b">${esc(c.brand || '')}</div></td>`;
     }).join('');
     const cls = g.pct >= 30 ? 'hi' : (g.pct >= 10 ? 'mid' : 'lo');
     const names = g.best.map(id => files.find(f => f.id === id)).filter(Boolean).map(f => `<span class="bn" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(f.name)}</span>`).join('');
-    return `<tr><td><div>${esc(g.desc)}</div>${g.no ? `<div class="no"${g.nos && g.nos.size > 1 ? ` title="${esc([...g.nos].join(' | '))}"` : ''}>${esc(g.no)}</div>` : ''}</td>${cells}${files.length > 1 ? `<td class="diff">${g.count > 1 ? `<b>${nf.format(g.diff)}</b> <span class="chip ${cls}">${g.pct.toFixed(0)}%</span>` : '<span class="mut">—</span>'}</td><td>${g.count > 1 ? names : '<span class="mut">—</span>'}</td>` : ''}</tr>`;
+    return `<tr><td><div><span class="sn">${ix + 1}</span>${esc(g.desc)}</div>${g.no ? `<div class="no"${g.nos && g.nos.size > 1 ? ` title="${esc([...g.nos].join(' | '))}"` : ''}>${esc(g.no)}</div>` : ''}</td>${cells}${files.length > 1 ? `<td class="diff">${g.count > 1 ? `<b>${nf.format(g.diff)}</b> <span class="chip ${cls}">${g.pct.toFixed(0)}%</span>` : '<span class="mut">—</span>'}</td><td>${g.count > 1 ? names : '<span class="mut">—</span>'}</td>` : ''}</tr>`;
   };
   const thead = `<thead><tr><th>الصنف</th>${head}${files.length > 1 ? '<th>الفرق</th><th>الأرخص عند</th>' : ''}</tr></thead>`;
   /* تجميع الأصناف في أقسام: قسم لكل نوع، مغلق افتراضياً */
-  const cnt = {}; rows.forEach(g => { const k = catOf(g.desc); cnt[k] = (cnt[k] || 0) + 1; });
-  const cats = new Map(); rows.forEach(g => { let k = catOf(g.desc); if (cnt[k] < 3 && !CAT_NAME[k]) k = 'أخرى'; if (!cats.has(k)) cats.set(k, []); cats.get(k).push(g); });
-  const order = [...cats.entries()].sort((a, b) => (a[0] === 'أخرى') - (b[0] === 'أخرى') || b[1].length - a[1].length);
+  const order = groupCats(rows);
   const searching = !!ui.q.trim();
   const catHtml = order.map(([k, list]) => {
     const open = searching || ui.open.has(k), common = list.filter(g => g.count > 1).length;
-    return `<div class="cat ${open ? 'open' : ''}"><button class="ch" data-cat="${esc(k)}" aria-expanded="${open}"><span class="ct">${esc(CAT_NAME[k] || (k === 'أخرى' ? 'أصناف أخرى' : k))}</span><span class="cm">${list.length} صنف${files.length > 1 ? ' · ' + common + ' مشترك' : ''}</span><span class="cg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>${open ? `<div class="tw"><table class="${files.length >= 5 ? 'dense' : ''}">${thead}<tbody>${list.map(rowHtml).join('')}</tbody></table></div>` : ''}</div>`;
+    return `<div class="cat ${open ? 'open' : ''}"><button class="ch" data-cat="${esc(k)}" aria-expanded="${open}"><span class="ct">${esc(CAT_NAME[k] || (k === 'أخرى' ? 'أصناف أخرى' : k))}</span><span class="cm">${list.length} صنف</span><span class="cg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>${open ? `<div class="tw"><table class="${files.length >= 5 ? 'dense' : ''}">${thead}<tbody>${list.map(rowHtml).join('')}</tbody></table></div>` : ''}</div>`;
   }).join('');
   return `${tiles}
   <div class="tool"><div class="grow"><input id="q" type="search" placeholder="ابحث باسم الصنف أو رقمه" value="${esc(ui.q)}" aria-label="بحث"></div>
@@ -553,15 +602,16 @@ function viewResults() {
   <p class="note">لكل شركة لون ثابت، المربع الأخضر بجانب السعر يدل على الأرخص، والمثلث الأحمر على الأغلى، والنسبة بجانب بقية الأسعار هي زيادتها عن الأرخص. اضغط على اسم القسم لفتح جدوله. يُعرض ${rows.length} صنف.</p>` : `<div class="drop mini"><p>${files.length > 1 ? 'لا توجد أصناف مشتركة بين الملفات بهذا البحث. جرّب «إظهار الأصناف الموجودة عند شركة واحدة».' : 'لا توجد أصناف مطابقة.'}</p></div>`}`;
 }
 function render() {
-  ctxMine = page === 'mine'; ui = ctxMine ? uiM : uiC; files = ctxMine ? filesM : filesC;
+  if (isCmp(page)) lastCmp = page;
+  ctxPage = page; ui = page === 'mine' ? uiM : page === 'toyota' ? uiT : uiN; files = page === 'mine' ? filesM : page === 'toyota' ? filesT : filesN;
   const a = document.activeElement, keep = a && a.id === 'q' ? [a.selectionStart, a.selectionEnd] : null;
-  const dz = page !== 'compare' ? '' : !files.length
-    ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض الأسعار</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
-    : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة للمقارنة.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
-  $('#app').innerHTML = page !== 'compare' ? '' : dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
-  $('#tabs').innerHTML = `<button data-page="compare" class="${page === 'compare' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesC.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button>`;
-  $('#app').hidden = page !== 'compare'; $('#hist').hidden = page === 'compare';
-  if (page === 'compare') $('#hist').innerHTML = '';
+  const dz = !isCmp(page) ? '' : !files.length
+    ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض ${KIND_AR[page]}</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
+    : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة لمقارنة ${KIND_AR[page]}.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
+  $('#app').innerHTML = !isCmp(page) ? '' : `<div class="kseg" role="tablist">${['nissan', 'toyota'].map(k => `<button data-page="${k}" role="tab" aria-selected="${page === k}" class="${page === k ? 'on' : ''}">${KIND_AR[k]}<span class="n">${(k === 'nissan' ? filesN : filesT).length}</span></button>`).join('')}</div>` + dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
+  $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button>`;
+  $('#app').hidden = !isCmp(page); $('#hist').hidden = isCmp(page);
+  if (isCmp(page)) $('#hist').innerHTML = '';
   else if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine();
   renderAcct();
   if (keep) { const q = $('#q'); if (q) { q.focus(); try { q.setSelectionRange(...keep); } catch (e) { } } }
@@ -593,7 +643,7 @@ async function addFile(file, mine) {
 function addRows(rows, name, sig, mine) {
   rows = rows.filter(r => r.some(x => String(x ?? '').trim() !== '')).slice(0, 20000).map(r => r.map(x => typeof x === 'number' ? x : String(x ?? '')));
   if (!rows.length) { toast('لم أجد بيانات في الملف'); return; }
-  const g = guessMap(rows), id = uid(); sig = sig || headerSig(rows, g.hdr); saved.push({ id, name: mine ? name : (knownName(sig) || name), sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: true, ...(mine ? { mine: true } : {}) }); sync(); save(); render(); return id;
+  const g = guessMap(rows), id = uid(); sig = sig || headerSig(rows, g.hdr); saved.push({ id, name: mine ? name : (knownName(sig) || name), sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: true, ...(mine ? { mine: true } : { kind: page === 'toyota' ? 'toyota' : 'nissan' }) }); sync(); save(); render(); return id;
 }
 const GEN = /^(microsoft|untitled|document|word|pdf|هاتف|جوال|العنوان|الرياض|جدة|الدمام|المملكة|ص\.?\s?ب|سجل|ضريب|فاتورة|الرقم|sheet|ورقة|صفحة|page|عرض|قائمة|كشف|تسعير|اسعار|أسعار|السعر|الصنف|البيان|اسم|رقم|الماركة|الماركه|الكمية|المجموع|تاريخ|شهر|نيسان|تويوتا|nissan|toyota|جدول|ملاحظ)/i;
 const KEYWORD = /(شركة|مؤسسة|معرض|مصنع|مستودع)\s+/;
@@ -620,17 +670,17 @@ function guessCompany(rows, extra, head) {
 async function addFiles(list, mine) { for (const f of list) await addFile(f, mine); }
 
 /* ---------- فتح عرض شركة وحدها ---------- */
-let openId = null;
+let openId = null, focusI = null;
 function fillOffer() {
   const f = saved.find(x => x.id === openId); if (!f) return;
-  const q = normAr($('#of-q').value), all = itemsOf(f), list = q ? all.filter(it => normAr(it.desc + ' ' + it.no + ' ' + (it.brand || '')).includes(q)) : all, LIM = 500;
-  $('#of-b').innerHTML = list.slice(0, LIM).map(it => `<tr><td><span class="no">${esc(it.no || '')}</span></td><td>${esc(it.desc)}</td><td>${esc(it.brand || '')}</td><td class="p"><b>${nf.format(it.price)}</b></td></tr>`).join('') || '<tr><td colspan="4"><span class="mut">لا توجد أصناف مطابقة</span></td></tr>';
+  const q = normAr($('#of-q').value), all = itemsOf(f), list = q ? all.filter(it => normAr(it.desc + ' ' + it.no + ' ' + (it.brand || '')).includes(q)) : all, fp = focusI == null ? -1 : list.findIndex(it => it.i === focusI), LIM = Math.max(5000, fp + 40);
+  $('#of-b').innerHTML = list.slice(0, LIM).map((it, ix) => `<tr${it.i === focusI ? ' class="hl"' : ''}><td><span class="sn">${ix + 1}</span><span class="no">${esc(it.no || '')}</span></td><td>${esc(it.desc)}</td><td>${esc(it.brand || '')}</td><td class="p"><b>${nf.format(it.price)}</b></td></tr>`).join('') || '<tr><td colspan="4"><span class="mut">لا توجد أصناف مطابقة</span></td></tr>';
   $('#of-c').textContent = list.length > LIM ? `يُعرض أول ${LIM} من ${list.length} صنف. استخدم البحث لتضييق النتائج.` : `${list.length} من ${all.length} صنف`;
 }
-function openOffer(id) { const f = saved.find(x => x.id === id); if (!f) return; openId = id; $('#of-t').textContent = f.name; $('#of-q').value = ''; fillOffer(); $('#offer').showModal(); $('#of-b').parentElement.parentElement.scrollTop = 0; }
+function openOffer(id, row) { const f = saved.find(x => x.id === id); if (!f) return; openId = id; focusI = row == null ? null : row; $('#of-t').textContent = f.name; $('#of-q').value = ''; fillOffer(); $('#offer').showModal(); $('#of-b').parentElement.parentElement.scrollTop = 0; if (focusI != null) { const h = $('#of-b tr.hl'); if (h) h.scrollIntoView({ block: 'center' }); } }
 $('#of-x').addEventListener('click', () => $('#offer').close());
 $('#offer').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
-$('#of-q').addEventListener('input', fillOffer);
+$('#of-q').addEventListener('input', () => { focusI = null; fillOffer(); });
 
 /* ---------- المزامنة بين الأجهزة (Supabase) ---------- */
 /* بعد إنشاء مشروع Supabase ضع هنا عنوانه والمفتاح العام (anon). اتركهما فارغين ليعمل الموقع على هذا الجهاز فقط. */
@@ -732,6 +782,25 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) clou
 setInterval(() => { if (!document.hidden) cloud.run(); }, 60000);
 
 /* ---------- الأحداث ---------- */
+/* الضغط على مربع سعر في المقارنة: خيار لعرض الصنف في العرض الأصلي */
+let popEl = null;
+const closePop = () => { if (popEl) { popEl.remove(); popEl = null; } };
+document.addEventListener('click', e => {
+  const cell = e.target.closest('td[data-src]');
+  if (e.target.closest('#pop')) return;
+  closePop();
+  if (!cell) return;
+  const [fid, row] = cell.dataset.src.split(':'), f = saved.find(x => x.id === fid); if (!f) return;
+  popEl = document.createElement('div'); popEl.id = 'pop';
+  popEl.innerHTML = `<button class="btn sm primary" type="button">عرضه في عرض «${esc(f.name)}» الأصلي</button>`;
+  popEl.firstChild.addEventListener('click', () => { closePop(); openOffer(fid, +row); });
+  document.body.appendChild(popEl);
+  const r = cell.getBoundingClientRect(), w = popEl.offsetWidth;
+  popEl.style.top = Math.min(window.innerHeight - 60, r.bottom + 4) + 'px';
+  popEl.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + 'px';
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePop(); });
+window.addEventListener('scroll', closePop, true);
 document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'acct-in') { lgMode(false); $('#login').showModal(); $('#lg-e').focus(); }
@@ -742,7 +811,8 @@ document.addEventListener('click', e => {
   else if (t.id === 'pick-mine') $('#file-mine').click();
   else if (t.id === 'pastebtn') { ui.paste = !ui.paste; render(); }
   else if (t.id === 'padd') { const tx = $('#ptext').value; if (!tx.trim()) { toast('الصق النص أولاً'); return; } ui.paste = false; addRows(parseText(tx), $('#pname').value.trim() || 'شركة ' + (files.length + 1)); }
-  else if (t.id === 'clear') { saved.forEach(f => { f.active = false; }); sync(); save(); render(); }
+  else if (t.id === 'clear') { files.forEach(f => { f.active = false; }); sync(); save(); render(); }
+  else if (t.dataset.kind) { const f = saved.find(x => x.id === t.dataset.kind); if (f) { f.kind = f.kind === 'toyota' ? 'nissan' : 'toyota'; f.ci = undefined; sync(); save(); render(); toast('نُقل العرض إلى ' + KIND_AR[f.kind]); } }
   else if (t.dataset.del || t.dataset.toggle) { const f = saved.find(x => x.id === (t.dataset.del || t.dataset.toggle)); if (f) { f.active = t.dataset.del ? false : f.active === false; sync(); save(); render(); } }
   else if (t.dataset.purge) { const id = t.dataset.purge; if (armed === id) { saved = saved.filter(f => f.id !== id); armed = null; sync(); save(); render(); } else { armed = id; clearTimeout(armT); armT = setTimeout(() => { armed = null; render(); }, 4000); render(); } }
   else if (t.dataset.cat !== undefined) { const k = t.dataset.cat; ui.open.has(k) ? ui.open.delete(k) : ui.open.add(k); refreshResults(); }
@@ -785,8 +855,9 @@ document.addEventListener('change', e => {
 
 function exportTable() {
   const { rows } = resultsData();
-  const head = ['القسم', 'الصنف', 'رقم الصنف', ...files.flatMap(f => [f.name + ' - السعر', f.name + ' - الماركة']), 'الفرق', 'نسبة الفرق %', 'الأرخص عند'];
-  const aoa = [head, ...rows.map(g => { const k = catOf(g.desc); return [CAT_NAME[k] || k, g.desc, g.no || '', ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand || ''] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? Math.round(g.pct * 10) / 10 : '', g.count > 1 ? g.best.map(id => (files.find(f => f.id === id) || {}).name).join('، ') : '']; })];
+  const head = ['القسم', 'م', 'الصنف', 'رقم الصنف', ...files.flatMap(f => [f.name + ' - السعر', f.name + ' - الماركة']), 'الفرق', 'نسبة الفرق %', 'الأرخص عند'];
+  const aoa = [head];
+  groupCats(rows).forEach(([k, list]) => list.forEach((g, i) => aoa.push([CAT_NAME[k] || (k === 'أخرى' ? 'أصناف أخرى' : k), i + 1, g.desc, g.no || '', ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand || ''] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? Math.round(g.pct * 10) / 10 : '', g.count > 1 ? g.best.map(id => (files.find(f => f.id === id) || {}).name).join('، ') : ''])));
   return aoa;
 }
 let printing = false;
@@ -803,13 +874,13 @@ function savePdf() {
 }
 function downloadXlsx() {
   if (!window.XLSX) { toast('تعذر تحميل مكتبة Excel. تأكد من الاتصال بالإنترنت.'); return; }
-  const ws = XLSX.utils.aoa_to_sheet(exportTable()), n = files.length, w = [{ wch: 14 }, { wch: 44 }, { wch: 18 }];
+  const ws = XLSX.utils.aoa_to_sheet(exportTable()), n = files.length, w = [{ wch: 14 }, { wch: 6 }, { wch: 44 }, { wch: 18 }];
   for (let i = 0; i < n; i++) w.push({ wch: 11 }, { wch: 14 }); w.push({ wch: 9 }, { wch: 11 }, { wch: 24 });
   ws['!cols'] = w;
   const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'المقارنة');
   try { XLSX.writeFile(wb, 'مقارنة-الأسعار.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
 }
-window.addEventListener('hashchange', () => { const p = ['history', 'mine'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'compare'; if (p !== page) { page = p; render(); } });
+window.addEventListener('hashchange', () => { const p = ['history', 'mine', 'toyota'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan'; if (p !== page) { page = p; render(); } });
 render();
 cloud.run();
 </script>
