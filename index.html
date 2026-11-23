@@ -143,6 +143,7 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 .tabs button.on .n{background:var(--accent-fill);color:#fff}
 #hist h2{margin:0 0 4px;font-family:var(--font-display);font-size:22px;font-weight:700}
 #hist .sub{margin:0 0 16px;color:var(--ink2);font-size:14px}
+.h-it input.nm{width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-weight:700;font-family:inherit;margin-bottom:6px}
 .hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
 .h-it{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel);display:flex;flex-direction:column;gap:4px;align-items:flex-start}
 .h-it.on{border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
@@ -201,6 +202,29 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 @media (pointer:coarse){.btn,.tabs button,.cat>button.ch{min-height:44px}.btn.sm{min-height:38px}}
 body{padding-bottom:env(safe-area-inset-bottom)}
 @media (min-width:1500px){.main{max-width:1500px}}
+@page{size:A4 landscape;margin:9mm}
+@media print{
+  :root{--bg:#fff;--panel:#fff;--panel2:#eef0f2;--line:#c9cdd2;--ink:#111;--ink2:#555;--accent:#c52b22;--good:#1f9d55;--bad:#c62828}
+  html,body{background:#fff!important;color:#111!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .shell{display:block}
+  .side,.tool,.file,.files,.tabs,#acct,#hist,.toast,dialog,.drop,.note,.cat .cg,.btn{display:none!important}
+  .main{padding:0;max-width:none}
+  .brand{display:block!important;width:140px;margin:0 0 8px}
+  .tiles{grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px}
+  .tile{padding:6px 10px;break-inside:avoid}
+  .cats{gap:10px}
+  .cat{border:0;background:none;break-inside:auto}
+  .cat>button.ch{padding:4px 0;min-height:0;font-size:15px;break-after:avoid}
+  .cat .tw{max-height:none!important;overflow:visible!important;border:1px solid var(--line)!important}
+  table{font-size:11px}
+  th,td{padding:4px 6px!important}
+  th:first-child,td:first-child{position:static!important;box-shadow:none;min-width:0!important;max-width:none!important;width:30%}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  td.p b{font-size:13px!important}
+  .pr-title{display:block!important}
+}
+.pr-title{display:none;font-size:13px;color:#555;margin:0 0 6px}
 </style>
 </head>
 <body>
@@ -220,6 +244,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 <dialog id="login"><div class="h"><b id="lg-t">تسجيل الدخول</b><button class="btn sm" id="lg-x">إغلاق</button></div><div class="b"><div class="seg" role="tablist"><button type="button" id="lg-m-in" class="on">لدي حساب</button><button type="button" id="lg-m-new">حساب جديد</button></div><p class="note" id="lg-h" style="margin:12px 0 0"></p><div id="lg-nm-w"><label for="lg-n">الاسم</label><input id="lg-n" type="text" autocomplete="name" style="direction:rtl"></div><label for="lg-e">البريد الإلكتروني</label><input id="lg-e" type="email" autocomplete="email" inputmode="email"><label for="lg-p">كلمة المرور</label><input id="lg-p" type="password" autocomplete="current-password"><div id="lg-c-w"><label for="lg-c">تأكيد كلمة المرور</label><input id="lg-c" type="password" autocomplete="new-password"></div><div class="err" id="lg-err" role="alert"></div></div><div class="f"><button class="btn primary" id="lg-go">دخول</button></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <input id="file-in" type="file" multiple accept=".pdf,.xlsx,.xls,.xlsm,.csv,.tsv,.txt" style="display:none">
+<input id="file-mine" type="file" multiple accept=".pdf,.xlsx,.xls,.xlsm,.csv,.tsv,.txt" style="display:none">
 
 <script>
 'use strict';
@@ -381,7 +406,7 @@ const PAL = ['#5aa9ff', '#f2b14a', '#b58cff', '#2fc7c0', '#ff7eb6', '#c9d65a', '
 const colorOf = f => PAL[(f.ci || 0) % PAL.length];
 const sync = () => {
   /* لون مختلف لكل شركة داخل المقارنة: لا يحجز اللون إلا الملفات الفعّالة */
-  files = saved.filter(f => f.active !== false); const used = new Set(); let ch = false;
+  files = saved.filter(f => f.active !== false && !f.mine); const used = new Set(); let ch = false;
   files.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
   files.forEach(f => { if (f.ci === -1) { let i = 0; while (used.has(i) && i < PAL.length - 1) i++; f.ci = i; used.add(i); ch = true; } });
   if (ch) { try { store.set(JSON.stringify(saved)); } catch (e) { } }
@@ -392,14 +417,20 @@ let cloudTouch = () => { };
 const save = () => { store.set(JSON.stringify(saved)); cloudTouch(); };
 
 /* ---------- العروض السابقة ---------- */
-let armed = null, armT, page = location.hash.slice(1) === 'history' ? 'history' : 'compare';
+let armed = null, armT, page = ['history', 'mine'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'compare';
 function fmtWhen(ts) { if (!ts) return 'تاريخ غير معروف'; const d = new Date(ts), p = n => String(n).padStart(2, '0'); return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}`; }
 function viewHistory() {
-  const list = saved.slice().sort((a, b) => (b.date || 0) - (a.date || 0));
+  const list = saved.filter(f => !f.mine).sort((a, b) => (b.date || 0) - (a.date || 0));
   return `<h2>العروض السابقة</h2><p class="sub">كل ملف رفعته محفوظ هنا. أضف أي عرض إلى المقارنة أو أزله منها دون حذفه.</p>${list.length ? '<div class="hgrid">' + list.map(f => {
     const on = f.active !== false;
     return `<div class="h-it ${on ? 'on' : ''}"><div class="h-n">${esc(f.name)}</div><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div>${on ? '<span class="chip lo">في المقارنة</span>' : ''}<div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm" data-toggle="${f.id}">${on ? 'إزالة من المقارنة' : 'إضافة للمقارنة'}</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`;
   }).join('') + '</div>' : '<p class="note">لا توجد عروض محفوظة بعد. كل ملف ترفعه يُحفظ هنا تلقائياً لتعود إليه لاحقاً.</p>'}`;
+}
+function viewMine() {
+  const list = saved.filter(f => f.mine).sort((a, b) => (b.date || 0) - (a.date || 0));
+  return `<h2>عروضي</h2><p class="sub">عروض شركتك الخاصة، مثل عروض أصول. تُحفظ هنا وحدها، ولا تدخل في مقارنة الشركات الموردة. وتظهر على أجهزتك عند تسجيل الدخول بحسابكم.</p>
+  <div class="drop mini"><p>أضف عرضاً بصيغة PDF أو Excel أو CSV. يمكنك أيضاً سحب الملفات وإفلاتها في هذه الصفحة.</p><div><button class="btn primary" id="pick-mine">إضافة عرض</button></div></div>
+  ${list.length ? '<div class="hgrid">' + list.map(f => `<div class="h-it on"><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم العرض"><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div><div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`).join('') + '</div>' : '<p class="note">لا توجد عروض بعد. أضف أول عرض لشركتك.</p>'}`;
 }
 let toastT; const toast = m => { const t = $('#toast'); t.innerHTML = `<span>${esc(m)}</span>`; clearTimeout(toastT); toastT = setTimeout(() => t.innerHTML = '', 2600); };
 
@@ -492,7 +523,7 @@ function viewResults() {
   <div class="tool"><div class="grow"><input id="q" type="search" placeholder="ابحث باسم الصنف أو رقمه" value="${esc(ui.q)}" aria-label="بحث"></div>
     ${files.length > 1 ? `<label class="chk"><input type="checkbox" id="single" ${ui.single ? 'checked' : ''}> إظهار الأصناف الموجودة عند شركة واحدة</label>` : ''}
     ${order.length > 1 && !searching ? `<button class="btn" id="catall">${ui.open.size >= order.length ? 'إغلاق كل الأقسام' : 'فتح كل الأقسام'}</button>` : ''}
-    <button class="btn" id="export">نسخ الجدول (CSV)</button></div>
+    <button class="btn" id="export">نسخ للصقه في Excel</button><button class="btn" id="xlsx">تنزيل ملف Excel</button><button class="btn" id="pdf">حفظ PDF</button></div>
   ${rows.length ? `<div class="cats">${catHtml}</div>
   <p class="note">لكل شركة لون ثابت، المربع الأخضر بجانب السعر يدل على الأرخص، والمثلث الأحمر على الأغلى، والنسبة بجانب بقية الأسعار هي زيادتها عن الأرخص. اضغط على اسم القسم لفتح جدوله. يُعرض ${rows.length} صنف.</p>` : `<div class="drop mini"><p>${files.length > 1 ? 'لا توجد أصناف مشتركة بين الملفات بهذا البحث. جرّب «إظهار الأصناف الموجودة عند شركة واحدة».' : 'لا توجد أصناف مطابقة.'}</p></div>`}`;
 }
@@ -502,9 +533,9 @@ function render() {
     ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض الأسعار</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
     : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة للمقارنة.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
   $('#app').innerHTML = dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
-  $('#tabs').innerHTML = `<button data-page="compare" class="${page === 'compare' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${files.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.length}</span></button>`;
-  $('#app').hidden = page === 'history'; $('#hist').hidden = page !== 'history';
-  if (page === 'history') $('#hist').innerHTML = viewHistory();
+  $('#tabs').innerHTML = `<button data-page="compare" class="${page === 'compare' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${files.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button>`;
+  $('#app').hidden = page !== 'compare'; $('#hist').hidden = page === 'compare';
+  if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine();
   renderAcct();
   if (keep) { const q = $('#q'); if (q) { q.focus(); try { q.setSelectionRange(...keep); } catch (e) { } } }
 }
@@ -512,7 +543,7 @@ const pasteBox = () => `<div class="paste"><input type="text" id="pname" placeho
 function refreshResults() { const r = $('#res'); if (r) r.innerHTML = viewResults(); const q = $('#q'); }
 
 /* ---------- إضافة الملفات ---------- */
-async function addFile(file) {
+async function addFile(file, mine) {
   const nm = file.name || 'شركة', base = nm.replace(/\.[^.]+$/, '');
   try {
     const buf = await file.arrayBuffer(); let rows, extra = [], head = [];
@@ -528,14 +559,14 @@ async function addFile(file) {
       let text; try { text = new TextDecoder('utf-8', { fatal: true }).decode(buf); } catch (e) { text = new TextDecoder('windows-1256').decode(buf); }
       rows = parseText(text);
     }
-    const id = addRows(rows, guessCompany(rows, extra, head) || 'شركة ' + (saved.length + 1), rows.sig);
+    const id = addRows(rows, mine ? (base || 'عرضي') : (guessCompany(rows, extra, head) || 'شركة ' + (saved.length + 1)), rows.sig, mine);
     if (id) { const inp = document.querySelector('input[data-name="' + id + '"]'); if (inp) { inp.focus(); inp.select(); } }
   } catch (e) { toast('تعذرت قراءة الملف: ' + nm); }
 }
-function addRows(rows, name, sig) {
+function addRows(rows, name, sig, mine) {
   rows = rows.filter(r => r.some(x => String(x ?? '').trim() !== '')).slice(0, 20000).map(r => r.map(x => typeof x === 'number' ? x : String(x ?? '')));
   if (!rows.length) { toast('لم أجد بيانات في الملف'); return; }
-  const g = guessMap(rows), id = uid(); sig = sig || headerSig(rows, g.hdr); saved.push({ id, name: knownName(sig) || name, sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: true }); sync(); save(); render(); return id;
+  const g = guessMap(rows), id = uid(); sig = sig || headerSig(rows, g.hdr); saved.push({ id, name: mine ? name : (knownName(sig) || name), sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: true, ...(mine ? { mine: true } : {}) }); sync(); save(); render(); return id;
 }
 const GEN = /^(microsoft|untitled|document|word|pdf|هاتف|جوال|العنوان|الرياض|جدة|الدمام|المملكة|ص\.?\s?ب|سجل|ضريب|فاتورة|الرقم|sheet|ورقة|صفحة|page|عرض|قائمة|كشف|تسعير|اسعار|أسعار|السعر|الصنف|البيان|اسم|رقم|الماركة|الماركه|الكمية|المجموع|تاريخ|شهر|نيسان|تويوتا|nissan|toyota|جدول|ملاحظ)/i;
 const KEYWORD = /(شركة|مؤسسة|معرض|مصنع|مستودع)\s+/;
@@ -559,7 +590,7 @@ function guessCompany(rows, extra, head) {
   }
   return '';
 }
-async function addFiles(list) { for (const f of list) await addFile(f); }
+async function addFiles(list, mine) { for (const f of list) await addFile(f, mine); }
 
 /* ---------- فتح عرض شركة وحدها ---------- */
 let openId = null;
@@ -679,8 +710,9 @@ document.addEventListener('click', e => {
   if (t.id === 'acct-in') { lgMode(false); $('#login').showModal(); $('#lg-e').focus(); }
   else if (t.id === 'acct-out') cloud.logout();
   else if (t.dataset.open) openOffer(t.dataset.open);
-  else if (t.dataset.page) { page = t.dataset.page; try { location.hash = page === 'history' ? 'history' : 'compare'; } catch (x) { } render(); window.scrollTo(0, 0); }
+  else if (t.dataset.page) { page = t.dataset.page; try { location.hash = page; } catch (x) { } render(); window.scrollTo(0, 0); }
   else if (t.id === 'pick') $('#file-in').click();
+  else if (t.id === 'pick-mine') $('#file-mine').click();
   else if (t.id === 'pastebtn') { ui.paste = !ui.paste; render(); }
   else if (t.id === 'padd') { const tx = $('#ptext').value; if (!tx.trim()) { toast('الصق النص أولاً'); return; } ui.paste = false; addRows(parseText(tx), $('#pname').value.trim() || 'شركة ' + (files.length + 1)); }
   else if (t.id === 'clear') { saved.forEach(f => { f.active = false; }); sync(); save(); render(); }
@@ -689,13 +721,15 @@ document.addEventListener('click', e => {
   else if (t.dataset.cat !== undefined) { const k = t.dataset.cat; ui.open.has(k) ? ui.open.delete(k) : ui.open.add(k); refreshResults(); }
   else if (t.id === 'catall') { const keys = [...document.querySelectorAll('.cat > button.ch')].map(b => b.dataset.cat); if (ui.open.size >= keys.length) ui.open.clear(); else keys.forEach(k => ui.open.add(k)); refreshResults(); }
   else if (t.id === 'export') exportCsv();
+  else if (t.id === 'xlsx') downloadXlsx();
+  else if (t.id === 'pdf') savePdf();
 });
 /* الكتابة تُحدّث الاسم في الذاكرة فوراً، أما الحفظ وإعادة رسم الجداول فبعد توقف الكتابة (لتبقى الكتابة سلسة) */
 let nameT = null, nameId = null, qT = null;
 function flushName() {
   clearTimeout(nameT); nameT = null; if (!nameId) return;
-  const f = files.find(x => x.id === nameId); nameId = null;
-  if (f) { names.set(f.sig, (f.name || '').trim()); save(); refreshResults(); }
+  const f = saved.find(x => x.id === nameId); nameId = null;
+  if (f) { if (!f.mine) names.set(f.sig, (f.name || '').trim()); save(); f.mine ? render() : refreshResults(); }
 }
 document.addEventListener('input', e => {
   const t = e.target;
@@ -703,7 +737,7 @@ document.addEventListener('input', e => {
     ui.q = t.value; clearTimeout(qT);
     qT = setTimeout(() => { refreshResults(); const q = $('#q'); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 180);
   }
-  else if (t.dataset.name) { const f = files.find(x => x.id === t.dataset.name); if (f) { f.name = t.value; nameId = f.id; clearTimeout(nameT); nameT = setTimeout(flushName, 600); } }
+  else if (t.dataset.name) { const f = saved.find(x => x.id === t.dataset.name); if (f) { f.name = t.value; nameId = f.id; clearTimeout(nameT); nameT = setTimeout(flushName, 600); } }
 });
 document.addEventListener('keydown', e => {
   const t = e.target;
@@ -714,24 +748,62 @@ window.addEventListener('pagehide', flushName);
 document.addEventListener('change', e => {
   const t = e.target;
   if (t.id === 'file-in') { addFiles([...t.files]); t.value = ''; }
+  else if (t.id === 'file-mine') { addFiles([...t.files], true); t.value = ''; }
   else if (t.id === 'sort') { ui.sort = t.value; refreshResults(); }
   else if (t.id === 'single') { ui.single = t.checked; refreshResults(); }
   else if (t.dataset.col) { const [id, k] = t.dataset.col.split(':'), f = files.find(x => x.id === id); if (f) { f.map[k] = +t.value; save(); render(); } }
   else if (t.dataset.hdr) { const f = files.find(x => x.id === t.dataset.hdr); if (f) { f.hdr = +t.value; save(); render(); } }
 });
-['dragover', 'dragenter'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); const d = e.target.closest && e.target.closest('#drop'); if (d) d.classList.add('over'); }));
-['dragleave', 'drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); const d = $('#drop'); if (d) d.classList.remove('over'); if (ev === 'drop' && e.dataTransfer && e.dataTransfer.files.length) addFiles([...e.dataTransfer.files]); }));
+['dragover', 'dragenter'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); const d = e.target.closest && e.target.closest('.drop'); if (d) d.classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); document.querySelectorAll('.drop.over').forEach(d => d.classList.remove('over')); if (ev === 'drop' && e.dataTransfer && e.dataTransfer.files.length) addFiles([...e.dataTransfer.files], page === 'mine'); }));
 
-function exportCsv() {
-  const { rows } = resultsData(), c = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const head = ['الصنف', 'رقم الصنف', ...files.flatMap(f => [f.name + ' - السعر', f.name + ' - الماركة']), 'الفرق', 'نسبة الفرق %', 'الأرخص عند'];
-  const lines = rows.map(g => [g.desc, g.no, ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? g.pct.toFixed(1) : '', g.best.map(id => (files.find(f => f.id === id) || {}).name).join('، ')].map(c).join(','));
-  const text = [head.map(c).join(','), ...lines].join('\r\n');
-  $('#dlg-t').textContent = 'الجدول بصيغة CSV'; $('#dlg-a').value = text; $('#dlg').showModal(); $('#dlg-a').select();
+function exportTable() {
+  const { rows } = resultsData();
+  const head = ['القسم', 'الصنف', 'رقم الصنف', ...files.flatMap(f => [f.name + ' - السعر', f.name + ' - الماركة']), 'الفرق', 'نسبة الفرق %', 'الأرخص عند'];
+  const aoa = [head, ...rows.map(g => { const k = catOf(g.desc); return [CAT_NAME[k] || k, g.desc, g.no || '', ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand || ''] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? Math.round(g.pct * 10) / 10 : '', g.count > 1 ? g.best.map(id => (files.find(f => f.id === id) || {}).name).join('، ') : '']; })];
+  return aoa;
 }
-window.addEventListener('hashchange', () => { const p = location.hash.slice(1) === 'history' ? 'history' : 'compare'; if (p !== page) { page = p; render(); } });
+function exportCsv() {
+  const aoa = exportTable(), clean = v => String(v ?? '').replace(/[\t\r\n]+/g, ' ');
+  $('#dlg-t').textContent = 'الجدول للصقه في Excel أو Google Sheets'; $('#dlg-a').value = aoa.map(r => r.map(clean).join('\t')).join('\r\n'); $('#dlg').showModal(); $('#dlg-a').select();
+}
+let printing = false;
+function savePdf() {
+  if (window.self !== window.top && !/github\.io$/.test(location.hostname)) { toast('الطباعة لا تعمل داخل هذه النافذة. افتح الموقع من رابط GitHub ثم اضغط حفظ PDF.'); return; }
+  if (printing) return; printing = true; setTimeout(() => { printing = false; }, 8000);
+  /* يُطبع ما هو مفتوح من الأقسام؛ فإن لم يُفتح شيء تُفتح كلها مؤقتاً */
+  const keys = [...document.querySelectorAll('.cat > button.ch')].map(b => b.dataset.cat), had = new Set(ui.open), none = !keys.some(k => ui.open.has(k)) && !ui.q.trim();
+  if (none) { keys.forEach(k => ui.open.add(k)); refreshResults(); }
+  const title = document.title; document.title = 'مقارنة الأسعار - ' + new Date().toLocaleDateString('en-CA');
+  const done = () => { printing = false; document.title = title; if (none) { ui.open = had; refreshResults(); } window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة هنا. افتح الموقع من رابط GitHub.'); done(); } }, 150);
+}
+function downloadXlsx() {
+  if (!window.XLSX) { toast('تعذر تحميل مكتبة Excel. تأكد من الاتصال بالإنترنت.'); return; }
+  const ws = XLSX.utils.aoa_to_sheet(exportTable()), n = files.length, w = [{ wch: 14 }, { wch: 44 }, { wch: 18 }];
+  for (let i = 0; i < n; i++) w.push({ wch: 11 }, { wch: 14 }); w.push({ wch: 9 }, { wch: 11 }, { wch: 24 });
+  ws['!cols'] = w;
+  const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'المقارنة');
+  try { XLSX.writeFile(wb, 'مقارنة-الأسعار.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. استخدم زر النسخ ثم الصق في Excel.'); }
+}
+window.addEventListener('hashchange', () => { const p = ['history', 'mine'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'compare'; if (p !== page) { page = p; render(); } });
 $('#dlg-x').addEventListener('click', () => $('#dlg').close());
-$('#dlg-c').addEventListener('click', async () => { const a = $('#dlg-a'); try { await navigator.clipboard.writeText(a.value); toast('تم النسخ، الصقه في Excel'); } catch (e) { a.select(); toast('حدد النص وانسخه يدوياً'); } });
+function exportHtml() {
+  const aoa = exportTable(), n = files.length, esc = v => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const w = [90, 300, 130]; for (let i = 0; i < n; i++) w.push(95, 110); w.push(80, 90, 170);
+  const cols = w.map(x => '<col width="' + x + '" style="width:' + x + 'px">').join('');
+  const body = aoa.map((r, i) => '<tr>' + r.map((v, j) => '<td style="' + (i ? '' : 'font-weight:bold;background:#eeeeee;') + 'padding:4px 8px;white-space:' + (i ? 'nowrap' : 'normal') + ';text-align:' + (typeof v === 'number' ? 'center' : 'right') + '">' + esc(v) + '</td>').join('') + '</tr>').join('');
+  return '<table dir="rtl" style="border-collapse:collapse">' + cols + body + '</table>';
+}
+$('#dlg-c').addEventListener('click', async () => {
+  const a = $('#dlg-a');
+  try {
+    if (window.ClipboardItem) await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([exportHtml()], { type: 'text/html' }), 'text/plain': new Blob([a.value], { type: 'text/plain' }) })]);
+    else await navigator.clipboard.writeText(a.value);
+    toast('تم النسخ. الصقه في Excel أو Google Sheets.');
+  } catch (e) { try { await navigator.clipboard.writeText(a.value); toast('تم النسخ. الصقه في Excel أو Google Sheets.'); } catch (e2) { a.select(); toast('حدد النص وانسخه يدوياً'); } }
+});
 $('#dlg').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
 render();
 cloud.run();
