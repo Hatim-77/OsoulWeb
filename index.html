@@ -239,7 +239,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <section id="hist" aria-label="العروض السابقة" hidden></section>
   </main>
 </div>
-<dialog id="dlg"><div class="h"><b id="dlg-t"></b><button class="btn sm" id="dlg-x">إغلاق</button></div><div class="b"><textarea id="dlg-a" readonly aria-label="النص"></textarea></div><div class="f"><button class="btn primary" id="dlg-c">نسخ</button></div></dialog>
 <dialog id="offer"><div class="h"><b id="of-t"></b><button class="btn sm" id="of-x">إغلاق</button></div><div class="b"><div class="tool"><div class="grow"><input id="of-q" type="search" placeholder="ابحث في هذا العرض باسم الصنف أو رقمه" aria-label="بحث في العرض"></div><span class="note" id="of-c" style="margin:0"></span></div><div class="tw"><table><thead><tr><th>رقم الصنف</th><th>الصنف</th><th>الماركة</th><th>السعر</th></tr></thead><tbody id="of-b"></tbody></table></div></div></dialog>
 <dialog id="login"><div class="h"><b id="lg-t">تسجيل الدخول</b><button class="btn sm" id="lg-x">إغلاق</button></div><div class="b"><div class="seg" role="tablist"><button type="button" id="lg-m-in" class="on">لدي حساب</button><button type="button" id="lg-m-new">حساب جديد</button></div><p class="note" id="lg-h" style="margin:12px 0 0"></p><div id="lg-nm-w"><label for="lg-n">الاسم</label><input id="lg-n" type="text" autocomplete="name" style="direction:rtl"></div><label for="lg-e">البريد الإلكتروني</label><input id="lg-e" type="email" autocomplete="email" inputmode="email"><label for="lg-p">كلمة المرور</label><input id="lg-p" type="password" autocomplete="current-password"><div id="lg-c-w"><label for="lg-c">تأكيد كلمة المرور</label><input id="lg-c" type="password" autocomplete="new-password"></div><div class="err" id="lg-err" role="alert"></div></div><div class="f"><button class="btn primary" id="lg-go">دخول</button></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -523,7 +522,7 @@ function viewResults() {
   <div class="tool"><div class="grow"><input id="q" type="search" placeholder="ابحث باسم الصنف أو رقمه" value="${esc(ui.q)}" aria-label="بحث"></div>
     ${files.length > 1 ? `<label class="chk"><input type="checkbox" id="single" ${ui.single ? 'checked' : ''}> إظهار الأصناف الموجودة عند شركة واحدة</label>` : ''}
     ${order.length > 1 && !searching ? `<button class="btn" id="catall">${ui.open.size >= order.length ? 'إغلاق كل الأقسام' : 'فتح كل الأقسام'}</button>` : ''}
-    <button class="btn" id="export">نسخ للصقه في Excel</button><button class="btn" id="xlsx">تنزيل ملف Excel</button><button class="btn" id="pdf">حفظ PDF</button></div>
+    <button class="btn" id="xlsx">تنزيل ملف Excel</button><button class="btn" id="pdf">حفظ PDF</button></div>
   ${rows.length ? `<div class="cats">${catHtml}</div>
   <p class="note">لكل شركة لون ثابت، المربع الأخضر بجانب السعر يدل على الأرخص، والمثلث الأحمر على الأغلى، والنسبة بجانب بقية الأسعار هي زيادتها عن الأرخص. اضغط على اسم القسم لفتح جدوله. يُعرض ${rows.length} صنف.</p>` : `<div class="drop mini"><p>${files.length > 1 ? 'لا توجد أصناف مشتركة بين الملفات بهذا البحث. جرّب «إظهار الأصناف الموجودة عند شركة واحدة».' : 'لا توجد أصناف مطابقة.'}</p></div>`}`;
 }
@@ -720,7 +719,6 @@ document.addEventListener('click', e => {
   else if (t.dataset.purge) { const id = t.dataset.purge; if (armed === id) { saved = saved.filter(f => f.id !== id); armed = null; sync(); save(); render(); } else { armed = id; clearTimeout(armT); armT = setTimeout(() => { armed = null; render(); }, 4000); render(); } }
   else if (t.dataset.cat !== undefined) { const k = t.dataset.cat; ui.open.has(k) ? ui.open.delete(k) : ui.open.add(k); refreshResults(); }
   else if (t.id === 'catall') { const keys = [...document.querySelectorAll('.cat > button.ch')].map(b => b.dataset.cat); if (ui.open.size >= keys.length) ui.open.clear(); else keys.forEach(k => ui.open.add(k)); refreshResults(); }
-  else if (t.id === 'export') exportCsv();
   else if (t.id === 'xlsx') downloadXlsx();
   else if (t.id === 'pdf') savePdf();
 });
@@ -763,10 +761,6 @@ function exportTable() {
   const aoa = [head, ...rows.map(g => { const k = catOf(g.desc); return [CAT_NAME[k] || k, g.desc, g.no || '', ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand || ''] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? Math.round(g.pct * 10) / 10 : '', g.count > 1 ? g.best.map(id => (files.find(f => f.id === id) || {}).name).join('، ') : '']; })];
   return aoa;
 }
-function exportCsv() {
-  const aoa = exportTable(), clean = v => String(v ?? '').replace(/[\t\r\n]+/g, ' ');
-  $('#dlg-t').textContent = 'الجدول للصقه في Excel أو Google Sheets'; $('#dlg-a').value = aoa.map(r => r.map(clean).join('\t')).join('\r\n'); $('#dlg').showModal(); $('#dlg-a').select();
-}
 let printing = false;
 function savePdf() {
   if (window.self !== window.top && !/github\.io$/.test(location.hostname)) { toast('الطباعة لا تعمل داخل هذه النافذة. افتح الموقع من رابط GitHub ثم اضغط حفظ PDF.'); return; }
@@ -785,26 +779,9 @@ function downloadXlsx() {
   for (let i = 0; i < n; i++) w.push({ wch: 11 }, { wch: 14 }); w.push({ wch: 9 }, { wch: 11 }, { wch: 24 });
   ws['!cols'] = w;
   const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'المقارنة');
-  try { XLSX.writeFile(wb, 'مقارنة-الأسعار.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. استخدم زر النسخ ثم الصق في Excel.'); }
+  try { XLSX.writeFile(wb, 'مقارنة-الأسعار.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
 }
 window.addEventListener('hashchange', () => { const p = ['history', 'mine'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'compare'; if (p !== page) { page = p; render(); } });
-$('#dlg-x').addEventListener('click', () => $('#dlg').close());
-function exportHtml() {
-  const aoa = exportTable(), n = files.length, esc = v => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const w = [90, 300, 130]; for (let i = 0; i < n; i++) w.push(95, 110); w.push(80, 90, 170);
-  const cols = w.map(x => '<col width="' + x + '" style="width:' + x + 'px">').join('');
-  const body = aoa.map((r, i) => '<tr>' + r.map((v, j) => '<td style="' + (i ? '' : 'font-weight:bold;background:#eeeeee;') + 'padding:4px 8px;white-space:' + (i ? 'nowrap' : 'normal') + ';text-align:' + (typeof v === 'number' ? 'center' : 'right') + '">' + esc(v) + '</td>').join('') + '</tr>').join('');
-  return '<table dir="rtl" style="border-collapse:collapse">' + cols + body + '</table>';
-}
-$('#dlg-c').addEventListener('click', async () => {
-  const a = $('#dlg-a');
-  try {
-    if (window.ClipboardItem) await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([exportHtml()], { type: 'text/html' }), 'text/plain': new Blob([a.value], { type: 'text/plain' }) })]);
-    else await navigator.clipboard.writeText(a.value);
-    toast('تم النسخ. الصقه في Excel أو Google Sheets.');
-  } catch (e) { try { await navigator.clipboard.writeText(a.value); toast('تم النسخ. الصقه في Excel أو Google Sheets.'); } catch (e2) { a.select(); toast('حدد النص وانسخه يدوياً'); } }
-});
-$('#dlg').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
 render();
 cloud.run();
 </script>
