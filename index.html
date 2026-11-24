@@ -92,7 +92,7 @@ td.p.has{cursor:pointer}
 .qmeta{grid-template-columns:1fr!important}
 .qh{display:flex;justify-content:space-between;align-items:center;gap:16px}
 .qlg{width:190px}.qlg svg{width:100%;height:auto;display:block}
-.qt{text-align:center;margin:0 0 14px}.qt b{display:block;font-size:14px;font-weight:900;color:#c52b22;line-height:1.3}.qkd{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:7px}.qkd i{height:1px;width:46px;background:linear-gradient(90deg,transparent,#a8221a)}.qkd i:last-child{background:linear-gradient(270deg,transparent,#a8221a)}.qkd.k-nissan i{background:linear-gradient(90deg,transparent,#111)}.qkd.k-nissan i:last-child{background:linear-gradient(270deg,transparent,#111)}
+.qt{text-align:center;margin:0 0 14px}.qt b{display:block;font-size:14px;font-weight:900;color:#c52b22;line-height:1.3}.qkd{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:9px}.qkd i{height:1px;width:46px;background:linear-gradient(90deg,transparent,#a8221a)}.qkd i:last-child{background:linear-gradient(270deg,transparent,#a8221a)}.qkd.k-nissan i{background:linear-gradient(90deg,transparent,#111)}.qkd.k-nissan i:last-child{background:linear-gradient(270deg,transparent,#111)}
 .qkd.k-nissan em{background:#111;border-color:#111;color:#fff}.qkd.k-nissan em small{color:#c3c7cc}
 .qkd.k-mixed i:first-child{background:linear-gradient(90deg,transparent,#111)}.qkd.k-mixed i:last-child{background:linear-gradient(270deg,transparent,#a8221a)}
 .qkd.k-mixed em{background:linear-gradient(90deg,#a8221a 0 50%,#111 50% 100%);border-color:#111}.qkd.k-mixed em small{color:#e4e6e8}
@@ -1017,8 +1017,8 @@ function qPaper() {
   t.sel.forEach(i => { let k = catOf(i.desc); if (cnt[k] < 2 && !CAT_NAME[k]) k = 'أخرى'; if (!grp.has(k)) grp.set(k, []); grp.get(k).push(i); });
   let sn = 0; const rows = [...grp.entries()].sort((x, y) => (x[0] === 'أخرى') - (y[0] === 'أخرى')).map(([k, list]) => `<tr class="qg"><td colspan="${ncol}">${esc(CAT_NAME[k] || k)}</td></tr>` + list.map(i => line(i, ++sn)).join('')).join('') || `<tr><td colspan="${ncol}" class="qc qempty">لا توجد أصناف في العرض بعد</td></tr>`;
   const foot = [co.addr, co.phone && 'هاتف: ' + co.phone, co.email, co.vat && 'الرقم الضريبي: ' + co.vat, co.cr && 'السجل التجاري: ' + co.cr].filter(Boolean).map(esc).join('  •  ');
-  return `<table class="qpg"><thead><tr><td><div class="qh"><div class="qlg">${logo}</div>${qStrip()}</div><div class="qbar"></div></td></tr></thead><tbody><tr><td>
-  <div class="qt"><b>${esc(qTitle())}</b><span>PRICE QUOTATION</span>${qKind() ? `<div class="qkd k-${qKind()}"><i></i><em>${esc(QKIND[qKind()])}<small>${{ nissan: 'NISSAN', toyota: 'TOYOTA', mixed: 'NISSAN &amp; TOYOTA' }[qKind()]}</small></em><i></i></div>` : ''}</div>
+  return `<table class="qpg"><thead><tr><td><div class="qh"><div class="qlg">${logo}</div>${qStrip()}</div><div class="qbar"></div>${qKind() ? `<div class="qkd k-${qKind()}"><i></i><em>${esc(QKIND[qKind()])}<small>${{ nissan: 'NISSAN', toyota: 'TOYOTA', mixed: 'NISSAN &amp; TOYOTA' }[qKind()]}</small></em><i></i></div>` : ''}</td></tr></thead><tbody><tr><td>
+  <div class="qt"><b>${esc(qTitle())}</b><span>PRICE QUOTATION</span></div>
   <div class="qmeta"><div class="qd"><p><span>رقم العرض</span><b>${esc(Q.no || '-')}</b></p><p><span>التاريخ</span><b>${qDate(Q.date)}</b></p>${+Q.valid > 0 ? `<p><span>صالح حتى</span><b>${qDate(qEnd())}</b></p>` : ''}</div></div>
   <table class="qtb"><thead><tr><th class="qc">م</th><th>رقم القطعة</th><th>اسم الصنف</th>${hasBrand ? '<th class="qc">الماركة</th>' : ''}${Q.gen ? '' : '<th class="qc">الكمية</th>'}<th class="qn1">${Q.gen ? 'السعر' : 'سعر الوحدة'}</th>${Q.gen ? '' : '<th class="qn1">الإجمالي</th>'}</tr></thead><tbody>${rows}</tbody></table>
   
