@@ -497,14 +497,21 @@ function viewMine() {
 let toastT; const toast = m => { const t = $('#toast'); t.innerHTML = `<span>${esc(m)}</span>`; clearTimeout(toastT); toastT = setTimeout(() => t.innerHTML = '', 2600); };
 
 /* ---------- جمع الأصناف المتطابقة من كل الملفات ---------- */
+/* بلد الصنع: ياباني/ماليزي/صيني... يُقرأ من الوصف أو عمود الماركة. القطعة اليابانية غير الماليزية فلا تُدمجان */
+const ORIGINS = [['ياباني', /(يابان|japan|\bjpn\b)/], ['ماليزي', /(ماليز|malay)/], ['صيني', /(صين|china|chinese)/], ['كوري', /(كوري|korea)/], ['تايواني', /(تايوان|taiwan)/], ['هندي', /(هندي|هند\b|india)/], ['تايلندي', /(تايلند|thai)/], ['تركي', /(تركي|turk)/], ['اصلي', /(اصلي|اورجنال|original|genuine|oem|وكاله)/]];
+const originOf = it => { const t = normAr((it.brand || '') + ' ' + (it.desc || '')); for (const [k, re] of ORIGINS) if (re.test(t)) return k; return ''; };
+/* الرقم أولاً: رقمان مختلفان يعنيان قطعتين مختلفتين مهما تشابه الاسم. رقم الصنف يطابق الآخر إن كان أحدهما بداية الآخر (لاحقة الشركة) */
+const numSame = (a, b) => { const x = oemRaw(a), y = oemRaw(b); if (x && y) return x === y; const u = normNo(a), v = normNo(b), m = Math.min(u.length, v.length); return m >= 6 && (u.startsWith(v) || v.startsWith(u)); };
+const hasNum = v => { const n = normNo(v); return n.length >= 5 && /\d/.test(n); };
 function build() {
   const groups = [], byNo = new Map(), inv = new Map();
   const reg = g => g.t.forEach(w => { if (!inv.has(w)) inv.set(w, []); inv.get(w).push(g); });
   files.forEach(f => itemsOf(f).forEach(it => {
-    const ok = oemRaw(it.no); let n = codeKey(it.no);
+    const ok = oemRaw(it.no), og = originOf(it); let n = codeKey(it.no);
     /* رقم ضعيف (قصير أو أرقام فقط، مثل سعر قُرئ خطأً) لا يصلح لدمج صنفين */
     if (!ok && !(n.length >= 5 && /\d/.test(n) && /[A-Z]/.test(n))) n = '';
     let g = null;
+    if (n) n += '|' + og;
     if (n.length >= 3 && byNo.has(n)) g = byNo.get(n);
     if (!g) {
       const t = toks(it.desc);
@@ -512,7 +519,7 @@ function build() {
         const cnt = new Map(); t.forEach(w => (inv.get(w) || []).forEach(x => cnt.set(x, (cnt.get(x) || 0) + 1)));
         const ds = sideOf(it.desc), hd = headOf(it.desc), nm = [...t].filter(w => /\d/.test(w)).sort().join(','); let bs = 0;
         cnt.forEach((inter, x) => {
-          if (inter < 2 || x.cells[f.id] || x.head !== hd || (ds && x.side && ds !== x.side)) return;
+          if (inter < 2 || x.cells[f.id] || x.og !== og || (hasNum(it.no) && x.nums.length && !x.nums.some(m => numSame(m, it.no))) || x.head !== hd || (ds && x.side && ds !== x.side)) return;
           /* أصناف برقمي وكالة مختلفين، أو بسنوات/موديلات مختلفة، هي قطع مختلفة فلا تُدمج بالتشابه */
           if (ok && x.keys && x.keys.size && !x.keys.has(ok)) return;
           if (nm && x.nm && nm !== x.nm) return;
@@ -522,16 +529,18 @@ function build() {
         if (bs < 0.7) g = null;
       }
     }
-    if (!g) { g = { desc: it.desc, no: it.no, t: toks(it.desc), side: sideOf(it.desc), head: headOf(it.desc), cells: {}, keys: new Set(), nm: [...toks(it.desc)].filter(w => /\d/.test(w)).sort().join(',') }; groups.push(g); reg(g); }
+    if (!g) { g = { desc: it.desc, no: it.no, t: toks(it.desc), side: sideOf(it.desc), head: headOf(it.desc), cells: {}, og, nums: [], keys: new Set(), nm: [...toks(it.desc)].filter(w => /\d/.test(w)).sort().join(',') }; groups.push(g); reg(g); }
     if (n.length >= 3 && !byNo.has(n)) byNo.set(n, g);
     if (!g.no && it.no) g.no = it.no;
     if (ok) g.keys.add(ok);
+    if (hasNum(it.no) && !g.nums.some(m => numSame(m, it.no))) g.nums.push(it.no);
     if (it.no) { (g.nos = g.nos || new Set()).add(it.no); if (!g.oem) g.oem = oemNo(it.no); }
     const c = g.cells[f.id]; if (!c || it.price < c.price) g.cells[f.id] = { price: it.price, brand: it.brand, i: it.i };
   }));
   return groups.map(g => {
     const list = Object.entries(g.cells), prices = list.map(([, c]) => c.price);
     if (g.oem) g.no = g.oem;
+    if (g.og && !normAr(g.desc).includes(normAr(g.og).slice(0, 4))) g.desc += ' ' + g.og;
     g.count = list.length; g.min = Math.min(...prices); g.max = Math.max(...prices);
     g.diff = g.max - g.min; g.pct = g.min ? g.diff / g.min * 100 : 0;
     g.best = list.filter(([, c]) => c.price === g.min).map(([id]) => id);
