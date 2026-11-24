@@ -1053,7 +1053,7 @@ function qPdf() {
   if (window.self !== window.top && !/github\.io$/.test(location.hostname)) { toast('الطباعة لا تعمل داخل هذه النافذة. افتح الموقع من رابط GitHub ثم اضغط حفظ العرض PDF.'); return; }
   if (!qTotals().sel.length) { toast('أضف صنفاً واحداً على الأقل إلى العرض'); return; }
   qKeep(true);
-  const title = document.title; document.title = qTitle() + ' ' + (Q.no || '') + (Q.cust ? ' - ' + Q.cust : ''); document.body.classList.add('pq');
+  const title = document.title; document.title = qTitle() + (qKind() ? ' - ' + QKIND[qKind()] : '') + ' - ' + (Q.no || ''); document.body.classList.add('pq');
   const done = () => { document.body.classList.remove('pq'); document.title = title; window.removeEventListener('afterprint', done); };
   window.addEventListener('afterprint', done);
   setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة هنا. افتح الموقع من رابط GitHub.'); done(); } }, 150);
