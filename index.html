@@ -92,7 +92,8 @@ td.p.has{cursor:pointer}
 .qmeta{grid-template-columns:1fr!important}
 .qh{display:flex;justify-content:space-between;align-items:center;gap:16px}
 .qlg{width:190px}.qlg svg{width:100%;height:auto;display:block}
-.qt{text-align:center;margin:0 0 14px}.qt b{display:block;font-size:14px;font-weight:900;color:#c52b22;line-height:1.3}.qt span{font-size:9px;letter-spacing:3px;color:#7a7f85;font-weight:700}
+.qt{text-align:center;margin:0 0 14px}.qt b{display:block;font-size:14px;font-weight:900;color:#c52b22;line-height:1.3}.qkd{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:7px}.qkd i{height:1px;width:46px;background:linear-gradient(90deg,transparent,#a8221a)}.qkd i:last-child{background:linear-gradient(270deg,transparent,#a8221a)}.qkd em small{display:block;font-size:7.5px;letter-spacing:1.4px;padding-left:1.4px;font-weight:700;color:#f6d3cf;direction:ltr;text-align:center;line-height:1.2;margin-top:1px;font-family:inherit;text-transform:uppercase}.qkd em{font-style:normal;font-size:10px;font-weight:800;color:#fff;border:1px solid #8f1a14;border-radius:11px;padding:1px 14px 2px;background:#a8221a;text-align:center;line-height:1.25}
+.qt span{font-size:9px;letter-spacing:3px;color:#7a7f85;font-weight:700}
 .qbar{height:4px;background:linear-gradient(90deg,#c52b22,#ec4a40 60%,#f3d4d1);border-radius:2px;margin:18px 0 16px}
 .qmeta{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:10px}
 .qmeta>div{border:1px solid #dfe2e6;border-radius:6px;padding:3px 12px;background:#f7f8f9}
@@ -103,6 +104,7 @@ td.p.has{cursor:pointer}
 .qtb td{padding:6px 8px;border-bottom:1px solid #e6e8eb;vertical-align:top}
 .qtb tbody tr:nth-child(even) td{background:#fafafa}
 .qtb .qc{text-align:center}.qtb .qn1{text-align:center;width:130px;direction:ltr;font-variant-numeric:tabular-nums}.qtb .qno{direction:ltr;text-align:right;color:#555;white-space:nowrap}
+.qtb th:first-child,.qtb td:first-child{width:1%;white-space:nowrap;padding-inline:16px 8px}.qtb th:nth-child(2),.qtb td.qno{width:1%;white-space:nowrap;padding-inline:6px 26px}
 .qempty{padding:20px!important;color:#888}
 .qtot[hidden]{display:none!important}
 .qtot{display:flex;justify-content:flex-start;margin-top:14px;break-inside:avoid}
@@ -993,7 +995,7 @@ function qPaper() {
   let sn = 0; const rows = [...grp.entries()].sort((x, y) => (x[0] === 'أخرى') - (y[0] === 'أخرى')).map(([k, list]) => `<tr class="qg"><td colspan="${ncol}">${esc(CAT_NAME[k] || k)}</td></tr>` + list.map(i => line(i, ++sn)).join('')).join('') || `<tr><td colspan="${ncol}" class="qc qempty">لا توجد أصناف في العرض بعد</td></tr>`;
   const foot = [co.addr, co.phone && 'هاتف: ' + co.phone, co.email, co.vat && 'الرقم الضريبي: ' + co.vat, co.cr && 'السجل التجاري: ' + co.cr].filter(Boolean).map(esc).join('  •  ');
   return `<div class="qh"><div class="qlg">${logo}</div>${qStrip()}</div><div class="qbar"></div>
-  <div class="qt"><b>${esc(qTitle())}</b><span>PRICE QUOTATION</span></div>
+  <div class="qt"><b>${esc(qTitle())}</b><span>PRICE QUOTATION</span>${qKind() ? `<div class="qkd"><i></i><em>${esc(QKIND[qKind()])}<small>${{ nissan: 'NISSAN', toyota: 'TOYOTA', mixed: 'NISSAN &amp; TOYOTA' }[qKind()]}</small></em><i></i></div>` : ''}</div>
   <div class="qmeta"><div class="qd"><p><span>رقم العرض</span><b>${esc(Q.no || '-')}</b></p><p><span>التاريخ</span><b>${qDate(Q.date)}</b></p>${+Q.valid > 0 ? `<p><span>صالح حتى</span><b>${qDate(qEnd())}</b></p>` : ''}</div></div>
   <table class="qtb"><thead><tr><th class="qc">م</th><th>رقم القطعة</th><th>اسم الصنف</th>${hasBrand ? '<th class="qc">الماركة</th>' : ''}${Q.gen ? '' : '<th class="qc">الكمية</th>'}<th class="qn1">${Q.gen ? 'السعر' : 'سعر الوحدة'}</th>${Q.gen ? '' : '<th class="qn1">الإجمالي</th>'}</tr></thead><tbody>${rows}</tbody></table>
   
