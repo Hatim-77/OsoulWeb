@@ -316,7 +316,7 @@ body{max-width:100%}
 .tw{touch-action:pan-x pan-y;overscroll-behavior-x:contain}
 @media (min-width:1500px){.main{max-width:1500px}}
 /* ---------- طباعة الجوال داخل التطبيق ---------- */
-#povl{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(8,9,10,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#povl{display:none}
 #povl .pdlg{max-width:380px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;display:flex;flex-direction:column;gap:10px}
 #povl .pdlg p{margin:0;color:var(--ink2);font-size:14px;line-height:1.8}#povl .pbt{display:flex;gap:8px}#povl .pbt .btn{flex:1}
 #qpp{display:none}
@@ -8913,8 +8913,9 @@ function qPaginate(html) {
       } pg.className = 'qpage fin'; if (qIOS()) pg.style.width = W + 'mm'; const n = document.createElement('div'); n.className = 'pn'; n.textContent = 'صفحة ' + (k + 1) + ' من ' + pages.length; pg.appendChild(n); return pg.outerHTML; });
   } finally { tmp.remove(); document.body.classList.remove('pq'); st.remove(); if (pv) pv.hidden = pvh; }
 }
+let qPrintOff = null;
 function qPrintClose() {
-  window.removeEventListener('afterprint', qPrintClose);
+  window.removeEventListener('afterprint', qPrintClose); if (qPrintOff) { qPrintOff(); qPrintOff = null; }
   const o = document.getElementById('povl'); if (o) o.remove(); const t = document.getElementById('povl-st'); if (t) t.remove();
   document.body.classList.remove('pq', 'povl'); if (typeof qFit === 'function') qFit();
 }
@@ -8925,11 +8926,14 @@ function qPrintHere() {
     if (!pages.length) { if (!qOpenPrintTab()) toast('تعذر تجهيز الطباعة'); return; }
     const st = document.createElement('style'); st.id = 'povl-st'; st.textContent = '@page{size:A4 portrait;margin:0}'; document.head.appendChild(st);
     const o = document.createElement('div'); o.id = 'povl';
-    o.innerHTML = '<div class="pdlg" role="dialog" aria-label="الطباعة"><b>العرض جاهز للطباعة</b><p>إن لم تظهر نافذة الطباعة فاضغط الزر. وعلى الآيفون اختر من نافذة الطباعة زر المشاركة ثم «حفظ في الملفات».</p><div class="pbt"><button type="button" class="btn primary" data-pa="print">طباعة / حفظ PDF</button><button type="button" class="btn" data-pa="close">إغلاق</button></div><button type="button" class="btn link" data-pa="tab">تعذرت الطباعة؟ افتح في صفحة مستقلة</button></div><div id="qpp" class="qpaper" style="--qw:' + qPageW() + 'mm">' + pages.join('') + '</div>';
+    o.innerHTML = '<div id="qpp" class="qpaper" style="--qw:' + qPageW() + 'mm">' + pages.join('') + '</div>';
     document.body.appendChild(o); document.body.classList.add('pq', 'povl');
-    o.addEventListener('click', e => { const a = e.target.closest('[data-pa]'); if (!a) return; const k = a.dataset.pa; if (k === 'close') qPrintClose(); else if (k === 'print') { try { window.print(); } catch (x) { } } else if (k === 'tab') { qPrintClose(); if (!qOpenPrintTab()) toast('اسمح للموقع بفتح النوافذ المنبثقة ثم أعد المحاولة.'); } });
+    /* الصفحات مخفية على الشاشة وتظهر في الطباعة فقط. وتُزال عند انتهاء الطباعة، أو عند أول لمسة بعد إغلاق نافذة الطباعة (الآيفون لا يُبلغ الصفحة بانتهائها) */
+    const evs = ['pointerdown', 'touchstart', 'keydown'], fire = () => qPrintClose();
+    const arm = setTimeout(() => evs.forEach(ev => document.addEventListener(ev, fire, true)), 1500);
+    qPrintOff = () => { clearTimeout(arm); evs.forEach(ev => document.removeEventListener(ev, fire, true)); };
     window.addEventListener('afterprint', qPrintClose);
-    setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة هنا. اضغط «طباعة / حفظ PDF».'); } }, 250);
+    setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة من هنا'); qPrintClose(); } }, 250);
   }, 60);
 }
 function qPrintBoot() {
