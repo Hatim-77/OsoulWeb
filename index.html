@@ -243,7 +243,8 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 #acct .st.bad i{background:var(--bad)}#acct .st.wait i{background:var(--warn)}
 #acct .btn{width:100%}
 #acct .er{direction:ltr;text-align:start;font-size:11.5px;color:var(--bad);overflow-wrap:anywhere}
-#login,#reset{width:min(420px,calc(100% - 20px))}
+#login,#reset,#kw{width:min(420px,calc(100% - 20px))}
+#kw .f{flex-wrap:wrap}#kw .f .btn{flex:1;min-width:140px}#kw p{margin:0;line-height:1.9}
 #login label,#reset label{display:block;font-size:13.5px;color:var(--ink2);margin:10px 0 4px}
 #login input,#reset input{width:100%;direction:ltr;text-align:start;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:15px}
 
@@ -376,6 +377,7 @@ body{max-width:100%}
 </div>
 <dialog id="offer"><div class="h"><b id="of-t"></b><button class="btn sm" id="of-x">إغلاق</button></div><div class="b"><div class="tool"><div class="grow"><input id="of-q" type="search" placeholder="ابحث في هذا العرض باسم الصنف أو رقمه" aria-label="بحث في العرض"></div><span class="note" id="of-c" style="margin:0"></span></div><div class="tw"><table><thead><tr><th>رقم الصنف</th><th>الصنف</th><th>الماركة</th><th>السعر</th></tr></thead><tbody id="of-b"></tbody></table></div></div></dialog>
 <dialog id="login"><div class="h"><b id="lg-t">تسجيل الدخول</b><button class="btn sm" id="lg-x">إغلاق</button></div><div class="b"><div class="seg" role="tablist"><button type="button" id="lg-m-in" class="on">لدي حساب</button><button type="button" id="lg-m-new">حساب جديد</button></div><p class="note" id="lg-h" style="margin:12px 0 0"></p><div id="lg-nm-w"><label for="lg-n">الاسم</label><input id="lg-n" type="text" autocomplete="name" style="direction:rtl"></div><label for="lg-e">البريد الإلكتروني</label><input id="lg-e" type="email" autocomplete="email" inputmode="email"><label for="lg-p">كلمة المرور</label><input id="lg-p" type="password" autocomplete="current-password"><div id="lg-c-w"><label for="lg-c">تأكيد كلمة المرور</label><input id="lg-c" type="password" autocomplete="new-password"></div><button type="button" id="lg-fg">نسيت كلمة المرور؟</button><div class="err" id="lg-err" role="alert"></div></div><div class="f"><button class="btn primary" id="lg-go">دخول</button></div></dialog>
+<dialog id="kw"><div class="h"><b>تنبيه: نوع العرض</b><button class="btn sm" id="kw-x" type="button" aria-label="إلغاء رفع العرض">✕ إلغاء الرفع</button></div><div class="b"><p id="kw-t"></p></div><div class="f"><button class="btn primary" id="kw-mv" type="button">نقله إلى المقارنة الصحيحة</button><button class="btn" id="kw-ok" type="button">إبقاؤه هنا</button></div></dialog>
 <dialog id="reset"><div class="h"><b>تعيين كلمة مرور جديدة</b></div><div class="b"><p class="note" style="margin:0">اكتب كلمة المرور الجديدة مرتين، وبعدها يُسجَّل دخولك تلقائيًا.</p><label for="rs-p">كلمة المرور الجديدة</label><input id="rs-p" type="password" autocomplete="new-password"><label for="rs-c">تأكيد كلمة المرور</label><input id="rs-c" type="password" autocomplete="new-password"><div class="err" id="rs-err" role="alert"></div></div><div class="f"><button class="btn primary" id="rs-go">حفظ كلمة المرور</button></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <button id="totop" class="totop" type="button" aria-label="الصعود إلى أعلى الصفحة" title="إلى أعلى الصفحة" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
@@ -804,8 +806,25 @@ async function addFile(file, mine) {
   const nm = file.name || 'شركة', base = nm.replace(/\.[^.]+$/, ''), r = await fileToRows(file); if (!r) return;
   const { rows, extra, head } = r;
   const id = addRows(rows, mine ? (base || 'عرضي') : (guessCompany(rows, extra, head) || 'شركة ' + (saved.length + 1)), rows.sig, mine);
-  if (id) { const inp = document.querySelector('input[data-name="' + id + '"]'); if (inp) { inp.focus(); inp.select(); } }
+  if (id) { const inp = document.querySelector('input[data-name="' + id + '"]'); if (inp) { inp.focus(); inp.select(); } if (!mine) kindCheck(id, base); }
 }
+/* تنبيه إذا كان العرض المرفوع لنوع غير نوع المقارنة المفتوحة */
+function kindOfItems(its) { let t = 0, n = 0; its.forEach(i => { const x = normAr(String(i.desc || '')); if (TOY_W.test(x)) t++; if (NIS_W.test(x)) n++; });
+  if (t + n < 3) return ''; return Math.min(t, n) / Math.max(t, n) < 0.15 ? (t > n ? 'toyota' : 'nissan') : 'mixed'; }
+let kwId = null;
+function kindCheck(id, base) {
+  const f = saved.find(x => x.id === id); if (!f || f.mine || !f.kind) return;
+  let d = ''; try { d = kindOfItems(itemsOf(f)); } catch (e) { return; }
+  if (!d || d === f.kind) return;
+  kwId = id; const nm = f.name || base || 'العرض', mv = $('#kw-mv');
+  if (d === 'mixed') { $('#kw-t').textContent = 'العرض «' + nm + '» يبدو مختلطًا بين نيسان وتويوتا، وقد رُفع في مقارنة ' + KIND_AR[f.kind] + '. قد تظهر أصناف لا تخص هذه المقارنة.'; mv.hidden = true; }
+  else { $('#kw-t').textContent = 'العرض «' + nm + '» يبدو أنه عرض ' + KIND_AR[d] + '، لكنك رفعته في مقارنة ' + KIND_AR[f.kind] + '. هل تريد نقله إلى مقارنة ' + KIND_AR[d] + '؟'; mv.hidden = false; mv.textContent = 'نقله إلى مقارنة ' + KIND_AR[d]; mv.dataset.k = d; }
+  const dg = $('#kw'); if (!dg.open) dg.showModal();
+}
+$('#kw-ok').addEventListener('click', () => $('#kw').close());
+$('#kw-x').addEventListener('click', () => { const i = saved.findIndex(x => x.id === kwId); $('#kw').close(); if (i >= 0) { saved.splice(i, 1); sync(); save(); render(); toast('أُلغي رفع العرض'); } });
+$('#kw-mv').addEventListener('click', e => { const f = saved.find(x => x.id === kwId), k = e.currentTarget.dataset.k; $('#kw').close();
+  if (f && k) { f.kind = k; page = k; try { location.hash = k; } catch (x) { } sync(); save(); render(); toast('نُقل العرض إلى مقارنة ' + KIND_AR[k]); } });
 function addRows(rows, name, sig, mine) {
   rows = rows.filter(r => r.some(x => String(x ?? '').trim() !== '')).slice(0, 20000).map(r => r.map(x => typeof x === 'number' ? x : String(x ?? '')));
   if (!rows.length) { toast('لم أجد بيانات في الملف'); return; }
