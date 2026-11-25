@@ -328,7 +328,7 @@ body{max-width:100%}
   body.povl>*:not(#povl){display:none!important}
   body.povl #povl{position:static!important;display:block!important;padding:0!important;background:#fff!important;-webkit-backdrop-filter:none;backdrop-filter:none}
   body.povl #povl .pdlg{display:none!important}
-  body.povl #qpp{display:block!important;width:210mm!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;max-width:none!important;transform:none!important;zoom:1!important}
+  body.povl #qpp{display:block!important;width:var(--qw,210mm)!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;max-width:none!important;transform:none!important;zoom:1!important}
   body.povl .qpage{margin:0!important;box-shadow:none!important}
 }
 @page{size:A4 landscape;margin:9mm}
@@ -8878,18 +8878,19 @@ const qIsMobile = () => matchMedia('(pointer:coarse)').matches && !matchMedia('(
 /* الطباعة على الجوال من داخل التطبيق نفسه: تُبنى صفحات A4 (الترويسة والتذييل في كل صفحة) داخل الصفحة الحالية ثم تُفتح نافذة الطباعة مباشرة */
 const QPAGE_CSS = '.qpage{width:210mm;box-sizing:border-box;padding:12mm 12mm 14mm;background:#fff;position:relative;overflow:hidden}';
 /* على الآيفون تُضيف الطباعة هوامش من عندها وتصغّر الصفحة، فنجعل ارتفاع الصفحة أقصر حتى لا يتجاوز ورقة واحدة فتخرج صفحات فارغة */
-const qPageH = () => (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) ? 266 : 296;
+const qIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const qPageH = () => qIOS() ? 234 : 296, qPageW = () => qIOS() ? 180 : 210; /* على الآيفون: عرض أقل من المساحة المطبوعة فلا يصغّر الصفحة، وهوامش داخلية صغيرة */
 function qPrintRules() { const pr = []; for (const sh of document.styleSheets) { try { for (const r of sh.cssRules) if (r.type === 4 && /print/.test(r.media.mediaText)) for (const x of r.cssRules) if (x.type === 1 && !/^body\.pq \.qpaper$/.test(x.selectorText) && !/povl|qpp/.test(x.selectorText)) pr.push(x.cssText); } catch (e) { } } return pr; }
 function qPaginate(html) {
   const st = document.createElement('style'); st.textContent = qPrintRules().join('\n') + QPAGE_CSS; document.head.appendChild(st);
   const pv = document.getElementById('qpaper'), pvh = pv ? pv.hidden : false; if (pv) pv.hidden = true;
   document.body.classList.add('pq');
-  const tmp = document.createElement('div'); tmp.className = 'qpaper'; tmp.style.cssText = 'position:absolute;left:-99999px;top:0;width:210mm;padding:0;background:none;box-shadow:none;max-width:none'; document.body.appendChild(tmp);
+  const tmp = document.createElement('div'); tmp.className = 'qpaper'; tmp.style.cssText = 'position:absolute;left:-99999px;top:0;width:' + qPageW() + 'mm;padding:0;background:none;box-shadow:none;max-width:none'; document.body.appendChild(tmp);
   try {
     const src = document.createElement('div'); src.innerHTML = html; const qpg = src.querySelector('.qpg'); if (!qpg) return [];
     const probe = document.createElement('div'); probe.style.cssText = 'width:100mm;height:1px'; tmp.appendChild(probe); const mm = probe.offsetWidth / 100; tmp.removeChild(probe);
     const isHead = r => r.classList.contains('qg') || r.classList.contains('qb'), H = qPageH(), LIM = (H - 5) * mm, rows = [...qpg.querySelector('.qtb tbody').children], pages = [];
-    const mk = (list, last) => { const pg = document.createElement('div'); pg.className = 'qpage'; const c = qpg.cloneNode(true), tb = c.querySelector('.qtb tbody'); tb.innerHTML = ''; list.forEach(r => tb.appendChild(r.cloneNode(true))); const sg = c.querySelector('.qs'); if (sg && !last) sg.remove(); pg.appendChild(c); return pg; };
+    const W = qPageW(), mk = (list, last) => { const pg = document.createElement('div'); pg.className = 'qpage'; if (qIOS()) pg.style.cssText = 'width:' + W + 'mm;padding:5mm 3mm 5mm'; const c = qpg.cloneNode(true), tb = c.querySelector('.qtb tbody'); tb.innerHTML = ''; list.forEach(r => tb.appendChild(r.cloneNode(true))); const sg = c.querySelector('.qs'); if (sg && !last) sg.remove(); pg.appendChild(c); return pg; };
     let i = 0;
     while (i < rows.length) {
       const pg = mk([], false), tb = pg.querySelector('.qtb tbody'), list = []; tmp.appendChild(pg);
@@ -8903,7 +8904,7 @@ function qPaginate(html) {
       if (!ov || pages[li].length < 2) break;
       const mv = [pages[li].pop()]; while (pages[li].length > 1 && isHead(pages[li][pages[li].length - 1])) mv.unshift(pages[li].pop()); pages.push(mv);
     }
-    return pages.map((l, k) => { const pg = mk(l, k === pages.length - 1); pg.className = 'qpage fin'; pg.style.height = H + 'mm'; const n = document.createElement('div'); n.className = 'pn'; n.textContent = 'صفحة ' + (k + 1) + ' من ' + pages.length; pg.appendChild(n); return pg.outerHTML; });
+    return pages.map((l, k) => { const pg = mk(l, k === pages.length - 1); pg.className = 'qpage fin'; pg.style.height = H + 'mm'; if (qIOS()) pg.style.width = W + 'mm'; const n = document.createElement('div'); n.className = 'pn'; n.textContent = 'صفحة ' + (k + 1) + ' من ' + pages.length; pg.appendChild(n); return pg.outerHTML; });
   } finally { tmp.remove(); document.body.classList.remove('pq'); st.remove(); if (pv) pv.hidden = pvh; }
 }
 function qPrintClose() {
@@ -8918,7 +8919,7 @@ function qPrintHere() {
     if (!pages.length) { if (!qOpenPrintTab()) toast('تعذر تجهيز الطباعة'); return; }
     const st = document.createElement('style'); st.id = 'povl-st'; st.textContent = '@page{size:A4 portrait;margin:0}'; document.head.appendChild(st);
     const o = document.createElement('div'); o.id = 'povl';
-    o.innerHTML = '<div class="pdlg" role="dialog" aria-label="الطباعة"><b>العرض جاهز للطباعة</b><p>إن لم تظهر نافذة الطباعة فاضغط الزر. وعلى الآيفون اختر من نافذة الطباعة زر المشاركة ثم «حفظ في الملفات».</p><div class="pbt"><button type="button" class="btn primary" data-pa="print">طباعة / حفظ PDF</button><button type="button" class="btn" data-pa="close">إغلاق</button></div><button type="button" class="btn link" data-pa="tab">تعذرت الطباعة؟ افتح في صفحة مستقلة</button></div><div id="qpp" class="qpaper">' + pages.join('') + '</div>';
+    o.innerHTML = '<div class="pdlg" role="dialog" aria-label="الطباعة"><b>العرض جاهز للطباعة</b><p>إن لم تظهر نافذة الطباعة فاضغط الزر. وعلى الآيفون اختر من نافذة الطباعة زر المشاركة ثم «حفظ في الملفات».</p><div class="pbt"><button type="button" class="btn primary" data-pa="print">طباعة / حفظ PDF</button><button type="button" class="btn" data-pa="close">إغلاق</button></div><button type="button" class="btn link" data-pa="tab">تعذرت الطباعة؟ افتح في صفحة مستقلة</button></div><div id="qpp" class="qpaper" style="--qw:' + qPageW() + 'mm">' + pages.join('') + '</div>';
     document.body.appendChild(o); document.body.classList.add('pq', 'povl');
     o.addEventListener('click', e => { const a = e.target.closest('[data-pa]'); if (!a) return; const k = a.dataset.pa; if (k === 'close') qPrintClose(); else if (k === 'print') { try { window.print(); } catch (x) { } } else if (k === 'tab') { qPrintClose(); if (!qOpenPrintTab()) toast('اسمح للموقع بفتح النوافذ المنبثقة ثم أعد المحاولة.'); } });
     window.addEventListener('afterprint', qPrintClose);
