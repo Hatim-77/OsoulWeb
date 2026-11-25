@@ -8878,7 +8878,7 @@ const qIsMobile = () => matchMedia('(pointer:coarse)').matches && !matchMedia('(
 /* الطباعة على الجوال من داخل التطبيق نفسه: تُبنى صفحات A4 (الترويسة والتذييل في كل صفحة) داخل الصفحة الحالية ثم تُفتح نافذة الطباعة مباشرة */
 const QPAGE_CSS = '.qpage{width:210mm;box-sizing:border-box;padding:12mm 12mm 14mm;background:#fff;position:relative;overflow:hidden}';
 /* على الآيفون تُضيف الطباعة هوامش من عندها وتصغّر الصفحة، فنجعل ارتفاع الصفحة أقصر حتى لا يتجاوز ورقة واحدة فتخرج صفحات فارغة */
-const qPageH = () => (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) ? 238 : 296;
+const qPageH = () => (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) ? 266 : 296;
 function qPrintRules() { const pr = []; for (const sh of document.styleSheets) { try { for (const r of sh.cssRules) if (r.type === 4 && /print/.test(r.media.mediaText)) for (const x of r.cssRules) if (x.type === 1 && !/^body\.pq \.qpaper$/.test(x.selectorText) && !/povl|qpp/.test(x.selectorText)) pr.push(x.cssText); } catch (e) { } } return pr; }
 function qPaginate(html) {
   const st = document.createElement('style'); st.textContent = qPrintRules().join('\n') + QPAGE_CSS; document.head.appendChild(st);
