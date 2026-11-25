@@ -243,9 +243,9 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 #acct .st.bad i{background:var(--bad)}#acct .st.wait i{background:var(--warn)}
 #acct .btn{width:100%}
 #acct .er{direction:ltr;text-align:start;font-size:11.5px;color:var(--bad);overflow-wrap:anywhere}
-#login{width:min(420px,calc(100% - 20px))}
-#login label{display:block;font-size:13.5px;color:var(--ink2);margin:10px 0 4px}
-#login input{width:100%;direction:ltr;text-align:start;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:15px}
+#login,#reset{width:min(420px,calc(100% - 20px))}
+#login label,#reset label{display:block;font-size:13.5px;color:var(--ink2);margin:10px 0 4px}
+#login input,#reset input{width:100%;direction:ltr;text-align:start;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:15px}
 
 /* شاشة الافتتاح: ثابتة بلا حركة، بشعار العروض نفسه */
 #intro{position:fixed;inset:0;z-index:99999;background:var(--bg,#0e0f10);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .55s ease}
@@ -263,14 +263,16 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 #intro .i2{height:2px;width:min(240px,60%);margin:8px auto 10px;background:linear-gradient(90deg,transparent,#d63a33,transparent)}
 #intro .i3{font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-weight:800;font-size:clamp(12px,2.1vw,20px);letter-spacing:.24em;color:#d63a33;white-space:nowrap;direction:ltr}
 #lg-x[hidden]{display:none}
-#login.gate::backdrop{background:#0b0b0c}
-#login input:focus{outline:2px solid var(--accent);outline-offset:1px}
-#login .err{color:var(--bad);font-size:13.5px;min-height:20px;margin-top:10px}
-#login .f{flex-wrap:wrap}
-#login .seg{display:flex;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:3px}
-#login .seg button{flex:1;border:0;background:transparent;color:var(--ink2);padding:8px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:14px}
-#login .seg button.on{background:var(--accent-fill);color:#fff;font-weight:700}
-#login .f .btn{width:100%}
+#login.gate::backdrop,#reset.gate::backdrop{background:#0b0b0c}
+#lg-fg{border:0;background:transparent;color:var(--accent,#ec4a40);padding:6px 0;margin-top:6px;cursor:pointer;font-family:inherit;font-size:13.5px;text-decoration:underline}
+#lg-fg[hidden]{display:none}
+#login input:focus,#reset input:focus{outline:2px solid var(--accent);outline-offset:1px}
+#login .err,#reset .err{color:var(--bad);font-size:13.5px;min-height:20px;margin-top:10px}
+#login .f,#reset .f{flex-wrap:wrap}
+#login .seg,#reset .seg{display:flex;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:3px}
+#login .seg button,#reset .seg button{flex:1;border:0;background:transparent;color:var(--ink2);padding:8px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:14px}
+#login .seg button.on,#reset .seg button.on{background:var(--accent-fill);color:#fff;font-weight:700}
+#login .f .btn,#reset .f .btn{width:100%}
 #acct .nm{color:var(--ink);font-weight:700;font-size:14px;overflow-wrap:anywhere}
 @media (max-width:820px){#acct{margin-top:0;flex-direction:row;align-items:center;flex-wrap:wrap;padding:6px 10px;gap:8px}#acct .btn{width:auto}#acct .em{display:none}}
 @media (max-width:640px){
@@ -367,7 +369,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   </main>
 </div>
 <dialog id="offer"><div class="h"><b id="of-t"></b><button class="btn sm" id="of-x">إغلاق</button></div><div class="b"><div class="tool"><div class="grow"><input id="of-q" type="search" placeholder="ابحث في هذا العرض باسم الصنف أو رقمه" aria-label="بحث في العرض"></div><span class="note" id="of-c" style="margin:0"></span></div><div class="tw"><table><thead><tr><th>رقم الصنف</th><th>الصنف</th><th>الماركة</th><th>السعر</th></tr></thead><tbody id="of-b"></tbody></table></div></div></dialog>
-<dialog id="login"><div class="h"><b id="lg-t">تسجيل الدخول</b><button class="btn sm" id="lg-x">إغلاق</button></div><div class="b"><div class="seg" role="tablist"><button type="button" id="lg-m-in" class="on">لدي حساب</button><button type="button" id="lg-m-new">حساب جديد</button></div><p class="note" id="lg-h" style="margin:12px 0 0"></p><div id="lg-nm-w"><label for="lg-n">الاسم</label><input id="lg-n" type="text" autocomplete="name" style="direction:rtl"></div><label for="lg-e">البريد الإلكتروني</label><input id="lg-e" type="email" autocomplete="email" inputmode="email"><label for="lg-p">كلمة المرور</label><input id="lg-p" type="password" autocomplete="current-password"><div id="lg-c-w"><label for="lg-c">تأكيد كلمة المرور</label><input id="lg-c" type="password" autocomplete="new-password"></div><div class="err" id="lg-err" role="alert"></div></div><div class="f"><button class="btn primary" id="lg-go">دخول</button></div></dialog>
+<dialog id="login"><div class="h"><b id="lg-t">تسجيل الدخول</b><button class="btn sm" id="lg-x">إغلاق</button></div><div class="b"><div class="seg" role="tablist"><button type="button" id="lg-m-in" class="on">لدي حساب</button><button type="button" id="lg-m-new">حساب جديد</button></div><p class="note" id="lg-h" style="margin:12px 0 0"></p><div id="lg-nm-w"><label for="lg-n">الاسم</label><input id="lg-n" type="text" autocomplete="name" style="direction:rtl"></div><label for="lg-e">البريد الإلكتروني</label><input id="lg-e" type="email" autocomplete="email" inputmode="email"><label for="lg-p">كلمة المرور</label><input id="lg-p" type="password" autocomplete="current-password"><div id="lg-c-w"><label for="lg-c">تأكيد كلمة المرور</label><input id="lg-c" type="password" autocomplete="new-password"></div><button type="button" id="lg-fg">نسيت كلمة المرور؟</button><div class="err" id="lg-err" role="alert"></div></div><div class="f"><button class="btn primary" id="lg-go">دخول</button></div></dialog>
+<dialog id="reset"><div class="h"><b>تعيين كلمة مرور جديدة</b></div><div class="b"><p class="note" style="margin:0">اكتب كلمة المرور الجديدة مرتين، وبعدها يُسجَّل دخولك تلقائيًا.</p><label for="rs-p">كلمة المرور الجديدة</label><input id="rs-p" type="password" autocomplete="new-password"><label for="rs-c">تأكيد كلمة المرور</label><input id="rs-c" type="password" autocomplete="new-password"><div class="err" id="rs-err" role="alert"></div></div><div class="f"><button class="btn primary" id="rs-go">حفظ كلمة المرور</button></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <button id="totop" class="totop" type="button" aria-label="الصعود إلى أعلى الصفحة" title="إلى أعلى الصفحة" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <input id="file-in" type="file" multiple accept=".pdf,.xlsx,.xls,.xlsm,.csv,.tsv,.txt" style="display:none">
@@ -902,6 +905,14 @@ const cloud = {
     store.set(JSON.stringify(saved)); this.persist();
   }
 };
+/* استعادة كلمة المرور: يصل المستخدم من رابط البريد وفي عنوانه رمز مؤقت */
+let recov = null, recovErr = '';
+(() => { const h = location.hash; if (!/access_token|error/.test(h)) return;
+  const p = new URLSearchParams(h.slice(1));
+  if (p.get('type') === 'recovery' && p.get('access_token')) recov = { access_token: p.get('access_token'), refresh_token: p.get('refresh_token') || '', expires_in: +p.get('expires_in') || 3600 };
+  else if (p.get('error')) recovErr = 'انتهت صلاحية رابط الاستعادة أو استُخدم من قبل. اطلب رابطًا جديدًا.';
+  else return;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { } })();
 cloud.init(); cloudTouch = () => cloud.touch();
 /* الدخول إلزامي: لا يظهر التطبيق قبل تسجيل الدخول */
 /* القفل يعمل في الموقع المنشور على GitHub فقط، أما المعاينات (مثل الأرتيفاكت) فلا تصل إلى قاعدة البيانات فلا تُقفل */
@@ -915,7 +926,9 @@ function endIntro() {
 (() => { const el = document.getElementById('intro'); if (!el) return; el.addEventListener('click', endIntro); setTimeout(endIntro, 3800); })();
 function gate() {
   if (introOn) return;
+  if (recov) { const r = $('#reset'); if (r) { r.classList.add('gate'); if (!r.open) r.showModal(); } return; }
   const d = $('#login'); if (!d) return;
+  if (recovErr && !d.open) { const m = recovErr; recovErr = ''; lgMode(false); d.showModal(); $('#lg-err').textContent = m; return; }
   if (needLogin()) { d.classList.add('gate'); $('#lg-x').hidden = true; if (!d.open) { lgMode(lgNew); d.showModal(); } }
   else { d.classList.remove('gate'); $('#lg-x').hidden = false; }
 }
@@ -930,7 +943,7 @@ const lgMsg = m => (/invalid login|invalid_credentials/i.test(m) ? 'البريد
 let lgNew = false;
 function lgMode(n) {
   lgNew = n; $('#lg-m-in').classList.toggle('on', !n); $('#lg-m-new').classList.toggle('on', n);
-  $('#lg-nm-w').hidden = $('#lg-c-w').hidden = !n; $('#lg-t').textContent = n ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+  $('#lg-nm-w').hidden = $('#lg-c-w').hidden = !n; $('#lg-fg').hidden = n; $('#lg-t').textContent = n ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
   $('#lg-go').textContent = n ? 'إنشاء الحساب' : 'دخول'; $('#lg-p').autocomplete = n ? 'new-password' : 'current-password'; $('#lg-err').textContent = '';
   $('#lg-h').textContent = n ? 'سيُنشأ حساب جديد بهذا البريد. اكتب كلمة المرور مرتين للتأكد منها.' : needLogin() ? 'سجّل الدخول للمتابعة إلى «أصول القطع».' : 'سجّل الدخول بالحساب نفسه على كل أجهزتك لتظهر عروضك المحفوظة في كل مكان.';
 }
@@ -953,6 +966,33 @@ $('#login').addEventListener('close', () => { if (needLogin()) setTimeout(gate, 
 $('#lg-m-in').addEventListener('click', () => lgMode(false));
 $('#lg-m-new').addEventListener('click', () => lgMode(true));
 $('#lg-go').addEventListener('click', doLogin);
+$('#lg-fg').addEventListener('click', async () => {
+  const e = $('#lg-e').value.trim(), er = $('#lg-err'); er.textContent = '';
+  if (!e) { er.textContent = 'اكتب بريدك الإلكتروني أولًا ثم اضغط «نسيت كلمة المرور».'; $('#lg-e').focus(); return; }
+  $('#lg-fg').disabled = true;
+  try { await cloud.http('/auth/v1/recover?redirect_to=' + encodeURIComponent(location.origin + location.pathname), { method: 'POST', body: JSON.stringify({ email: e }) }, false);
+    $('#lg-h').textContent = 'إن كان هذا البريد مسجّلًا فقد أُرسل إليه رابط لتعيين كلمة مرور جديدة. افتح الرسالة واضغط الرابط (وتحقق من البريد غير الهام).'; }
+  catch (x) { er.textContent = /rate|seconds|many/i.test(String(x.message)) ? 'طُلب رابط قبل قليل. انتظر دقيقة ثم أعد المحاولة.' : 'تعذر إرسال الرابط. تحقق من البريد والاتصال ثم أعد المحاولة.'; }
+  $('#lg-fg').disabled = false;
+});
+async function doReset() {
+  const p = $('#rs-p').value, er = $('#rs-err'); er.textContent = ''; if (!recov) return;
+  if (p.length < 6) { er.textContent = 'كلمة المرور ضعيفة، استخدم 6 أحرف على الأقل.'; return; }
+  if (p !== $('#rs-c').value) { er.textContent = 'كلمتا المرور غير متطابقتين.'; return; }
+  $('#rs-go').disabled = true;
+  try {
+    const r = await fetch(CLOUD.url + '/auth/v1/user', { method: 'PUT', headers: { apikey: CLOUD.key, 'Content-Type': 'application/json', Authorization: 'Bearer ' + recov.access_token }, body: JSON.stringify({ password: p }) });
+    const j = await r.json().catch(() => null);
+    if (!r.ok) { const m = String((j && (j.msg || j.message || j.error_description)) || ''); throw new Error(/different/i.test(m) ? 'كلمة المرور الجديدة يجب أن تختلف عن القديمة.' : /expired|invalid|jwt/i.test(m) ? 'انتهت صلاحية الرابط. اطلب رابطًا جديدًا من شاشة الدخول.' : 'تعذر حفظ كلمة المرور، أعد المحاولة.'); }
+    cloud.setSess({ ...recov, user: j }); cloud.last = new Map(); cloud.persist(); recov = null;
+    $('#rs-p').value = $('#rs-c').value = ''; $('#reset').classList.remove('gate'); $('#reset').close(); cloud.state = 'wait'; renderAcct(); cloud.run(); toast('تم تعيين كلمة المرور الجديدة وتسجيل الدخول');
+  } catch (x) { er.textContent = String(x.message || x); }
+  $('#rs-go').disabled = false;
+}
+$('#rs-go').addEventListener('click', doReset);
+$('#reset').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doReset(); } });
+$('#reset').addEventListener('cancel', e => { if (recov) e.preventDefault(); });
+$('#reset').addEventListener('close', () => { if (recov) setTimeout(gate, 0); });
 $('#login').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
 gate();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) cloud.run(); });
