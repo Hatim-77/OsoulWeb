@@ -85,7 +85,7 @@ td.p.has{cursor:pointer}
 #qdb{position:fixed;z-index:80;max-height:320px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.55);padding:4px}#qdb[hidden]{display:none}.qdbr{display:flex;align-items:baseline;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13.5px;line-height:1.5}.qdbr.on,.qdbr:hover{background:var(--panel2)}.qdn{flex:0 0 auto;color:var(--ink2);font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace}.qdd{flex:1 1 auto;min-width:0}.qdp{flex:0 0 auto;color:var(--accent)}@media(max-width:760px){.qdbr{flex-wrap:wrap;gap:2px 10px}.qdd{flex-basis:100%;order:3}}
 @media print{#qdb{display:none!important}}
 .qtw{max-height:420px;overflow:auto}
-.qtw[hidden]{display:none}.qfold{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 6px;padding:11px 14px;background:var(--panel,#1a1b1c);border:1px solid var(--line,#2c2d2f);border-radius:10px;color:inherit;font:inherit;cursor:pointer;text-align:right}
+.qtw[hidden],.qpaper[hidden]{display:none}.qfold{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 6px;padding:11px 14px;background:var(--panel,#1a1b1c);border:1px solid var(--line,#2c2d2f);border-radius:10px;color:inherit;font:inherit;cursor:pointer;text-align:right}
 .qfold b{font-size:15px;flex:1}.qfold .qcnt{font-size:13px;opacity:.7}.qfold .qar{transition:transform .2s}.qfold.shut .qar{transform:rotate(90deg)}.qfold:hover{border-color:#e03b3b}
 .qwarn{color:#ffb4a8;background:rgba(197,43,34,.18);border:1px solid rgba(197,43,34,.5);border-radius:8px;padding:4px 10px;font-size:13px;margin-inline-start:10px}
 .qed td,.qed th{padding:4px 6px;white-space:nowrap}.qed textarea{resize:none;overflow:hidden;white-space:pre-wrap;line-height:1.5;min-width:220px;display:block;height:auto}.qpaper{transform-origin:top center}.qed input.sm{width:84px}.qed td .tt,.qed .tt{font-variant-numeric:tabular-nums;font-weight:700}
@@ -178,8 +178,9 @@ td.p.best.has b{color:var(--ink)}
 th:first-child,td:first-child{position:sticky;inset-inline-start:0;z-index:2;background:var(--panel);min-width:190px;max-width:260px;box-shadow:-1px 0 0 var(--line)}
 thead th:first-child{z-index:4;background:var(--panel2)}
 tbody tr:last-child td{border-bottom:0}
-tbody tr:hover td{background:#192026}
-tbody tr:hover td:first-child{background:#192026}
+@media (hover:hover){tbody tr:hover td{background:#192026}
+tbody tr:hover td:first-child{background:#192026}}
+.qpaper tbody tr:hover td,.qpaper tbody tr:hover td:first-child{background:transparent}
 td.p{min-width:84px;padding:7px 8px;white-space:normal;line-height:1.3}
 td.p b{font-variant-numeric:tabular-nums;font-size:17px;white-space:nowrap}
 table.dense td.p{min-width:68px;padding:6px 5px}
@@ -1198,13 +1199,15 @@ function viewQuote() {
   <div class="tw qtw" id="q-list" ${Q.fold ? 'hidden' : ''}><table class="qed"><thead><tr><th></th><th>رقم القطعة</th><th>اسم الصنف</th><th>السعر</th><th></th></tr></thead><tbody id="q-rows">${qRows()}</tbody><tfoot><tr><td colspan="5"><button class="btn qplus" data-qact="addend" aria-label="إضافة صنف" title="إضافة صنف">+</button></td></tr></tfoot></table></div>
   <p class="mut" style="margin:6px 2px 0;font-size:13px">عند إضافة صنف يدوياً: اكتب اسم القطعة (مثل «مقص التيما») أو أول رقمين من رقمها لتظهر الاقتراحات من قاعدة بيانات القطع، ثم اختر منها لتُملأ البيانات كاملة.</p>
   <div class="tool" style="margin-top:14px"><span class="mut" id="q-count"></span><span id="q-warn" class="qwarn" hidden></span></div>
-  <h3 style="margin:18px 0 8px">معاينة العرض</h3><div id="qpaper" class="qpaper">${qPaper()}</div></div>`;
+  <button type="button" class="qfold pv${Q.pfold ? ' shut' : ''}" data-qact="pfold" aria-expanded="${Q.pfold ? 'false' : 'true'}" title="${Q.pfold ? 'فتح المعاينة' : 'طي المعاينة'}" style="margin-top:18px"><b>معاينة العرض</b><svg class="qar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div id="qpaper" class="qpaper" ${Q.pfold ? 'hidden' : ''}>${qPaper()}</div></div>`;
 }
 const qUndo = [];
 const qSnap = () => { qUndo.push({ items: Q.items.map(i => ({ ...i })), no: Q.no, date: Q.date }); if (qUndo.length > 20) qUndo.shift(); qUndoBtn(); };
 const qUndoBtn = () => { const u = document.querySelector('[data-qact=undo]'); if (u) u.classList.toggle('dim', !qUndo.length); };
-const qGrow = el => { if (window.innerWidth > 760) { el.style.height = ''; return; } el.style.height = 'auto'; el.style.height = el.scrollHeight + 2 + 'px'; };
-const qGrowAll = () => document.querySelectorAll('#q-rows textarea').forEach(qGrow);
+const qGrow = el => { if (window.innerWidth > 760) { el.style.height = ''; return; } if (!el.offsetParent) return; el.style.height = 'auto'; el.style.height = el.scrollHeight + 4 + 'px'; };
+const qGrowAll = () => { const l = [...document.querySelectorAll('#q-rows textarea')]; if (window.innerWidth > 760) { l.forEach(e => e.style.height = ''); return; } if (!l.length || !l[0].offsetParent) return; l.forEach(e => e.style.height = 'auto'); const h = l.map(e => e.scrollHeight + 4); l.forEach((e, i) => e.style.height = h[i] + 'px'); };
+try { document.fonts && document.fonts.ready.then(() => qGrowAll()); } catch (e) { }
+window.addEventListener('load', () => qGrowAll());
 /* ملاءمة المعاينة لعرض الشاشة: نكبّر/نصغّر بـ transform بدل zoom لأن zoom يتصرف بشكل مختلف في سفاري */
 const qUnfit = () => { const el = document.getElementById('qpaper'); if (!el) return; el.style.cssText = ''; if (el.parentElement) el.parentElement.style.overflow = ''; };
 const qFit = () => { const el = document.getElementById('qpaper'); if (!el || !el.parentElement) return; const host = el.parentElement;
@@ -8872,9 +8875,10 @@ function qPdf() {
   if (!qTotals().sel.length) { toast('أضف صنفاً واحداً على الأقل إلى العرض'); return; }
   qKeep(true);
   if (qIsMobile()) { if (qOpenPrintTab()) return; toast('اسمح للموقع بفتح النوافذ المنبثقة ثم أعد المحاولة.'); return; }
+  const pp = document.getElementById('qpaper'), wasH = pp && pp.hidden; if (wasH) pp.hidden = false;
   qUnfit();
   const title = document.title; document.title = qDocTitle(); document.body.classList.add('pq');
-  const done = () => { document.body.classList.remove('pq'); qFit(); document.title = title; window.removeEventListener('afterprint', done); };
+  const done = () => { document.body.classList.remove('pq'); if (wasH) pp.hidden = true; qFit(); document.title = title; window.removeEventListener('afterprint', done); };
   window.addEventListener('afterprint', done);
   setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة هنا. افتح الموقع من رابط GitHub.'); done(); } }, 150);
 }
@@ -8906,8 +8910,9 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-qact]'); if (!b) return; const a = b.dataset.qact;
   if (a === 'pick') $('#file-quote').click();
   else if (a === 'pdf') qPdf();
-  else if (a === 'fold') { Q.fold = !Q.fold; const l = $('#q-list'); if (l) l.hidden = Q.fold; b.classList.toggle('shut', Q.fold); b.setAttribute('aria-expanded', Q.fold ? 'false' : 'true'); b.title = Q.fold ? 'فتح القائمة' : 'طي القائمة'; qSave(); }
-  else if (a === 'addend') { if (Q.fold) { Q.fold = false; const l = $('#q-list'); if (l) l.hidden = false; const fb = document.querySelector('[data-qact=fold]'); if (fb) { fb.classList.remove('shut'); fb.setAttribute('aria-expanded', 'true'); } } Q.q = ''; const si = $('#q-search'); if (si) si.value = ''; if (!Q.no) Q.no = qNewNo(); Q.items.push({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); const ins = document.querySelectorAll('#q-rows tr input[data-qi="no"]'); const f = ins[ins.length - 1]; if (f) { f.focus(); f.scrollIntoView({ block: 'center' }); } }
+  else if (a === 'pfold') { Q.pfold = !Q.pfold; const l = $('#qpaper'); if (l) { l.hidden = Q.pfold; if (!Q.pfold) qFit(); } b.classList.toggle('shut', Q.pfold); b.setAttribute('aria-expanded', Q.pfold ? 'false' : 'true'); b.title = Q.pfold ? 'فتح المعاينة' : 'طي المعاينة'; qSave(); }
+  else if (a === 'fold') { Q.fold = !Q.fold; const l = $('#q-list'); if (l) l.hidden = Q.fold; b.classList.toggle('shut', Q.fold); b.setAttribute('aria-expanded', Q.fold ? 'false' : 'true'); b.title = Q.fold ? 'فتح القائمة' : 'طي القائمة'; if (!Q.fold) qGrowAll(); qSave(); }
+  else if (a === 'addend') { if (Q.fold) { Q.fold = false; const l = $('#q-list'); if (l) l.hidden = false; const fb = document.querySelector('[data-qact=fold]'); if (fb) { fb.classList.remove('shut'); fb.setAttribute('aria-expanded', 'true'); } qGrowAll(); } Q.q = ''; const si = $('#q-search'); if (si) si.value = ''; if (!Q.no) Q.no = qNewNo(); Q.items.push({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); const ins = document.querySelectorAll('#q-rows tr input[data-qi="no"]'); const f = ins[ins.length - 1]; if (f) { f.focus(); f.scrollIntoView({ block: 'center' }); } }
   else if (a === 'add') { Q.fold = false; Q.items.unshift({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); Q.q = ''; if (!Q.no) Q.no = qNewNo(); render(); const f = $('#q-rows textarea[data-qi="desc"]'); if (f) f.focus(); }
   else if (a === 'all' || a === 'none') { const q = normAr(Q.q || ''); Q.items.forEach(i => { if (!q || normAr(i.desc + ' ' + i.no).includes(q)) i.on = a === 'all'; }); $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); }
   else if (a === 'clear') { if (!Q.items.length) { toast('لا توجد أصناف لحذفها'); return; } if (b.dataset.armed) { qSnap(); const ok = qKeep(true), no = Q.no; Q.items = []; Q.q = ''; if (ok) { Q.no = qNewNo(); Q.date = qToday(); } render(); toast(ok ? 'حُذفت كل الأصناف وحُفظ العرض ' + no + ' في عروضي، ورقم العرض الجديد ' + Q.no : 'حُذفت كل الأصناف'); } else { b.dataset.armed = '1'; b.textContent = 'اضغط مرة أخرى لحذف ' + Q.items.length + ' صنف'; setTimeout(() => { b.dataset.armed = ''; b.textContent = 'حذف كل الأصناف'; }, 3000); } }
