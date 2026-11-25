@@ -710,7 +710,11 @@ function build() {
     let g = null;
     /* الرقم هو المرجع: نفس رقم الوكالة = نفس الصنف مهما اختلف الاسم، بشرط ألا يتعارض نوعان مكتوبان صراحةً (ساكا / ياباني / ماليزي...). وغياب النوع في أحد العرضين لا يمنع الدمج.
        والاسم لا يُستعمل للدمج إلا للأصناف التي ليس لها رقم صالح */
-    if (n && byNo.has(n)) { g = byNo.get(n).find(x => x.og === og || !x.og || !og) || null; if (g && !g.og && og) g.og = og; }
+    if (n && byNo.has(n)) {
+      /* الرقم هو المرجع: صنف ساكا يُدمج مع نظيره بنفس الرقم حتى لو اختلف النوع المكتوب (ياباني / ماليزي...) */
+      const L = byNo.get(n), sk = v => /^ساكا/.test(v || '');
+      g = L.find(x => x.og === og || !x.og || !og) || L.find(x => sk(x.og) !== sk(og)) || null; if (g && !g.og && og) g.og = og;
+    }
     if (!g && !n) {
       const t = toks(it.desc);
       if (t.size >= 2) {
@@ -1150,9 +1154,11 @@ document.addEventListener('change', e => {
 
 function exportTable() {
   const { rows } = resultsData();
-  const head = ['القسم', 'م', 'الصنف', 'رقم الصنف', ...files.flatMap(f => [f.name + ' - السعر', f.name + ' - الماركة']), 'الفرق', 'نسبة الفرق %', 'الأرخص عند'];
-  const aoa = [head];
-  groupCats(rows).filter(([k]) => !ui.dls || ui.dls.has(k)).forEach(([k, list]) => list.forEach((g, i) => aoa.push([CAT_NAME[k] || (k === 'أخرى' ? 'أصناف أخرى' : k), i + 1, g.desc, g.no || '', ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand || ''] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? Math.round(g.pct * 10) / 10 : '', g.count > 1 ? g.best.map(id => (files.find(f => f.id === id) || {}).name).join('، ') : ''])));
+  /* بلا أسماء أصناف: الرقم هو المرجع. الترتيب: القسم ثم رقم الصنف (الأرقام قبل الحروف) */
+  const head = ['القسم', 'رقم الصنف', ...files.flatMap(f => [f.name + ' - السعر', f.name + ' - الماركة']), 'الفرق', 'نسبة الفرق %', 'الأرخص عند'];
+  const aoa = [head], nk = g => String(g.no || '').trim().toUpperCase(), pc = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
+  const cmp = (a, b) => { const x = nk(a), y = nk(b); if (!x !== !y) return x ? -1 : 1; const dx = /^\d/.test(x), dy = /^\d/.test(y); if (dx !== dy) return dx ? -1 : 1; return pc.compare(x, y); };
+  groupCats(rows).filter(([k]) => !ui.dls || ui.dls.has(k)).sort((a, b) => (a[0] === 'أخرى') - (b[0] === 'أخرى') || dlName(a[0]).localeCompare(dlName(b[0]), 'ar')).forEach(([k, list]) => [...list].sort(cmp).forEach(g => aoa.push([dlName(k), g.no || '', ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand || ''] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? +g.pct.toFixed(1) : '', g.count > 1 ? g.best.map(id => (files.find(f => f.id === id) || {}).name || '').join('، ') : ''])));
   return aoa;
 }
 /* ---------- إنشاء عرض سعر ---------- */
@@ -9101,9 +9107,10 @@ function savePdf(sel) {
 }
 function downloadXlsx() {
   if (!window.XLSX) { toast('تعذر تحميل مكتبة Excel. تأكد من الاتصال بالإنترنت.'); return; }
-  const ws = XLSX.utils.aoa_to_sheet(exportTable()), n = files.length, w = [{ wch: 14 }, { wch: 6 }, { wch: 44 }, { wch: 18 }];
-  for (let i = 0; i < n; i++) w.push({ wch: 11 }, { wch: 14 }); w.push({ wch: 9 }, { wch: 11 }, { wch: 24 });
-  ws['!cols'] = w;
+  const aoa = exportTable(), ws = XLSX.utils.aoa_to_sheet(aoa), n = files.length, w = [{ wch: 18 }, { wch: 22 }];
+  for (let i = 0; i < n; i++) w.push({ wch: 13 }, { wch: 14 }); w.push({ wch: 10 }, { wch: 12 }, { wch: 26 });
+  ws['!cols'] = w; ws['!autofilter'] = { ref: ws['!ref'] }; ws['!freeze'] = { xSplit: 0, ySplit: 1 };
+  for (let r = 1; r < aoa.length; r++) for (let c = 2; c < 2 + n * 2 + 2; c++) { const x = ws[XLSX.utils.encode_cell({ r, c })]; if (x && typeof x.v === 'number') x.z = '0.00'; }
   const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'المقارنة');
   try { XLSX.writeFile(wb, 'مقارنة-الأسعار' + (ui.dls && ui.dls.size === 1 ? '-' + dlName([...ui.dls][0]) : '') + '.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
 }
