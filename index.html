@@ -315,6 +315,22 @@ html{overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;-webkit-tex
 body{max-width:100%}
 .tw{touch-action:pan-x pan-y;overscroll-behavior-x:contain}
 @media (min-width:1500px){.main{max-width:1500px}}
+/* ---------- طباعة الجوال داخل التطبيق ---------- */
+#povl{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(8,9,10,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#povl .pdlg{max-width:380px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;display:flex;flex-direction:column;gap:10px}
+#povl .pdlg p{margin:0;color:var(--ink2);font-size:14px;line-height:1.8}#povl .pbt{display:flex;gap:8px}#povl .pbt .btn{flex:1}
+#qpp{display:none}
+.qpage{width:210mm;box-sizing:border-box;padding:12mm 12mm 14mm;background:#fff;position:relative;overflow:hidden}
+.qpage.fin{height:296mm;page-break-after:always;break-after:page}.qpage.fin:last-child{page-break-after:auto;break-after:auto}
+.qpage.fin .qpg{height:100%}.qpage.fin .qpg>thead>tr,.qpage.fin .qpg>tfoot>tr{height:1px}.qpage.fin .qpg>tbody>tr{height:100%}.qpage .qpg>tbody>tr>td{vertical-align:top}
+.qpage .pn{position:absolute;bottom:5mm;left:0;right:0;text-align:center;font:600 10px Cairo,Arial,sans-serif;color:#555;direction:rtl}
+@media print{
+  body.povl>*:not(#povl){display:none!important}
+  body.povl #povl{position:static!important;display:block!important;padding:0!important;background:#fff!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  body.povl #povl .pdlg{display:none!important}
+  body.povl #qpp{display:block!important;width:210mm!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;max-width:none!important;transform:none!important;zoom:1!important}
+  body.povl .qpage{margin:0!important;box-shadow:none!important}
+}
 @page{size:A4 landscape;margin:9mm}
 .totop{position:fixed;left:18px;right:auto;bottom:22px;z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.4);opacity:.92;transition:transform .15s,opacity .15s}.totop:hover{transform:translateY(-2px);opacity:1}.totop[hidden]{display:none}
 .qpdfrow{margin-top:8px}.qpdfrow .btn{flex:1;min-height:44px}
@@ -8859,6 +8875,54 @@ function qKeep(silent) {
 function qDocTitle() { const d = String(Q.date || '').split('-'), dd = d.length === 3 ? d[2] + '-' + d[1] + '-' + d[0] : new Date().toLocaleDateString('en-GB').replaceAll('/', '-'); return (Q.na ? 'وصل حديثًا ' + dd : qTitle() + ' ' + (Q.year || new Date().getFullYear())) + (qKind() ? ' - ' + QKIND[qKind()] : '') + ' - ' + (Q.no || ''); }
 /* الجوال: الطباعة من داخل التطبيق المثبّت لا تعمل ولا تُنهي وضع الطباعة، فنفتح العرض في صفحة مستقلة جاهزة للحفظ */
 const qIsMobile = () => matchMedia('(pointer:coarse)').matches && !matchMedia('(hover:hover)').matches;
+/* الطباعة على الجوال من داخل التطبيق نفسه: تُبنى صفحات A4 (الترويسة والتذييل في كل صفحة) داخل الصفحة الحالية ثم تُفتح نافذة الطباعة مباشرة */
+const QPAGE_CSS = '.qpage{width:210mm;box-sizing:border-box;padding:12mm 12mm 14mm;background:#fff;position:relative;overflow:hidden}';
+function qPrintRules() { const pr = []; for (const sh of document.styleSheets) { try { for (const r of sh.cssRules) if (r.type === 4 && /print/.test(r.media.mediaText)) for (const x of r.cssRules) if (x.type === 1 && !/^body\.pq \.qpaper$/.test(x.selectorText) && !/povl|qpp/.test(x.selectorText)) pr.push(x.cssText); } catch (e) { } } return pr; }
+function qPaginate(html) {
+  const st = document.createElement('style'); st.textContent = qPrintRules().join('\n') + QPAGE_CSS; document.head.appendChild(st);
+  const pv = document.getElementById('qpaper'), pvh = pv ? pv.hidden : false; if (pv) pv.hidden = true;
+  document.body.classList.add('pq');
+  const tmp = document.createElement('div'); tmp.className = 'qpaper'; tmp.style.cssText = 'position:absolute;left:-99999px;top:0;width:210mm;padding:0;background:none;box-shadow:none;max-width:none'; document.body.appendChild(tmp);
+  try {
+    const src = document.createElement('div'); src.innerHTML = html; const qpg = src.querySelector('.qpg'); if (!qpg) return [];
+    const probe = document.createElement('div'); probe.style.cssText = 'width:100mm;height:1px'; tmp.appendChild(probe); const mm = probe.offsetWidth / 100; tmp.removeChild(probe);
+    const isHead = r => r.classList.contains('qg') || r.classList.contains('qb'), LIM = (296 - 6) * mm, rows = [...qpg.querySelector('.qtb tbody').children], pages = [];
+    const mk = (list, last) => { const pg = document.createElement('div'); pg.className = 'qpage'; const c = qpg.cloneNode(true), tb = c.querySelector('.qtb tbody'); tb.innerHTML = ''; list.forEach(r => tb.appendChild(r.cloneNode(true))); const sg = c.querySelector('.qs'); if (sg && !last) sg.remove(); pg.appendChild(c); return pg; };
+    let i = 0;
+    while (i < rows.length) {
+      const pg = mk([], false), tb = pg.querySelector('.qtb tbody'), list = []; tmp.appendChild(pg);
+      while (i < rows.length) { const r = rows[i].cloneNode(true); tb.appendChild(r); if (pg.offsetHeight > LIM && list.length) { tb.removeChild(r); break; } list.push(rows[i]); i++; }
+      while (list.length > 1 && isHead(list[list.length - 1])) { list.pop(); i--; }
+      tmp.removeChild(pg); pages.push(list);
+    }
+    if (!pages.length) pages.push([]);
+    for (let g = 0; g < 50; g++) {
+      const li = pages.length - 1, lp = mk(pages[li], true); tmp.appendChild(lp); const ov = lp.offsetHeight > LIM; tmp.removeChild(lp);
+      if (!ov || pages[li].length < 2) break;
+      const mv = [pages[li].pop()]; while (pages[li].length > 1 && isHead(pages[li][pages[li].length - 1])) mv.unshift(pages[li].pop()); pages.push(mv);
+    }
+    return pages.map((l, k) => { const pg = mk(l, k === pages.length - 1); pg.className = 'qpage fin'; const n = document.createElement('div'); n.className = 'pn'; n.textContent = 'صفحة ' + (k + 1) + ' من ' + pages.length; pg.appendChild(n); return pg.outerHTML; });
+  } finally { tmp.remove(); document.body.classList.remove('pq'); st.remove(); if (pv) pv.hidden = pvh; }
+}
+function qPrintClose() {
+  window.removeEventListener('afterprint', qPrintClose);
+  const o = document.getElementById('povl'); if (o) o.remove(); const t = document.getElementById('povl-st'); if (t) t.remove();
+  document.body.classList.remove('pq', 'povl'); if (typeof qFit === 'function') qFit();
+}
+function qPrintHere() {
+  qPrintClose(); toast('جارٍ تجهيز صفحات العرض...');
+  setTimeout(() => {
+    let pages; try { pages = qPaginate(qPaper()); } catch (e) { pages = []; }
+    if (!pages.length) { if (!qOpenPrintTab()) toast('تعذر تجهيز الطباعة'); return; }
+    const st = document.createElement('style'); st.id = 'povl-st'; st.textContent = '@page{size:A4 portrait;margin:0}'; document.head.appendChild(st);
+    const o = document.createElement('div'); o.id = 'povl';
+    o.innerHTML = '<div class="pdlg" role="dialog" aria-label="الطباعة"><b>العرض جاهز للطباعة</b><p>إن لم تظهر نافذة الطباعة فاضغط الزر. وعلى الآيفون اختر من نافذة الطباعة زر المشاركة ثم «حفظ في الملفات».</p><div class="pbt"><button type="button" class="btn primary" data-pa="print">طباعة / حفظ PDF</button><button type="button" class="btn" data-pa="close">إغلاق</button></div><button type="button" class="btn link" data-pa="tab">تعذرت الطباعة؟ افتح في صفحة مستقلة</button></div><div id="qpp" class="qpaper">' + pages.join('') + '</div>';
+    document.body.appendChild(o); document.body.classList.add('pq', 'povl');
+    o.addEventListener('click', e => { const a = e.target.closest('[data-pa]'); if (!a) return; const k = a.dataset.pa; if (k === 'close') qPrintClose(); else if (k === 'print') { try { window.print(); } catch (x) { } } else if (k === 'tab') { qPrintClose(); if (!qOpenPrintTab()) toast('اسمح للموقع بفتح النوافذ المنبثقة ثم أعد المحاولة.'); } });
+    window.addEventListener('afterprint', qPrintClose);
+    setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة هنا. اضغط «طباعة / حفظ PDF».'); } }, 250);
+  }, 60);
+}
 function qPrintBoot() {
   var host = document.getElementById('qpaper'), isHead = function (r) { return r.classList.contains('qg') || r.classList.contains('qb'); };
   function fit() { host.style.cssText = ''; var w = document.documentElement.clientWidth - 20, W = 794; if (w < W) { var k = w / W; host.style.cssText = 'transform-origin:top right;transform:scale(' + k + ')'; host.style.marginBottom = -(host.offsetHeight * (1 - k)) + 'px'; } }
@@ -8919,7 +8983,7 @@ function qPdf() {
   if (window.self !== window.top && !/github\.io$/.test(location.hostname)) { toast('الطباعة لا تعمل داخل هذه النافذة. افتح الموقع من رابط GitHub ثم اضغط حفظ العرض PDF.'); return; }
   if (!qTotals().sel.length) { toast('أضف صنفاً واحداً على الأقل إلى العرض'); return; }
   qKeep(true);
-  if (qIsMobile()) { if (qOpenPrintTab()) return; toast('اسمح للموقع بفتح النوافذ المنبثقة ثم أعد المحاولة.'); return; }
+  if (qIsMobile()) { qPrintHere(); return; }
   const pp = document.getElementById('qpaper'), wasH = pp && pp.hidden; if (wasH) pp.hidden = false;
   qUnfit();
   const title = document.title; document.title = qDocTitle(); document.body.classList.add('pq');
