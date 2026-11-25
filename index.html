@@ -249,7 +249,7 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 #acct .st{display:flex;align-items:center;gap:7px}
 #acct .st i{width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block}
 #acct .st.bad i{background:var(--bad)}#acct .st.wait i{background:var(--warn)}
-#acct .btn{width:100%}
+#acct .btn{width:100%}.accb{margin-top:auto;display:flex;align-items:center;justify-content:center;width:100%;height:42px;border:0;border-radius:10px;background:#2f6fed;cursor:pointer}.accb:hover{background:#4a85f5}.accb svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.accb+#acct{margin-top:0}@media (max-width:820px){.accb{margin-top:0;height:36px}}
 #acct .er{direction:ltr;text-align:start;font-size:11.5px;color:var(--bad);overflow-wrap:anywhere}
 #login,#reset,#kw,#lo{width:min(420px,calc(100% - 20px))}
 #lo .f{flex-wrap:wrap}#lo .f .btn{flex:1;min-width:130px}#lo p{margin:0;line-height:1.9}
@@ -397,6 +397,8 @@ body{max-width:100%}
 .btn.pdf{background:#d93a31;border-color:#d93a31;color:#fff}.btn.pdf:hover{background:#e5473e;border-color:#e5473e}.btn.xls{background:#1f8f4e;border-color:#1f8f4e;color:#fff}.btn.xls:hover{background:#27a65c;border-color:#27a65c}
 @media screen{.qfold.pv{margin-bottom:16px}}
 #dl-d[open]{display:flex;flex-direction:column;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}#dl-d .h,#dl-d .f{flex:none}#dl-d .b{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto}#dl-d .f.dla{flex-wrap:wrap}
+.vfold{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.vf{background:var(--panel);border:1px solid var(--line);color:inherit;font:inherit;font-size:13px;padding:6px 12px;border-radius:18px;cursor:pointer}.vf.on{border-color:#e03b3b;color:#fff;background:#2a1a1a}.vf .n{margin-inline-start:6px;color:#8a8f96;font-size:12px}.vf.add{border-style:dashed;color:#9aa0a8}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.vc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}.vt{display:flex;align-items:center;justify-content:center;height:110px;background:#0f1113;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0}.vt img{width:100%;height:100%;object-fit:cover}.vx{font-weight:800;font-size:20px;color:#9aa0a8;letter-spacing:1px}.vn{font-size:13px;padding:6px 8px}.vm{font-size:11.5px;color:#8a8f96}.vb{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 </style>
 </head>
 <body>
@@ -405,6 +407,7 @@ body{max-width:100%}
   <aside class="side">
     <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="62 0 262 84" direction="ltr" class="logo" role="img" aria-label="شركة أصول القطع - Osoul Parts Co."><defs><linearGradient id="lgBadge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f25a4f"/><stop offset="1" stop-color="#c62f27"/></linearGradient><linearGradient id="lgR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6a5c"/><stop offset="1" stop-color="#c92d25"/></linearGradient><linearGradient id="lgW" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9bcc0"/></linearGradient><linearGradient id="lgL" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ec4a40"/><stop offset="1" stop-color="#ec4a40" stop-opacity="0"/></linearGradient></defs><g><text id="os-mark" x="280" y="56" text-anchor="middle" font-family="Montserrat,Cairo,'Segoe UI',Arial,sans-serif" font-weight="900" font-size="40" fill="#f3f1ea" textLength="60" lengthAdjust="spacingAndGlyphs">OS</text></g><text x="236" y="38" text-anchor="end" font-family="Cairo,'Segoe UI',Tahoma,sans-serif" font-weight="900" font-size="31" fill="#f3f1ea" textLength="168" lengthAdjust="spacingAndGlyphs">شركة أصول القطع</text><rect x="68" y="47.5" width="168" height="2" rx="1" fill="url(#lgL)" transform="translate(0 0)"/><text x="236" y="68" text-anchor="end" font-family="Cairo,'Segoe UI',Arial,sans-serif" font-weight="700" font-size="15" fill="#ec4a40" textLength="168" lengthAdjust="spacing">OSOUL PARTS CO.</text></svg></div>
     <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
+    <button type="button" class="accb" data-acc="1" title="فتح البرنامج المحاسبي" aria-label="فتح البرنامج المحاسبي"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>
     <div id="acct" hidden></div>
   </aside>
   <main class="main">
@@ -659,7 +662,7 @@ let cloudTouch = () => { };
 const save = () => { store.set(JSON.stringify(saved)); cloudTouch(); };
 
 /* ---------- العروض السابقة ---------- */
-let armed = null, armT, page = ['history', 'mine', 'toyota', 'quote'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan';
+let armed = null, armT, page = ['history', 'mine', 'toyota', 'quote', 'vault'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan';
 let lastCmp = 'nissan';
 const isCmp = p => p === 'nissan' || p === 'toyota', KIND_AR = { nissan: 'نيسان', toyota: 'تويوتا' };
 function fmtWhen(ts) { if (!ts) return 'تاريخ غير معروف'; const d = new Date(ts), p = n => String(n).padStart(2, '0'); return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}`; }
@@ -814,10 +817,10 @@ function render() {
     ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض ${KIND_AR[page]}</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
     : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة لمقارنة ${KIND_AR[page]}.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
   $('#app').innerHTML = !isCmp(page) ? '' : `<div class="kseg" role="tablist">${['nissan', 'toyota'].map(k => `<button data-page="${k}" role="tab" aria-selected="${page === k}" class="${page === k ? 'on' : ''}">${KIND_AR[k]}<span class="n">${(k === 'nissan' ? filesN : filesT).length}</span></button>`).join('')}</div>` + dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
-  $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button type="button" data-acc="1" title="فتح البرنامج المحاسبي"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>البرنامج المحاسبي</button>`;
+  $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button data-page="vault" class="${page === 'vault' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>المخزن</button>`;
   $('#app').hidden = !isCmp(page); $('#hist').hidden = isCmp(page);
   if (isCmp(page)) $('#hist').innerHTML = '';
-  else if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine(); else if (page === 'quote') { $('#hist').innerHTML = viewQuote(); qGrowAll(); qRefresh(); }
+  else if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine(); else if (page === 'quote') { $('#hist').innerHTML = viewQuote(); qGrowAll(); qRefresh(); } else if (page === 'vault') { $('#hist').innerHTML = viewVault(); vInit(); }
   renderAcct();
   if (keep) { const q = $('#q'); if (q) { q.focus(); try { q.setSelectionRange(...keep); } catch (e) { } } }
 }
@@ -9152,9 +9155,120 @@ function qXlsx() {
   const nm = String(qDocTitle()).replace(/[\\/:*?"<>|]/g, '-') + (DLS && DLS.size === 1 ? ' - ' + dlName([...DLS][0]) : '');
   try { XLSX.writeFile(wb, nm + '.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
 }
+/* ---------- المخزن: ملفات وصور محفوظة في Supabase Storage (لكل حساب مخزنه الخاص) ---------- */
+const VAULT = { bucket: 'vault', max: 25 * 1024 * 1024 };
+const V = { items: [], loaded: false, loading: false, folder: '', q: '', urls: {}, err: '', up: 0 };
+const vFolders = () => [...new Set(['عام', 'صور', 'كتالوجات', 'فواتير', ...V.items.map(i => i.folder || 'عام'), ...(V.extra || [])])];
+const vUid = () => { try { return JSON.parse(atob(cloud.sess.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub || ''; } catch (e) { return ''; } };
+const vSize = n => n >= 1073741824 ? (n / 1073741824).toFixed(2) + ' جيجابايت' : n >= 1048576 ? (n / 1048576).toFixed(1) + ' ميجابايت' : Math.max(1, Math.round(n / 1024)) + ' كيلوبايت';
+const vIsImg = i => /^image\//.test(i.mime || '');
+const vErr = e => { const m = String((e && e.message) || e || ''); return /relation|vault_files|PGRST20|schema cache|404|not found/i.test(m) && !/Bucket not found/i.test(m) ? 'المخزن غير مُجهَّز بعد في Supabase. شغّل ملف vault.sql مرة واحدة في SQL Editor.' : /Bucket not found/i.test(m) ? 'مجلد التخزين غير موجود في Supabase. شغّل ملف vault.sql مرة واحدة.' : /too large|payload|413|exceeded/i.test(m) ? 'الملف أكبر من الحد المسموح.' : m.slice(0, 140); };
+async function vSign(items) {
+  const need = items.filter(i => !V.urls[i.id] || V.urls[i.id].exp < Date.now());
+  if (!need.length) return;
+  try {
+    const r = await cloud.http('/storage/v1/object/sign/' + VAULT.bucket, { method: 'POST', body: JSON.stringify({ expiresIn: 3600, paths: need.map(i => i.path) }) });
+    (r || []).forEach(x => { const it = need.find(i => i.path === x.path); if (it && x.signedURL) V.urls[it.id] = { u: CLOUD.url + '/storage/v1' + x.signedURL, exp: Date.now() + 3300000 }; });
+  } catch (e) { }
+}
+async function vLoad(force) {
+  if (V.loading || (V.loaded && !force) || !cloud.on || !cloud.sess) return;
+  V.loading = true; V.err = ''; vGrid();
+  try { V.items = (await cloud.http('/rest/v1/vault_files?select=*&order=created_at.desc')) || []; V.loaded = true; await vSign(V.items.filter(vIsImg)); }
+  catch (e) { V.err = vErr(e); }
+  V.loading = false; vGrid(); vUsage();
+}
+function vInit() { vLoad(); }
+function vUsage() { const u = $('#v-use'); if (u) u.textContent = V.loaded ? V.items.length + ' ملف · المستخدم ' + vSize(V.items.reduce((a, i) => a + (+i.size || 0), 0)) : ''; }
+function viewVault() {
+  const head = '<h2>المخزن</h2>';
+  if (!cloud.on) return head + '<p class="note">المزامنة السحابية غير مفعّلة، والمخزن يحتاجها لحفظ الملفات.</p>';
+  if (!cloud.sess) return head + '<p class="sub">المخزن لحفظ ملفاتك وصورك وتصفحها من أي جهاز. سجّل الدخول أولًا.</p><button class="btn primary" id="acct-in">تسجيل الدخول</button>';
+  return head + `<p class="sub">ملفات شركتك وصورها في مكان واحد، تظهر على كل أجهزتك بعد تسجيل الدخول. الحد الأقصى للملف الواحد ${VAULT.max / 1048576} ميجابايت، والصور الكبيرة تُصغَّر تلقائيًا لتوفير المساحة.</p>
+  <div class="tool"><div class="grow"><input id="v-q" type="search" placeholder="ابحث باسم الملف" aria-label="بحث في المخزن" value="${esc(V.q)}"></div>
+    <button class="btn primary" data-vact="pick">رفع ملفات</button><input type="file" id="v-in" multiple hidden></div>
+  <div class="vfold" id="v-fold"></div><p class="note" id="v-use" style="margin:6px 0 12px"></p><div id="v-grid"></div>`;
+}
+function vFoldBar() {
+  const f = $('#v-fold'); if (!f) return;
+  const cnt = {}; V.items.forEach(i => { const k = i.folder || 'عام'; cnt[k] = (cnt[k] || 0) + 1; });
+  f.innerHTML = `<button type="button" class="vf${V.folder === '' ? ' on' : ''}" data-vact="fold" data-f="">الكل<span class="n">${V.items.length}</span></button>` + vFolders().map(k => `<button type="button" class="vf${V.folder === k ? ' on' : ''}" data-vact="fold" data-f="${esc(k)}">${esc(k)}<span class="n">${cnt[k] || 0}</span></button>`).join('') + '<button type="button" class="vf add" data-vact="newfold">+ مجلد جديد</button>';
+}
+function vGrid() {
+  const g = $('#v-grid'); if (!g) return; vFoldBar();
+  if (V.loading && !V.loaded) { g.innerHTML = '<p class="note">جارٍ تحميل المخزن...</p>'; return; }
+  if (V.err) { g.innerHTML = `<p class="note" style="color:var(--bad)">${esc(V.err)}</p><button class="btn" data-vact="retry">إعادة المحاولة</button>`; return; }
+  const q = normAr(V.q || ''), list = V.items.filter(i => (!V.folder || (i.folder || 'عام') === V.folder) && (!q || normAr(i.name).includes(q)));
+  if (!list.length) { g.innerHTML = `<p class="note">${V.items.length ? 'لا توجد ملفات مطابقة.' : 'المخزن فارغ. اضغط «رفع ملفات» لإضافة أول ملف.'}</p>`; return; }
+  g.innerHTML = '<div class="vgrid">' + list.map(i => {
+    const u = V.urls[i.id], img = vIsImg(i) && u ? `<img src="${esc(u.u)}" alt="" loading="lazy">` : `<span class="vx">${esc((String(i.name).split('.').pop() || '').slice(0, 4).toUpperCase())}</span>`;
+    return `<div class="vc" data-id="${i.id}"><button type="button" class="vt" data-vact="open" aria-label="فتح الملف">${img}</button><input class="nm vn" value="${esc(i.name)}" data-vname="${i.id}" aria-label="اسم الملف"><div class="vm">${esc(i.folder || 'عام')} · ${vSize(+i.size || 0)} · ${fmtWhen(Date.parse(i.created_at))}</div><div class="vb"><button type="button" class="btn sm" data-vact="open">فتح</button><button type="button" class="btn sm" data-vact="dl">تنزيل</button><button type="button" class="btn sm link" data-vact="del">حذف</button></div></div>`;
+  }).join('') + '</div>';
+  /* صور لم تُوقَّع بعد */
+  const miss = list.filter(i => vIsImg(i) && !V.urls[i.id]); if (miss.length) vSign(miss).then(() => { if (page === 'vault') vGridSoft(); });
+}
+let vSoft = 0; const vGridSoft = () => { clearTimeout(vSoft); vSoft = setTimeout(vGrid, 50); };
+/* تصغير الصور الكبيرة قبل الرفع */
+async function vShrink(file) {
+  if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size < 700 * 1024) return file;
+  try {
+    const bmp = await createImageBitmap(file), k = Math.min(1, 1800 / Math.max(bmp.width, bmp.height)), c = document.createElement('canvas'); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(bmp, 0, 0, c.width, c.height);
+    const b = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.85)); if (b && b.size < file.size) return new File([b], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' });
+  } catch (e) { }
+  return file;
+}
+async function vUpload(list) {
+  const uid = vUid(); if (!uid) { toast('سجّل الدخول أولًا'); return; }
+  let ok = 0; V.up += list.length; vBusy();
+  for (const f0 of list) {
+    try {
+      if (f0.size > VAULT.max * 4) throw new Error('too large');
+      const f = await vShrink(f0); if (f.size > VAULT.max) throw new Error('too large');
+      const ext = (f.name.match(/\.([A-Za-z0-9]{1,8})$/) || [])[0] || '', path = uid + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + ext.toLowerCase();
+      await cloud.http('/storage/v1/object/' + VAULT.bucket + '/' + path, { method: 'POST', headers: { 'Content-Type': f.type || 'application/octet-stream', 'x-upsert': 'false' }, body: f });
+      const row = await cloud.http('/rest/v1/vault_files', { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ name: f.name, folder: V.folder || (/^image\//.test(f.type) ? 'صور' : 'عام'), size: f.size, mime: f.type || '', path }) });
+      if (row && row[0]) { V.items.unshift(row[0]); ok++; }
+    } catch (e) { toast('تعذر رفع «' + f0.name + '»: ' + vErr(e)); }
+    V.up--; vBusy();
+  }
+  V.loaded = true; V.err = ''; await vSign(V.items.filter(i => vIsImg(i) && !V.urls[i.id])); vGrid(); vUsage();
+  if (ok) toast(ok === 1 ? 'تم رفع الملف' : 'تم رفع ' + ok + ' ملفات');
+}
+function vBusy() { const b = document.querySelector('[data-vact=pick]'); if (b) { b.disabled = V.up > 0; b.textContent = V.up > 0 ? 'جارٍ الرفع (' + V.up + ')...' : 'رفع ملفات'; } }
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-vact]'); if (!t) return; const a = t.dataset.vact, card = t.closest('.vc'), it = card && V.items.find(x => x.id === card.dataset.id);
+  if (a === 'pick') $('#v-in').click();
+  else if (a === 'retry') { V.loaded = false; vLoad(true); }
+  else if (a === 'fold') { V.folder = t.dataset.f; vGrid(); }
+  else if (a === 'newfold') { const n = (prompt('اسم المجلد الجديد') || '').trim().slice(0, 30); if (n) { V.folder = n; (V.extra = V.extra || new Set()).add(n); vGrid(); toast('اختر «رفع ملفات» ليُضاف الملف إلى مجلد «' + n + '»'); } }
+  else if (a === 'open' || a === 'dl') {
+    if (!it) return; await vSign([it]); const u = V.urls[it.id]; if (!u) { toast('تعذر فتح الملف'); return; }
+    if (a === 'open') { const w = window.open(u.u, '_blank', 'noopener'); if (!w) location.href = u.u; }
+    else { const l = document.createElement('a'); l.href = u.u + (u.u.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(it.name); l.rel = 'noopener'; document.body.appendChild(l); l.click(); l.remove(); }
+  }
+  else if (a === 'del') {
+    if (!it) return;
+    if (!t.dataset.armed) { t.dataset.armed = '1'; t.textContent = 'تأكيد الحذف'; setTimeout(() => { if (t.isConnected) { t.dataset.armed = ''; t.textContent = 'حذف'; } }, 3000); return; }
+    try {
+      await cloud.http('/storage/v1/object/' + VAULT.bucket, { method: 'DELETE', body: JSON.stringify({ prefixes: [it.path] }) });
+      await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(it.id), { method: 'DELETE' });
+      V.items = V.items.filter(x => x.id !== it.id); delete V.urls[it.id]; vGrid(); vUsage(); toast('حُذف الملف');
+    } catch (e2) { toast('تعذر الحذف: ' + vErr(e2)); }
+  }
+});
+document.addEventListener('change', async e => {
+  const t = e.target;
+  if (t.id === 'v-in') { const l = [...t.files]; t.value = ''; if (l.length) vUpload(l); }
+  else if (t.dataset && t.dataset.vname) {
+    const it = V.items.find(x => x.id === t.dataset.vname), n = t.value.trim(); if (!it) return; if (!n) { t.value = it.name; return; } if (n === it.name) return;
+    try { await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(it.id), { method: 'PATCH', body: JSON.stringify({ name: n }) }); it.name = n; toast('تم تغيير الاسم'); } catch (e2) { t.value = it.name; toast('تعذر تغيير الاسم: ' + vErr(e2)); }
+  }
+});
+document.addEventListener('input', e => { if (e.target.id === 'v-q') { V.q = e.target.value; vGrid(); } });
 /* تعطيل التكبير بالقرص ليبدو كتطبيق (آيفون) */
 ['gesturestart', 'gesturechange', 'gestureend'].forEach(n => document.addEventListener(n, e => e.preventDefault(), { passive: false }));
-window.addEventListener('hashchange', () => { const p = ['history', 'mine', 'toyota', 'quote'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan'; if (p !== page) { page = p; render(); } });
+window.addEventListener('hashchange', () => { const p = ['history', 'mine', 'toyota', 'quote', 'vault'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan'; if (p !== page) { page = p; render(); } });
 render();
 cloud.run();
 </script>
