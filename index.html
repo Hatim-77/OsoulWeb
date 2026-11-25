@@ -9169,7 +9169,8 @@ const vFolders = () => [...new Set(['عام', 'صور', 'كتالوجات', 'ف�
 const vUid = () => { try { return JSON.parse(atob(cloud.sess.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub || ''; } catch (e) { return ''; } };
 const vSize = n => n >= 1073741824 ? (n / 1073741824).toFixed(2) + ' جيجابايت' : n >= 1048576 ? (n / 1048576).toFixed(1) + ' ميجابايت' : Math.max(1, Math.round(n / 1024)) + ' كيلوبايت';
 const vIsImg = i => /^image\//.test(i.mime || '');
-const vErr = e => { const m = String((e && e.message) || e || ''); return /relation|vault_files|PGRST20|schema cache|404|not found/i.test(m) && !/Bucket not found/i.test(m) ? 'المخزن غير مُجهَّز بعد في Supabase. شغّل ملف vault.sql مرة واحدة في SQL Editor.' : /Bucket not found/i.test(m) ? 'مجلد التخزين غير موجود في Supabase. شغّل ملف vault.sql مرة واحدة.' : /too large|payload|413|exceeded/i.test(m) ? 'الملف أكبر من الحد المسموح.' : m.slice(0, 140); };
+const vErr = e => { const m = String((e && e.message) || e || ''), st = e && e.status ? ' [' + e.status + ']' : ''; return vErr0(e) + (/غير مُجهَّز|غير موجود/.test(vErr0(e)) ? ' (التفصيل: ' + m.slice(0, 90) + st + ')' : ''); };
+const vErr0 = e => { const m = String((e && e.message) || e || ''); return /relation|vault_files|PGRST20|schema cache|404|not found/i.test(m) && !/Bucket not found/i.test(m) ? 'المخزن غير مُجهَّز بعد في Supabase. شغّل ملف vault.sql مرة واحدة في SQL Editor.' : /Bucket not found/i.test(m) ? 'مجلد التخزين غير موجود في Supabase. شغّل ملف vault.sql مرة واحدة.' : /too large|payload|413|exceeded/i.test(m) ? 'الملف أكبر من الحد المسموح.' : m.slice(0, 140); };
 async function vSign(items) {
   const need = items.filter(i => !V.urls[i.id] || V.urls[i.id].exp < Date.now());
   if (!need.length) return;
