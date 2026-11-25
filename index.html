@@ -715,7 +715,7 @@ function viewResults() {
   };
   const thead = `<thead><tr><th>الصنف</th>${head}${files.length > 1 ? '<th>الفرق</th><th>الأرخص عند</th>' : ''}</tr></thead>`;
   /* تجميع الأصناف في أقسام: قسم لكل نوع، مغلق افتراضياً */
-  const order = groupCats(rows);
+  const FLAT = 'قائمة المقارنة (كل الأصناف)', order = ui.flat ? (rows.length ? [[FLAT, groupCats(rows).flatMap(([, l]) => l)]] : []) : groupCats(rows);
   const searching = !!ui.q.trim();
   const catHtml = order.map(([k, list]) => {
     const open = searching || ui.open.has(k), common = list.filter(g => g.count > 1).length;
@@ -723,6 +723,7 @@ function viewResults() {
   }).join('');
   return `${tiles}
   <div class="tool"><div class="grow"><input id="q" type="search" placeholder="ابحث باسم الصنف أو رقمه" value="${esc(ui.q)}" aria-label="بحث"></div>
+    <label class="chk"><input type="checkbox" id="flat" ${ui.flat ? 'checked' : ''}> عرض الأصناف معًا بدون تقسيم الفئات (مقصات، أقمشة...)</label>
     ${files.length > 1 ? `<label class="chk"><input type="checkbox" id="single" ${ui.single ? 'checked' : ''}> إظهار الأصناف الموجودة عند شركة واحدة</label>` : ''}
     ${order.length > 1 && !searching ? `<button class="btn" id="catall">${ui.open.size >= order.length ? 'إغلاق كل الأقسام' : 'فتح كل الأقسام'}</button>` : ''}
     <button class="btn" id="xlsx">تنزيل ملف Excel</button><button class="btn" id="pdf">حفظ PDF</button></div>
@@ -981,6 +982,7 @@ document.addEventListener('change', e => {
   else if (t.id === 'file-mine') { addFiles([...t.files], true); t.value = ''; }
   else if (t.id === 'sort') { ui.sort = t.value; refreshResults(); }
   else if (t.id === 'single') { ui.single = t.checked; refreshResults(); }
+  else if (t.id === 'flat') { ui.flat = t.checked; refreshResults(); }
   else if (t.dataset.col) { const [id, k] = t.dataset.col.split(':'), f = files.find(x => x.id === id); if (f) { f.map[k] = +t.value; save(); render(); } }
   else if (t.dataset.hdr) { const f = files.find(x => x.id === t.dataset.hdr); if (f) { f.hdr = +t.value; save(); render(); } }
 });
