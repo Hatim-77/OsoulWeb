@@ -85,7 +85,8 @@ td.p.has{cursor:pointer}
 #qdb{position:fixed;z-index:80;max-height:320px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.55);padding:4px}#qdb[hidden]{display:none}.qdbr{display:flex;align-items:baseline;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13.5px;line-height:1.5}.qdbr.on,.qdbr:hover{background:var(--panel2)}.qdn{flex:0 0 auto;color:var(--ink2);font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace}.qdd{flex:1 1 auto;min-width:0}.qdp{flex:0 0 auto;color:var(--accent)}@media(max-width:760px){.qdbr{flex-wrap:wrap;gap:2px 10px}.qdd{flex-basis:100%;order:3}}
 @media print{#qdb{display:none!important}}
 .qtw{max-height:420px;overflow:auto}
-.qtw[hidden],.qpaper[hidden]{display:none}.qfold{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 6px;padding:11px 14px;background:var(--panel,#1a1b1c);border:1px solid var(--line,#2c2d2f);border-radius:10px;color:inherit;font:inherit;cursor:pointer;text-align:right}
+.qtw[hidden],.qpaper[hidden]{display:none}.qfrow{display:flex;align-items:stretch;gap:8px;margin:10px 0 6px}.qfrow .qfold{flex:1;width:auto;margin:0}.qsort{width:46px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:10px;opacity:.85}.qsort:hover{opacity:1;border-color:#e03b3b}.qsw{position:relative;display:flex}.qsw .qsort{height:100%}.qmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:30;min-width:230px;background:#16181d;border:1px solid #2a2d34;border-radius:12px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.5)}.qmenu[hidden]{display:none}.qmenu button{display:block;width:100%;text-align:right;background:none;border:0;color:#e8e8ea;font:inherit;font-size:14px;padding:10px 12px;border-radius:8px;cursor:pointer}.qmenu button:hover,.qmenu button:focus-visible{background:#262932;outline:0}.qmenu button.on{color:#ff6b6b;font-weight:700}
+.qfold{display:flex;align-items:center;gap:10px;width:100%;margin:0;padding:11px 14px;background:var(--panel,#1a1b1c);border:1px solid var(--line,#2c2d2f);border-radius:10px;color:inherit;font:inherit;cursor:pointer;text-align:right}
 .qfold b{font-size:15px;flex:1}.qfold .qcnt{font-size:13px;opacity:.7}.qfold .qar{transition:transform .2s}.qfold.shut .qar{transform:rotate(90deg)}.qfold:hover{border-color:#e03b3b}
 .qwarn{color:#ffb4a8;background:rgba(197,43,34,.18);border:1px solid rgba(197,43,34,.5);border-radius:8px;padding:4px 10px;font-size:13px;margin-inline-start:10px}
 .qed td,.qed th{padding:4px 6px;white-space:nowrap}.qed textarea{resize:none;overflow:hidden;white-space:pre-wrap;line-height:1.5;min-width:220px;display:block;height:auto}.qpaper{transform-origin:top center}.qed input.sm{width:84px}.qed td .tt,.qed .tt{font-variant-numeric:tabular-nums;font-weight:700}
@@ -116,6 +117,9 @@ td.p.has{cursor:pointer}
 .qtb th{background:#15181c;color:#fff;padding:7px 8px;text-align:right;font-weight:700}
 .qtb td{padding:6px 8px;border-bottom:1px solid #e6e8eb;vertical-align:top}
 .qtb tbody tr:nth-child(even) td{background:#fafafa}
+.qpaper .qtb th,.qpaper .qtb tbody tr:not(.qg):not(.qb) td{text-align:center}
+.qpaper .qtb{table-layout:fixed}.qpaper .qtb th:nth-child(1),.qpaper .qtb td.qno{padding-inline:8px;white-space:normal;overflow-wrap:anywhere}
+.qpaper .qtb th,.qpaper .qtb td{padding-inline:6px}.qpaper .qtb td.qn1{width:auto}
 .qtb .qc{text-align:center}.qtb .qn1{text-align:center;width:130px;direction:ltr;font-variant-numeric:tabular-nums}.qtb .qno{direction:ltr;text-align:right;color:#555;white-space:nowrap}
 .qtb th:first-child,.qtb td:first-child{width:1%;white-space:nowrap;padding-inline:16px 8px}.qtb th:nth-child(2),.qtb td.qno{width:1%;white-space:nowrap;padding-inline:6px 26px}
 .qempty{padding:20px!important;color:#888}
@@ -181,6 +185,7 @@ tbody tr:last-child td{border-bottom:0}
 @media (hover:hover){tbody tr:hover td{background:#192026}
 tbody tr:hover td:first-child{background:#192026}}
 .qpaper tbody tr:hover td,.qpaper tbody tr:hover td:first-child{background:transparent}
+.qpaper .qtb tbody tr:not(.qg):not(.qb) td,.qpaper .qtb tbody tr:not(.qg):not(.qb):hover td,.qpaper .qtb tbody tr:not(.qg):not(.qb) td:first-child,.qpaper .qtb tbody tr:not(.qg):not(.qb):hover td:first-child{background:transparent!important}.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even) td,.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even):hover td,.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even) td:first-child,.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even):hover td:first-child{background:#e3e6e9!important}
 td.p{min-width:84px;padding:7px 8px;white-space:normal;line-height:1.3}
 td.p b{font-variant-numeric:tabular-nums;font-size:17px;white-space:nowrap}
 table.dense td.p{min-width:68px;padding:6px 5px}
@@ -1175,12 +1180,14 @@ function qFoot() {
 }
 function qPaper() {
   const t = qTotals(), co = Q.co, hasBrand = t.sel.some(i => i.brand), logo = document.querySelector('.brand svg').outerHTML.replaceAll('#f3f1ea', '#15181c').replace('class="logo"', 'class="qlogo"').replace('viewBox="62 0 262 84"', 'viewBox="62 0 270 84"').replace(/<g><text id="os-mark".*?<\/text><\/g>/, `<image href="${QOWN}" x="244" y="8" width="72" height="67" preserveAspectRatio="xMidYMid meet"/>`);
-  const ncol = (hasBrand ? 7 : 6) - (Q.gen ? 2 : 0), line = (i, n) => `<tr><td class="qc">${n}</td><td class="qno">${esc(i.no || '')}</td><td>${esc(i.desc)}</td>${hasBrand ? `<td class="qc">${esc(i.brand || '')}</td>` : ''}${Q.gen ? '' : `<td class="qc">${nf.format(+i.qty || 0)}</td>`}<td class="qn1">${qNum.format(+i.price || 0)}</td>${Q.gen ? '' : `<td class="qn1"><b>${qNum.format((+i.qty || 0) * (+i.price || 0))}</b></td>`}</tr>`;
+  /* مجموع عرض الأعمدة على يمين اسم الصنف يساوي مجموع ما على يساره، فيقع اسم الصنف في منتصف الصفحة تحت عنوان العرض ونوعه */
+  const cw = Q.gen ? (hasBrand ? [29, 42, 11, 18] : [29, 42, 29]) : (hasBrand ? [29, 42, 8, 6, 7.5, 7.5] : [29, 42, 8, 10.5, 10.5]);
+  const ncol = (hasBrand ? 6 : 5) - (Q.gen ? 2 : 0), line = (i) => `<tr><td class="qno">${esc(i.no || '')}</td><td>${esc(i.desc)}</td>${hasBrand ? `<td class="qc">${esc(i.brand || '')}</td>` : ''}${Q.gen ? '' : `<td class="qc">${nf.format(+i.qty || 0)}</td>`}<td class="qn1">${qNum.format(+i.price || 0)}</td>${Q.gen ? '' : `<td class="qn1"><b>${qNum.format((+i.qty || 0) * (+i.price || 0))}</b></td>`}</tr>`;
   const build = (items) => {
     if (Q.flat) return items.map((i, n) => line(i, n + 1)).join('');
     const cnt = {}, grp = new Map(); items.forEach(i => { const k = catOf(i.desc); cnt[k] = (cnt[k] || 0) + 1; });
     items.forEach(i => { let k = catOf(i.desc); if (cnt[k] < 2 && !CAT_NAME[k]) k = 'أخرى'; if (!grp.has(k)) grp.set(k, []); grp.get(k).push(i); });
-    let sn = 0; return [...grp.entries()].sort((x, y) => (x[0] === 'أخرى') - (y[0] === 'أخرى')).map(([k, list]) => `<tr class="qg"><td colspan="${ncol}">${esc(CAT_NAME[k] || k)}</td></tr>` + list.map(i => line(i, ++sn)).join('')).join('');
+    let sn = 0; return [...grp.entries()].sort((x, y) => (x[0] === 'أخرى') - (y[0] === 'أخرى')).map(([k, list]) => `<tr class="qg"><td colspan="${ncol}">${esc(CAT_NAME[k] || k)}</td></tr>` + list.map(i => line(i)).join('')).join('');
   };
   let rows;
   if (Q.split) {
@@ -1194,7 +1201,7 @@ function qPaper() {
   const qtB = `<div class="qt">${Q.na ? '' : `<b>${esc(qTitle())}</b>`}${Q.na ? '<div class="qnew"><i>★</i>وصل حديثًا<i>★</i></div>' : '<span>PRICE QUOTATION</span>'}</div>`;
   return `<table class="qpg"><thead><tr><td><div class="qh"><div class="qlg">${logo}</div>${qStrip()}</div><div class="qbar"></div>${qtB}${qKind() ? `<div class="qkd k-${qKind()}"><i></i><em>${esc(QKIND[qKind()])}<small>${{ nissan: 'NISSAN', toyota: 'TOYOTA', mixed: 'NISSAN &amp; TOYOTA' }[qKind()]}</small></em><i></i></div>` : ''}</td></tr></thead><tbody><tr><td>
   <div class="qmeta"><div class="qd"><p><span>رقم العرض</span><b>${esc(Q.no || '-')}</b></p><p><span>التاريخ</span><b>${qDate(Q.date)}</b></p>${+Q.valid > 0 ? `<p><span>صالح حتى</span><b>${qDate(qEnd())}</b></p>` : ''}</div></div>
-  <table class="qtb"><thead><tr><th class="qc">م</th><th>رقم القطعة</th><th>اسم الصنف</th>${hasBrand ? '<th class="qc">الماركة</th>' : ''}${Q.gen ? '' : '<th class="qc">الكمية</th>'}<th class="qn1">${Q.gen ? 'السعر' : 'سعر الوحدة'}</th>${Q.gen ? '' : '<th class="qn1">الإجمالي</th>'}</tr></thead><tbody>${rows}</tbody></table>
+  <table class="qtb"><thead><tr><th style="width:${cw[0]}%">رقم القطعة</th><th style="width:${cw[1]}%">اسم الصنف</th>${hasBrand ? `<th class="qc" style="width:${cw[2]}%">الماركة</th>` : ''}${Q.gen ? '' : `<th class="qc" style="width:${cw[hasBrand ? 3 : 2]}%">الكمية</th>`}<th class="qn1" style="width:${cw[cw.length - (Q.gen ? 1 : 2)]}%">${Q.gen ? 'السعر' : 'سعر الوحدة'}</th>${Q.gen ? '' : `<th class="qn1" style="width:${cw[cw.length - 1]}%">الإجمالي</th>`}</tr></thead><tbody>${rows}</tbody></table>
   
   
   ${Q.gen ? '' : '<div class="qs"><div>المبيعات</div><div>اعتماد العميل</div></div>'}
@@ -1212,7 +1219,7 @@ function viewQuote() {
   
     <div class="tool"><div class="grow"><input id="q-search" type="search" placeholder="ابحث في الأصناف المرفوعة" value="${esc(Q.q || '')}"></div><button class="btn" data-qact="add">إضافة صنف يدوياً</button><button class="btn" data-qact="all">تحديد الكل</button><button class="btn" data-qact="none">إلغاء التحديد</button><button class="btn" data-qact="clear">حذف كل الأصناف</button><button class="btn" data-qact="undo" title="التراجع عن آخر إضافة أو حذف">تراجع</button></div>
   <div class="tool qpdfrow"><button class="btn primary" data-qact="pdf">حفظ العرض PDF</button></div>
-  <button type="button" class="qfold${Q.fold ? ' shut' : ''}" data-qact="fold" aria-expanded="${Q.fold ? 'false' : 'true'}" title="${Q.fold ? 'فتح القائمة' : 'طي القائمة'}"><b>قائمة الأصناف</b><span class="qcnt" id="q-lc">${Q.items.length} صنف</span><svg class="qar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="qfrow"><button type="button" class="qfold${Q.fold ? ' shut' : ''}" data-qact="fold" aria-expanded="${Q.fold ? 'false' : 'true'}" title="${Q.fold ? 'فتح القائمة' : 'طي القائمة'}"><b>قائمة الأصناف</b><span class="qcnt" id="q-lc">${Q.items.length} صنف</span><svg class="qar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="qsw"><button type="button" class="btn qsort" data-qact="sort" aria-haspopup="menu" aria-expanded="false" aria-label="ترتيب الأصناف" title="ترتيب الأصناف"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h11M4 17h6"/></svg></button><div class="qmenu" id="q-smenu" role="menu" hidden><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-asc">أبجديًا: من الألف إلى الياء</button><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-desc">أبجديًا: من الياء إلى الألف</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-asc">الكمية: من الأقل إلى الأكثر</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-desc">الكمية: من الأكثر إلى الأقل</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-asc">السعر: من الأقل إلى الأعلى</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-desc">السعر: من الأعلى إلى الأقل</button></div></div></div>
   <div class="tw qtw" id="q-list" ${Q.fold ? 'hidden' : ''}><table class="qed"><thead><tr><th></th><th>رقم القطعة</th><th>اسم الصنف</th><th>السعر</th><th></th></tr></thead><tbody id="q-rows">${qRows()}</tbody><tfoot><tr><td colspan="5"><button class="btn qplus" data-qact="addend" aria-label="إضافة صنف" title="إضافة صنف">+</button></td></tr></tfoot></table></div>
   <p class="mut" style="margin:6px 2px 0;font-size:13px">عند إضافة صنف يدوياً: اكتب اسم القطعة (مثل «مقص التيما») أو أول رقمين من رقمها لتظهر الاقتراحات من قاعدة بيانات القطع، ثم اختر منها لتُملأ البيانات كاملة.</p>
   <div class="tool" style="margin-top:14px"><span class="mut" id="q-count"></span><span id="q-warn" class="qwarn" hidden></span></div>
@@ -9028,11 +9035,22 @@ document.addEventListener('change', e => {
   } }
   else if (t.id === 'file-quote') { qImport([...t.files]); t.value = ''; }
 });
+document.addEventListener('click', e => { const m = document.getElementById('q-smenu'); if (m && !m.hidden && !e.target.closest('.qsw')) { m.hidden = true; const sb = document.querySelector('.qsort'); if (sb) sb.setAttribute('aria-expanded', 'false'); } });
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-qact]'); if (!b) return; const a = b.dataset.qact;
   if (a === 'pick') $('#file-quote').click();
   else if (a === 'pdf') qPdf();
   else if (a === 'pfold') { Q.pfold = !Q.pfold; const l = $('#qpaper'); if (l) { l.hidden = Q.pfold; if (!Q.pfold) qFit(); } b.classList.toggle('shut', Q.pfold); b.setAttribute('aria-expanded', Q.pfold ? 'false' : 'true'); b.title = Q.pfold ? 'فتح المعاينة' : 'طي المعاينة'; qSave(); }
+  else if (a === 'sort') { const m = $('#q-smenu'); if (m) { m.hidden = !m.hidden; b.setAttribute('aria-expanded', m.hidden ? 'false' : 'true'); m.querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.k === Q.sortKey)); } }
+  else if (a === 'sortby') {
+    const m = $('#q-smenu'); if (m) m.hidden = true; const sb = document.querySelector('.qsort'); if (sb) sb.setAttribute('aria-expanded', 'false');
+    if (Q.items.length < 2) { toast('لا توجد أصناف كافية للترتيب'); return; }
+    const k = b.dataset.k, [f, d] = k.split('-'), dir = d === 'asc' ? 1 : -1, cmp = new Intl.Collator('ar', { numeric: true, sensitivity: 'base' });
+    qSnap();
+    Q.items.sort((x, y) => f === 'alpha' ? dir * cmp.compare(normAr(String(x.desc || '')), normAr(String(y.desc || '')))
+      : dir * ((+(f === 'qty' ? x.qty : x.price) || 0) - (+(f === 'qty' ? y.qty : y.price) || 0)) || cmp.compare(normAr(String(x.desc || '')), normAr(String(y.desc || ''))));
+    Q.sortKey = k; $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); qSave(); toast('رُتّبت الأصناف: ' + b.textContent + '. للتراجع اضغط «تراجع».');
+  }
   else if (a === 'fold') { Q.fold = !Q.fold; const l = $('#q-list'); if (l) l.hidden = Q.fold; b.classList.toggle('shut', Q.fold); b.setAttribute('aria-expanded', Q.fold ? 'false' : 'true'); b.title = Q.fold ? 'فتح القائمة' : 'طي القائمة'; if (!Q.fold) qGrowAll(); qSave(); }
   else if (a === 'addend') { if (Q.fold) { Q.fold = false; const l = $('#q-list'); if (l) l.hidden = false; const fb = document.querySelector('[data-qact=fold]'); if (fb) { fb.classList.remove('shut'); fb.setAttribute('aria-expanded', 'true'); } qGrowAll(); } Q.q = ''; const si = $('#q-search'); if (si) si.value = ''; if (!Q.no) Q.no = qNewNo(); Q.items.push({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); const ins = document.querySelectorAll('#q-rows tr input[data-qi="no"]'); const f = ins[ins.length - 1]; if (f) { f.focus(); f.scrollIntoView({ block: 'center' }); } }
   else if (a === 'add') { Q.fold = false; Q.items.unshift({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); Q.q = ''; if (!Q.no) Q.no = qNewNo(); render(); const f = $('#q-rows textarea[data-qi="desc"]'); if (f) f.focus(); }
