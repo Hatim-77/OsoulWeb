@@ -615,7 +615,7 @@ const originOf = it => {
   const t = normAr((it.brand || '') + ' ' + (it.desc || '')), n = String(it.no || '').toUpperCase().replace(/[^A-Z0-9]/g, ''), sm = n.match(SFX_RE), sx = sm ? sm[1] : ''; let o = '';
   for (const [k, re] of ORIGINS) if (re.test(t)) { o = k; break; }
   if (!o && NOSUF[sx]) o = NOSUF[sx];
-  const sk = /(ساكا|sacaa|saka)/.test(t) || /^SAC/.test(sx), extra = sx && !/^SAC/.test(sx) && (!NOSUF[sx] ? ' #' + sx : (sk && NOSUF[sx] === 'ياباني' ? ' #JAPAN' : ''));
+  const sk = /(ساكا|sacaa|saka)/.test(t) || /^SAC/.test(sx), extra = sx && !/^SAC/.test(sx) ? (!NOSUF[sx] ? ' #' + sx : (sk && NOSUF[sx] === 'ياباني' ? ' #JAPAN' : '')) : '';
   return (sk ? 'ساكا ' : '') + o + extra;
 };
 /* الرقم أولاً: رقمان مختلفان يعنيان قطعتين مختلفتين مهما تشابه الاسم. رقم الصنف يطابق الآخر إن كان أحدهما بداية الآخر (لاحقة الشركة) */
@@ -629,9 +629,10 @@ function build() {
     /* رقم ضعيف (قصير أو أرقام فقط، مثل سعر قُرئ خطأً) لا يصلح لدمج صنفين */
     if (!ok && !(n.length >= 5 && /\d/.test(n) && /[A-Z]/.test(n))) n = '';
     let g = null;
-    if (n) n += '|' + og;
-    if (n.length >= 3 && byNo.has(n)) g = byNo.get(n);
-    if (!g) {
+    /* الرقم هو المرجع: نفس رقم الوكالة = نفس الصنف مهما اختلف الاسم، بشرط ألا يتعارض نوعان مكتوبان صراحةً (ساكا / ياباني / ماليزي...). وغياب النوع في أحد العرضين لا يمنع الدمج.
+       والاسم لا يُستعمل للدمج إلا للأصناف التي ليس لها رقم صالح */
+    if (n && byNo.has(n)) { g = byNo.get(n).find(x => x.og === og || !x.og || !og) || null; if (g && !g.og && og) g.og = og; }
+    if (!g && !n) {
       const t = toks(it.desc);
       if (t.size >= 2) {
         const cnt = new Map(); t.forEach(w => (inv.get(w) || []).forEach(x => cnt.set(x, (cnt.get(x) || 0) + 1)));
@@ -648,7 +649,7 @@ function build() {
       }
     }
     if (!g) { g = { desc: it.desc, no: it.no, t: toks(it.desc), side: sideOf(it.desc), head: headOf(it.desc), cells: {}, og, nums: [], keys: new Set(), nm: [...toks(it.desc)].filter(w => /\d/.test(w)).sort().join(',') }; groups.push(g); reg(g); }
-    if (n.length >= 3 && !byNo.has(n)) byNo.set(n, g);
+    if (n) { if (!byNo.has(n)) byNo.set(n, []); if (!byNo.get(n).includes(g)) byNo.get(n).push(g); }
     if (!g.no && it.no) g.no = it.no;
     if (ok) g.keys.add(ok);
     if (hasNum(it.no) && !g.nums.some(m => numSame(m, it.no))) g.nums.push(it.no);
