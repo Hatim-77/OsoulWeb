@@ -396,6 +396,7 @@ body{max-width:100%}
 .dlk{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px 14px;margin-bottom:16px}.dla{display:flex;gap:10px;flex-wrap:wrap}#dl-d{width:min(520px,calc(100% - 24px))}#q-dls-note{margin-inline-start:10px;font-size:13px}
 .btn.pdf{background:#d93a31;border-color:#d93a31;color:#fff}.btn.pdf:hover{background:#e5473e;border-color:#e5473e}.btn.xls{background:#1f8f4e;border-color:#1f8f4e;color:#fff}.btn.xls:hover{background:#27a65c;border-color:#27a65c}
 @media screen{.qfold.pv{margin-bottom:16px}}
+#dl-d[open]{display:flex;flex-direction:column;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}#dl-d .h,#dl-d .f{flex:none}#dl-d .b{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto}#dl-d .f.dla{flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -9118,7 +9119,8 @@ function dlOpen(kind) {
     <p class="note" style="margin:0 0 10px">اختر القسم أو الأقسام التي تريد تنزيلها، ثم اضغط Excel أو PDF.</p>
     <div style="margin-bottom:10px"><button type="button" class="btn link sm" data-dlall="1">تحديد الكل</button> <button type="button" class="btn link sm" data-dlall="0">إلغاء التحديد</button></div>
     <div class="dlk">${keys.map(([k, n]) => `<label class="chk"><input type="checkbox" data-dlk="${esc(k)}" ${!pre || pre.has(k) ? 'checked' : ''}> ${esc(dlName(k))} <span class="mut">(${n})</span></label>`).join('')}</div>
-    <div class="dla">${kind === 'q' ? '<button type="button" class="btn xls" data-dlgo="qxlsx">Excel</button><button type="button" class="btn pdf" data-dlgo="qpdf">PDF</button>' : '<button type="button" class="btn xls" data-dlgo="xlsx">Excel</button><button type="button" class="btn pdf" data-dlgo="pdf">PDF</button>'}</div></div>`;
+  </div>
+    <div class="f dla">${kind === 'q' ? '<button type="button" class="btn xls" data-dlgo="qxlsx">Excel</button><button type="button" class="btn pdf" data-dlgo="qpdf">PDF</button>' : '<button type="button" class="btn xls" data-dlgo="xlsx">Excel</button><button type="button" class="btn pdf" data-dlgo="pdf">PDF</button>'}</div>`;
   d.showModal();
 }
 document.addEventListener('click', e => {
