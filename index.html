@@ -321,7 +321,7 @@ body{max-width:100%}
 #povl .pdlg p{margin:0;color:var(--ink2);font-size:14px;line-height:1.8}#povl .pbt{display:flex;gap:8px}#povl .pbt .btn{flex:1}
 #qpp{display:none}
 .qpage{width:210mm;box-sizing:border-box;padding:12mm 12mm 14mm;background:#fff;position:relative;overflow:hidden}
-.qpage.fin{height:auto;page-break-after:always;break-after:page}.qpage.fin:last-child{page-break-after:auto;break-after:auto}
+.qpage.fin{height:auto}.qpage.fin+.qpage.fin{page-break-before:always;break-before:page}
 .qpage .qpg>tbody>tr>td{vertical-align:top}
 .qpage .pn{margin:2mm 0 0;text-align:center;font:600 10px Cairo,Arial,sans-serif;color:#555;direction:rtl}
 @media print{
@@ -8879,7 +8879,7 @@ const qIsMobile = () => matchMedia('(pointer:coarse)').matches && !matchMedia('(
 const QPAGE_CSS = '.qpage{width:210mm;box-sizing:border-box;padding:12mm 12mm 14mm;background:#fff;position:relative;overflow:hidden}';
 /* على الآيفون تُضيف الطباعة هوامش من عندها وتصغّر الصفحة، فنجعل ارتفاع الصفحة أقصر حتى لا يتجاوز ورقة واحدة فتخرج صفحات فارغة */
 const qIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-const qPageH = () => qIOS() ? 234 : 296, qPageW = () => qIOS() ? 180 : 210; /* على الآيفون: عرض أقل من المساحة المطبوعة فلا يصغّر الصفحة، وهوامش داخلية صغيرة */
+const qPageH = () => qIOS() ? 230 : 296, qPageW = () => qIOS() ? 180 : 210; /* على الآيفون: عرض أقل من المساحة المطبوعة فلا يصغّر الصفحة، وهوامش داخلية صغيرة */
 function qPrintRules() { const pr = []; for (const sh of document.styleSheets) { try { for (const r of sh.cssRules) if (r.type === 4 && /print/.test(r.media.mediaText)) for (const x of r.cssRules) if (x.type === 1 && !/^body\.pq \.qpaper$/.test(x.selectorText) && !/povl|qpp/.test(x.selectorText)) pr.push(x.cssText); } catch (e) { } } return pr; }
 function qPaginate(html) {
   const st = document.createElement('style'); st.textContent = qPrintRules().join('\n') + QPAGE_CSS; document.head.appendChild(st);
@@ -8890,7 +8890,7 @@ function qPaginate(html) {
     const src = document.createElement('div'); src.innerHTML = html; const qpg = src.querySelector('.qpg'); if (!qpg) return [];
     const probe = document.createElement('div'); probe.style.cssText = 'width:100mm;height:1px'; tmp.appendChild(probe); const mm = probe.offsetWidth / 100; tmp.removeChild(probe);
     const isHead = r => r.classList.contains('qg') || r.classList.contains('qb'), H = qPageH(), LIM = (H - 9) * mm, rows = [...qpg.querySelector('.qtb tbody').children], pages = [];
-    const W = qPageW(), mk = (list, last) => { const pg = document.createElement('div'); pg.className = 'qpage'; if (qIOS()) pg.style.cssText = 'width:' + W + 'mm;padding:5mm 3mm 5mm'; const c = qpg.cloneNode(true), tb = c.querySelector('.qtb tbody'); tb.innerHTML = ''; list.forEach(r => tb.appendChild(r.cloneNode(true))); const sg = c.querySelector('.qs'); if (sg && !last) sg.remove(); pg.appendChild(c); return pg; };
+    const W = qPageW(), mk = (list, last) => { const pg = document.createElement('div'); pg.className = 'qpage'; if (qIOS()) pg.style.cssText = 'width:' + W + 'mm;padding:2mm 3mm 3mm'; const c = qpg.cloneNode(true), tb = c.querySelector('.qtb tbody'); tb.innerHTML = ''; list.forEach(r => tb.appendChild(r.cloneNode(true))); const sg = c.querySelector('.qs'); if (sg && !last) sg.remove(); pg.appendChild(c); return pg; };
     let i = 0;
     while (i < rows.length) {
       const pg = mk([], false), tb = pg.querySelector('.qtb tbody'), list = []; tmp.appendChild(pg);
