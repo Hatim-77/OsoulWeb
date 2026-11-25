@@ -392,6 +392,7 @@ body{max-width:100%}
 .btn.dim{opacity:.45}
 .qplus{width:100%;font-size:22px;line-height:1;padding:6px 0}
 .qed tfoot td{padding:6px;background:transparent}
+.pw{position:relative;display:block}.pw input{width:100%;padding-left:46px!important;padding-right:14px!important}.pw .pwe{position:absolute;top:0;bottom:0;left:0;width:44px;display:flex;align-items:center;justify-content:center;background:none;border:0;color:#9aa0a8;cursor:pointer;padding:0}.pw .pwe:hover,.pw .pwe:focus-visible{color:#fff;outline:0}.pw .pwe svg{width:20px;height:20px}
 </style>
 </head>
 <body>
@@ -806,7 +807,7 @@ function render() {
     ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض ${KIND_AR[page]}</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
     : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة لمقارنة ${KIND_AR[page]}.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
   $('#app').innerHTML = !isCmp(page) ? '' : `<div class="kseg" role="tablist">${['nissan', 'toyota'].map(k => `<button data-page="${k}" role="tab" aria-selected="${page === k}" class="${page === k ? 'on' : ''}">${KIND_AR[k]}<span class="n">${(k === 'nissan' ? filesN : filesT).length}</span></button>`).join('')}</div>` + dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
-  $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button type="button" data-acc="1" title="فتح البرنامج المحاسبي. اضغط مطولًا لتغيير الرابط"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>البرنامج المحاسبي</button>`;
+  $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button type="button" data-acc="1" title="فتح البرنامج المحاسبي"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>البرنامج المحاسبي</button>`;
   $('#app').hidden = !isCmp(page); $('#hist').hidden = isCmp(page);
   if (isCmp(page)) $('#hist').innerHTML = '';
   else if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine(); else if (page === 'quote') { $('#hist').innerHTML = viewQuote(); qGrowAll(); qRefresh(); }
@@ -9117,23 +9118,25 @@ cloud.run();
 /* تسجيل خدمة العمل دون اتصال (تعمل على GitHub Pages فقط) */
 try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && /github\.io$/.test(location.hostname)) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { })); } catch (e) { }
 
-/* البرنامج المحاسبي: زر يفتح رابط النظام السحابي. الرابط يُحفظ على الجهاز، ويُغيَّر بالضغط المطوّل */
+/* البرنامج المحاسبي: زر يفتح رابط النظام السحابي. الرابط ثابت ولا يمكن تغييره من الواجهة */
 (() => {
-  const K = 'osoul_acc_url', DEF = 'https://uat-erp-app.asaspc.net/login', get = () => { try { return localStorage.getItem(K) || DEF; } catch (e) { return DEF; } };
-  const ask = (cur) => {
-    const v = prompt('أدخل رابط البرنامج المحاسبي (مثال: https://example.com)', cur || ''); if (v === null) return '';
-    let u = v.trim(); if (!u) { try { localStorage.removeItem(K); } catch (e) { } toast('عاد الزر إلى الرابط الافتراضي'); return ''; }
-    if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
-    try { const x = new URL(u); if (!/^https?:$/.test(x.protocol) || !x.hostname.includes('.')) throw 0; u = x.href; } catch (e) { toast('الرابط غير صالح'); return ''; }
-    try { localStorage.setItem(K, u); } catch (e) { } toast('حُفظ رابط البرنامج المحاسبي'); return u;
-  };
-  const open = () => { const u = get() || ask(''); if (u) { const w = window.open(u, '_blank', 'noopener'); if (!w) location.href = u; } };
-  let t = null, long = false;
-  const clr = () => { clearTimeout(t); t = null; };
-  document.addEventListener('pointerdown', e => { const b = e.target.closest('[data-acc]'); if (!b) return; long = false; clr(); t = setTimeout(() => { long = true; ask(get()); }, 700); });
-  ['pointerup', 'pointercancel', 'pointermove', 'scroll'].forEach(n => document.addEventListener(n, clr, true));
-  document.addEventListener('contextmenu', e => { if (e.target.closest('[data-acc]')) e.preventDefault(); });
-  document.addEventListener('click', e => { const b = e.target.closest('[data-acc]'); if (!b) return; e.preventDefault(); if (long) { long = false; return; } open(); });
+  const URL_ACC = 'https://uat-erp-app.asaspc.net/login';
+  document.addEventListener('click', e => { const b = e.target.closest('[data-acc]'); if (!b) return; e.preventDefault(); const w = window.open(URL_ACC, '_blank', 'noopener'); if (!w) location.href = URL_ACC; });
+})();
+
+/* عين إظهار كلمة المرور: العين المفتوحة تعني أن الكلمة ظاهرة، والمشطوبة تعني أنها مخفية */
+(() => {
+  const OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const SHUT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 5.1A10.9 10.9 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6A16.5 16.5 0 0 0 2 12s3.5 7 10 7c1.8 0 3.4-.5 4.8-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  document.querySelectorAll('input[type="password"]').forEach(inp => {
+    if (inp.parentElement.classList.contains('pw')) return;
+    const w = document.createElement('div'); w.className = 'pw'; inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'pwe'; b.tabIndex = -1; b.setAttribute('aria-label', 'إظهار كلمة المرور'); b.innerHTML = SHUT; w.appendChild(b);
+    b.addEventListener('mousedown', e => e.preventDefault());
+    b.addEventListener('click', () => { const show = inp.type === 'password'; inp.type = show ? 'text' : 'password'; b.innerHTML = show ? OPEN : SHUT; b.setAttribute('aria-label', show ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'); });
+  });
+  /* عند إغلاق النافذة تعود الخانات مخفية */
+  document.querySelectorAll('dialog').forEach(d => d.addEventListener('close', () => d.querySelectorAll('.pw').forEach(w => { const i = w.querySelector('input'), b = w.querySelector('.pwe'); if (i.type !== 'password') { i.type = 'password'; b.innerHTML = SHUT; } })));
 })();
 </script>
 </body>
