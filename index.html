@@ -13,10 +13,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>أصول القطع</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l8.66 5v10L12 22l-8.66-5V7z' fill='%23ec4a40'/%3E%3Ccircle cx='12' cy='12' r='3.6' fill='%230e0f10'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20160%20160'%3E%3Crect%20width='160'%20height='160'%20rx='38'%20fill='%230b0b0c'/%3E%3Crect%20x='10'%20y='10'%20width='140'%20height='140'%20rx='30'%20fill='none'%20stroke='%23d63a33'%20stroke-width='5'/%3E%3Ccircle%20cx='60'%20cy='80'%20r='24'%20fill='none'%20stroke='%23f3f1ee'%20stroke-width='11'/%3E%3Cpath%20d='M123%2064%20C123%2048%2092%2048%2092%2064%20C92%2080%20124%2077%20124%2095%20C124%20112%2091%20112%2089%2094'%20fill='none'%20stroke='%230b0b0c'%20stroke-width='21'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Cpath%20d='M123%2064%20C123%2048%2092%2048%2092%2064%20C92%2080%20124%2077%20124%2095%20C124%20112%2091%20112%2089%2094'%20fill='none'%20stroke='%23d63a33'%20stroke-width='12'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Montserrat:wght@800;900&family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
@@ -128,15 +128,15 @@ td.p.has{cursor:pointer}
 .qnac{display:flex;align-items:center;gap:8px;min-height:38px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink);font-size:14px;cursor:pointer}.qnac input{width:auto;accent-color:#c9a227}
 .qpg thead .qt{margin-top:12px}.qpg thead .qt+.qkd{margin-top:8px}
 .qnew{display:inline-flex;align-items:center;gap:12px;margin-top:2px;padding:3px 26px;border-radius:20px;background:linear-gradient(90deg,#a8221a,#c52b22);color:#fff;font-size:14px;font-weight:800;letter-spacing:0;direction:rtl}.qnew i{font-style:normal;color:#fff;letter-spacing:0;font-size:10px}
-.qft{margin-top:18px;border-top:2px solid #c52b22;background:#f4f5f7;border-radius:0 0 6px 6px;padding:5px 10px 6px;break-inside:avoid}
-.qfa{display:flex;align-items:center;justify-content:center;gap:5px;font-weight:800;font-size:10px;color:#15181c;padding-bottom:3px;margin-bottom:4px;border-bottom:1px solid #dfe2e6}
-.qfa svg{width:12px;height:12px;stroke:#c52b22;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.qfc .ib{width:12px;height:12px;display:flex;align-items:center;justify-content:center;flex:none}
-.qfc .ib svg{width:11px;height:11px;stroke:#c52b22;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.qfg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px 10px}
-.qfc{display:block;min-width:0;padding-inline:6px}
-.qfc small{display:flex;align-items:center;gap:4px;font-size:8px;color:#7a7f85;font-weight:700;line-height:1.15}
-.qfc b{display:block;font-size:10px;color:#15181c;font-weight:800;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.25}
+.qft{margin-top:18px;border-top:2px solid #c52b22;background:#f4f5f7;border-radius:0 0 6px 6px;padding:5px 10px 5px;break-inside:avoid}
+.qfg{display:flex;flex-direction:column;gap:4px}
+.qfr{display:flex;justify-content:center;align-items:center;gap:6px 18px;flex-wrap:nowrap}
+.qfc{display:flex;align-items:center;gap:4px;min-width:0;white-space:nowrap}
+.qfc .ib{width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #e3d3d1;display:flex;align-items:center;justify-content:center;flex:none}
+.qfc .ib svg{width:9px;height:9px;stroke:#c52b22;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.qfc .qx{display:flex;align-items:baseline;gap:4px;min-width:0}
+.qfc small{display:inline;font-size:8px;color:#7a7f85;font-weight:700;line-height:1.2}
+.qfc b{display:inline;font-size:9.5px;color:#15181c;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.25}
 .qf{margin-top:22px;padding-top:8px;border-top:2px solid #c52b22;text-align:center;color:#555;font-size:11.5px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:18px 0}
 .tile{min-width:0;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
@@ -246,6 +246,24 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 #login{width:min(420px,calc(100% - 20px))}
 #login label{display:block;font-size:13.5px;color:var(--ink2);margin:10px 0 4px}
 #login input{width:100%;direction:ltr;text-align:start;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:15px}
+
+/* شاشة الافتتاح: ثابتة بلا حركة، بشعار العروض نفسه */
+#intro{position:fixed;inset:0;z-index:99999;background:var(--bg,#0e0f10);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .55s ease}
+#intro.out{opacity:0;pointer-events:none}
+#intro .il{display:flex;flex-direction:column;align-items:center;gap:clamp(18px,3vh,28px);padding:0 20px;text-align:center}
+#intro svg{width:clamp(130px,22vw,200px);height:auto;display:block;animation:inLogo 1.1s cubic-bezier(.2,.8,.2,1) both}
+#intro .i1{animation:inUp .9s .7s cubic-bezier(.2,.8,.2,1) both}
+#intro .i2{animation:inLine .9s 1.2s ease both}
+#intro .i3{animation:inUp .8s 1.5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes inLogo{from{opacity:0;transform:scale(.8) translateY(14px)}to{opacity:1;transform:none}}
+@keyframes inUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes inLine{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#intro svg,#intro .i1,#intro .i2,#intro .i3{animation:none}}
+#intro .i1{font-family:"Tajawal","Cairo","Segoe UI",Tahoma,sans-serif;font-weight:800;font-size:clamp(28px,5.4vw,52px);line-height:1.25;color:#f3f1ee;white-space:nowrap}
+#intro .i2{height:2px;width:min(240px,60%);margin:8px auto 10px;background:linear-gradient(90deg,transparent,#d63a33,transparent)}
+#intro .i3{font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-weight:800;font-size:clamp(12px,2.1vw,20px);letter-spacing:.24em;color:#d63a33;white-space:nowrap;direction:ltr}
+#lg-x[hidden]{display:none}
+#login.gate::backdrop{background:#0b0b0c}
 #login input:focus{outline:2px solid var(--accent);outline-offset:1px}
 #login .err{color:var(--bad);font-size:13.5px;min-height:20px;margin-top:10px}
 #login .f{flex-wrap:wrap}
@@ -301,7 +319,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   body.pq #hist>#qwrap{display:block!important}
   body.pq #qwrap>:not(#qpaper){display:none!important}
   /* حجم الملف: الخط Cairo متغير الوزن فيُدمج في PDF نسخةً لكل وزن، فنحصر الأوزان في وزنين (400 و700) عند الطباعة */
-  body.pq .qpaper .qt b,body.pq .qpaper .qkd em,body.pq .qpaper .qfa,body.pq .qpaper .qfc b,body.pq .qpaper .qtb tbody tr.qg td,body.pq .qpaper .qtb tbody tr.qb td{font-weight:700!important}
+  body.pq .qpaper .qt b,body.pq .qpaper .qkd em,body.pq .qpaper .qfc b,body.pq .qpaper .qtb tbody tr.qg td,body.pq .qpaper .qtb tbody tr.qb td{font-weight:700!important}
   body.pq .qpaper *{font-variant-numeric:normal!important}
   body.pq .qpaper{box-shadow:none;border-radius:0;padding:0;max-width:none;margin:0;page:quote}
   @page quote{size:A4 portrait;margin:12mm 12mm 18mm;background:#fff;@bottom-center{content:"صفحة " counter(page) " من " counter(pages);font:600 10px Cairo,Arial,sans-serif;color:#555;direction:rtl}}
@@ -336,6 +354,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 </style>
 </head>
 <body>
+<div id="intro" role="img" aria-label="شركة أصول القطع"><div class="il"><svg viewBox="0 0 160 160" aria-hidden="true"><rect width="160" height="160" rx="38" fill="#0b0b0c"/><rect x="10" y="10" width="140" height="140" rx="30" fill="none" stroke="#d63a33" stroke-width="2.5"/><circle cx="60" cy="74" r="24" fill="none" stroke="#f3f1ee" stroke-width="9"/><g transform="translate(0 -6)"><path d="M123 64 C123 48 92 48 92 64 C92 80 124 77 124 95 C124 112 91 112 89 94" fill="none" stroke="#0b0b0c" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/><path d="M123 64 C123 48 92 48 92 64 C92 80 124 77 124 95 C124 112 91 112 89 94" fill="none" stroke="#d63a33" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></g><rect x="52" y="124" width="56" height="4" rx="2" fill="#f3f1ee"/></svg><div><div class="i1">شركة أصول القطع</div><div class="i2"></div><div class="i3">OSOUL PARTS CO.</div></div></div></div>
 <div class="shell">
   <aside class="side">
     <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="62 0 262 84" direction="ltr" class="logo" role="img" aria-label="شركة أصول القطع - Osoul Parts Co."><defs><linearGradient id="lgBadge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f25a4f"/><stop offset="1" stop-color="#c62f27"/></linearGradient><linearGradient id="lgR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6a5c"/><stop offset="1" stop-color="#c92d25"/></linearGradient><linearGradient id="lgW" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9bcc0"/></linearGradient><linearGradient id="lgL" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ec4a40"/><stop offset="1" stop-color="#ec4a40" stop-opacity="0"/></linearGradient></defs><g><text id="os-mark" x="280" y="56" text-anchor="middle" font-family="Montserrat,Cairo,'Segoe UI',Arial,sans-serif" font-weight="900" font-size="40" fill="#f3f1ea" textLength="60" lengthAdjust="spacingAndGlyphs">OS</text></g><text x="236" y="38" text-anchor="end" font-family="Cairo,'Segoe UI',Tahoma,sans-serif" font-weight="900" font-size="31" fill="#f3f1ea" textLength="168" lengthAdjust="spacingAndGlyphs">شركة أصول القطع</text><rect x="68" y="47.5" width="168" height="2" rx="1" fill="url(#lgL)" transform="translate(0 0)"/><text x="236" y="68" text-anchor="end" font-family="Cairo,'Segoe UI',Arial,sans-serif" font-weight="700" font-size="15" fill="#ec4a40" textLength="168" lengthAdjust="spacing">OSOUL PARTS CO.</text></svg></div>
@@ -884,7 +903,24 @@ const cloud = {
   }
 };
 cloud.init(); cloudTouch = () => cloud.touch();
+/* الدخول إلزامي: لا يظهر التطبيق قبل تسجيل الدخول */
+/* القفل يعمل في الموقع المنشور على GitHub فقط، أما المعاينات (مثل الأرتيفاكت) فلا تصل إلى قاعدة البيانات فلا تُقفل */
+const GATED = /\.github\.io$/.test(location.hostname);
+const needLogin = () => GATED && cloud.on && !cloud.sess;
+let introOn = !!document.getElementById('intro');
+function endIntro() {
+  const el = document.getElementById('intro'); if (!el || !introOn) return;
+  introOn = false; el.classList.add('out'); gate(); setTimeout(() => el.remove(), 650);
+}
+(() => { const el = document.getElementById('intro'); if (!el) return; el.addEventListener('click', endIntro); setTimeout(endIntro, 3800); })();
+function gate() {
+  if (introOn) return;
+  const d = $('#login'); if (!d) return;
+  if (needLogin()) { d.classList.add('gate'); $('#lg-x').hidden = true; if (!d.open) { lgMode(lgNew); d.showModal(); } }
+  else { d.classList.remove('gate'); $('#lg-x').hidden = false; }
+}
 function renderAcct() {
+  gate();
   const el = $('#acct'); if (!el) return; el.hidden = !cloud.on; if (!cloud.on) return;
   if (!cloud.sess) { el.innerHTML = `<span>${cloud.state === 'expired' ? 'انتهت الجلسة، سجّل الدخول من جديد.' : 'لتظهر عروضك على كل أجهزتك'}</span><button class="btn primary" id="acct-in">تسجيل الدخول للمزامنة</button>`; return; }
   const t = { ok: ['', 'متزامن'], wait: ['wait', 'جارٍ المزامنة…'], bad: ['bad', 'تعذرت المزامنة، سأعيد المحاولة'], idle: ['wait', 'جارٍ المزامنة…'] }[cloud.state] || ['', 'متزامن'];
@@ -896,7 +932,7 @@ function lgMode(n) {
   lgNew = n; $('#lg-m-in').classList.toggle('on', !n); $('#lg-m-new').classList.toggle('on', n);
   $('#lg-nm-w').hidden = $('#lg-c-w').hidden = !n; $('#lg-t').textContent = n ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
   $('#lg-go').textContent = n ? 'إنشاء الحساب' : 'دخول'; $('#lg-p').autocomplete = n ? 'new-password' : 'current-password'; $('#lg-err').textContent = '';
-  $('#lg-h').textContent = n ? 'سيُنشأ حساب جديد بهذا البريد. اكتب كلمة المرور مرتين للتأكد منها.' : 'سجّل الدخول بالحساب نفسه على كل أجهزتك لتظهر عروضك المحفوظة في كل مكان.';
+  $('#lg-h').textContent = n ? 'سيُنشأ حساب جديد بهذا البريد. اكتب كلمة المرور مرتين للتأكد منها.' : needLogin() ? 'سجّل الدخول للمتابعة إلى «أصول القطع».' : 'سجّل الدخول بالحساب نفسه على كل أجهزتك لتظهر عروضك المحفوظة في كل مكان.';
 }
 async function doLogin() {
   const e = $('#lg-e').value.trim(), p = $('#lg-p').value, er = $('#lg-err'); er.textContent = '';
@@ -907,15 +943,18 @@ async function doLogin() {
   }
   $('#lg-go').disabled = true;
   try { const r = await cloud.login(e, p, lgNew, $('#lg-n').value.trim()); if (r === 'confirm') { er.textContent = 'تم إنشاء الحساب. أكّد بريدك الإلكتروني من الرسالة المرسلة إليك ثم سجّل الدخول.'; lgMode(false); }
-    else { $('#lg-p').value = $('#lg-c').value = ''; $('#login').close(); cloud.state = 'wait'; renderAcct(); cloud.run(); toast(lgNew ? 'تم إنشاء الحساب وتسجيل الدخول' : 'تم تسجيل الدخول'); } }
+    else { $('#lg-p').value = $('#lg-c').value = ''; cloud.state = 'wait'; $('#login').close(); renderAcct(); cloud.run(); toast(lgNew ? 'تم إنشاء الحساب وتسجيل الدخول' : 'تم تسجيل الدخول'); } }
   catch (x) { er.textContent = lgMsg(String(x.message || x)); }
   $('#lg-go').disabled = false;
 }
 $('#lg-x').addEventListener('click', () => $('#login').close());
+$('#login').addEventListener('cancel', e => { if (needLogin()) e.preventDefault(); });
+$('#login').addEventListener('close', () => { if (needLogin()) setTimeout(gate, 0); });
 $('#lg-m-in').addEventListener('click', () => lgMode(false));
 $('#lg-m-new').addEventListener('click', () => lgMode(true));
 $('#lg-go').addEventListener('click', doLogin);
 $('#login').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
+gate();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) cloud.run(); });
 setInterval(() => { if (!document.hidden) cloud.run(); }, 60000);
 
@@ -1030,7 +1069,9 @@ const qIc = d => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></
 const QI = { pin: 'M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11zM12 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z', tel: 'M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z', mob: 'M8 3h8a1 1 0 011 1v16a1 1 0 01-1 1H8a1 1 0 01-1-1V4a1 1 0 011-1zM11 18h2', chat: 'M4 5h16v11H9l-5 4zM8 10h8M8 13h5', mail: 'M3 6h18v12H3zM3 7l9 7 9-7', doc: 'M6 3h9l4 4v14H6zM9 12h7M9 16h7', cr: 'M4 7h16v13H4zM9 7V4h6v3M4 13h16' };
 const QCO = { addr: 'المملكة العربية السعودية - جدة - حي السروات', rows: [['tel', 'هاتف', '0122600094'], ['mob', 'جوال', '0509011591'], ['chat', 'واتساب', '0122600094'], ['mail', 'البريد الإلكتروني', 'osoul-est@hotmail.com'], ['doc', 'الرقم الضريبي', '311321384100003'], ['cr', 'السجل التجاري', '4030302049']] };
 function qFoot() {
-  return `<div class="qft"><div class="qfa">${qIc(QI.pin)}<span>${QCO.addr}</span></div><div class="qfg">${QCO.rows.map(([i, l, v]) => `<div class="qfc"><small><span class="ib">${qIc(QI[i])}</span>${l}</small><b dir="ltr">${v}</b></div>`).join('')}</div></div>`;
+  const cell = (i, l, v, d = ' dir="ltr"') => `<div class="qfc"><span class="ib">${qIc(QI[i])}</span><div class="qx">${l ? `<small>${l}:</small>` : ''}<b${d}>${v}</b></div></div>`;
+  const r = QCO.rows.map(([i, l, v]) => cell(i, l, v));
+  return `<div class="qft"><div class="qfg"><div class="qfr">${cell('pin', '', QCO.addr, '')}${r.slice(0, 3).join('')}</div><div class="qfr">${r.slice(3).join('')}</div></div></div>`;
 }
 function qPaper() {
   const t = qTotals(), co = Q.co, hasBrand = t.sel.some(i => i.brand), logo = document.querySelector('.brand svg').outerHTML.replaceAll('#f3f1ea', '#15181c').replace('class="logo"', 'class="qlogo"').replace('viewBox="62 0 262 84"', 'viewBox="62 0 270 84"').replace(/<g><text id="os-mark".*?<\/text><\/g>/, `<image href="${QOWN}" x="244" y="8" width="72" height="67" preserveAspectRatio="xMidYMid meet"/>`);
