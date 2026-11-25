@@ -9214,7 +9214,7 @@ function vGrid() {
   if (!list.length) { g.innerHTML = `<p class="note">${V.items.length ? 'لا توجد ملفات مطابقة.' : 'المخزن فارغ. اضغط «رفع ملفات» لإضافة أول ملف.'}</p>`; return; }
   g.innerHTML = '<div class="vgrid">' + list.map(i => {
     const u = V.urls[i.id], img = vIsImg(i) && u ? `<img src="${esc(u.u)}" alt="" loading="lazy">` : `<span class="vx">${esc((String(i.name).split('.').pop() || '').slice(0, 4).toUpperCase())}</span>`;
-    return `<div class="vc" data-id="${i.id}"><button type="button" class="vt" data-vact="open" aria-label="فتح الملف">${img}</button><input class="nm vn" value="${esc(i.name)}" data-vname="${i.id}" aria-label="اسم الملف"><div class="vm">${esc(i.folder || 'عام')} · ${vSize(+i.size || 0)} · ${fmtWhen(Date.parse(i.created_at))}</div><div class="vb"><button type="button" class="btn sm" data-vact="open">فتح</button><button type="button" class="btn sm" data-vact="dl">تنزيل</button><button type="button" class="btn sm link" data-vact="del">حذف</button></div></div>`;
+    return `<div class="vc" data-id="${i.id}"><button type="button" class="vt" data-vact="open" aria-label="فتح الملف">${img}</button><input class="nm vn" value="${esc(i.name)}" data-vname="${i.id}" aria-label="اسم الملف"><div class="vm">${esc(i.folder || 'عام')} · ${vSize(+i.size || 0)} · ${fmtWhen(Date.parse(i.created_at))}</div><div class="vb">${vIsImg(i) ? '<button type="button" class="btn sm" data-vact="open">عرض</button>' : ''}<button type="button" class="btn sm" data-vact="dl">تنزيل</button><button type="button" class="btn sm link" data-vact="del">حذف</button></div></div>`;
   }).join('') + '</div>';
   /* صور لم تُوقَّع بعد */
   const miss = list.filter(i => vIsImg(i) && !V.urls[i.id]); if (miss.length) vSign(miss).then(() => { if (page === 'vault') vGridSoft(); });
@@ -9285,8 +9285,8 @@ document.addEventListener('click', async e => {
     } catch (e2) { toast('تعذر حذف المجلد: ' + vErr(e2)); }
   }
   else if (a === 'open' || a === 'dl') {
-    if (!it) return; await vSign([it]); const u = V.urls[it.id]; if (!u) { toast('تعذر فتح الملف'); return; }
-    if (a === 'open') vView(it, u.u);
+    if (!it) return; const act = a === 'open' && vIsImg(it) ? 'open' : 'dl'; await vSign([it]); const u = V.urls[it.id]; if (!u) { toast('تعذر فتح الملف'); return; }
+    if (act === 'open') vView(it, u.u);
     else { const l = document.createElement('a'); l.href = u.u + (u.u.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(it.name); l.rel = 'noopener'; document.body.appendChild(l); l.click(); l.remove(); }
   }
   else if (a === 'del') {
