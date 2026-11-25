@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0e0f10">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -85,6 +85,8 @@ td.p.has{cursor:pointer}
 #qdb{position:fixed;z-index:80;max-height:320px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.55);padding:4px}#qdb[hidden]{display:none}.qdbr{display:flex;align-items:baseline;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13.5px;line-height:1.5}.qdbr.on,.qdbr:hover{background:var(--panel2)}.qdn{flex:0 0 auto;color:var(--ink2);font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace}.qdd{flex:1 1 auto;min-width:0}.qdp{flex:0 0 auto;color:var(--accent)}@media(max-width:760px){.qdbr{flex-wrap:wrap;gap:2px 10px}.qdd{flex-basis:100%;order:3}}
 @media print{#qdb{display:none!important}}
 .qtw{max-height:420px;overflow:auto}
+.qtw[hidden]{display:none}.qfold{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 6px;padding:11px 14px;background:var(--panel,#1a1b1c);border:1px solid var(--line,#2c2d2f);border-radius:10px;color:inherit;font:inherit;cursor:pointer;text-align:right}
+.qfold b{font-size:15px;flex:1}.qfold .qcnt{font-size:13px;opacity:.7}.qfold .qar{transition:transform .2s}.qfold.shut .qar{transform:rotate(90deg)}.qfold:hover{border-color:#e03b3b}
 .qwarn{color:#ffb4a8;background:rgba(197,43,34,.18);border:1px solid rgba(197,43,34,.5);border-radius:8px;padding:4px 10px;font-size:13px;margin-inline-start:10px}
 .qed td,.qed th{padding:4px 6px;white-space:nowrap}.qed textarea{resize:none;overflow:hidden;white-space:pre-wrap;line-height:1.5;min-width:220px;display:block;height:auto}.qpaper{transform-origin:top center}.qed input.sm{width:84px}.qed td .tt,.qed .tt{font-variant-numeric:tabular-nums;font-weight:700}
 .qpaper{background:#fff;color:#15181c;max-width:820px;margin:0 auto;padding:34px 36px;border-radius:6px;box-shadow:0 8px 30px rgba(0,0,0,.35);font-size:13px;line-height:1.7}
@@ -307,12 +309,15 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
 /* منع تحريك الصفحة يمينًا ويسارًا على الجوال (الجداول العريضة تتحرك داخل إطارها فقط) */
 *{-webkit-tap-highlight-color:transparent}
 button,a,label,select,summary,input[type=checkbox]{touch-action:manipulation}
-html{overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y pinch-zoom}
+html{overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (pointer:coarse){input,select,textarea{font-size:16px}}
 body{max-width:100%}
-.tw{touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain}
+.tw{touch-action:pan-x pan-y;overscroll-behavior-x:contain}
 @media (min-width:1500px){.main{max-width:1500px}}
 @page{size:A4 landscape;margin:9mm}
 .totop{position:fixed;left:18px;right:auto;bottom:22px;z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.4);opacity:.92;transition:transform .15s,opacity .15s}.totop:hover{transform:translateY(-2px);opacity:1}.totop[hidden]{display:none}
+.qpdfrow{margin-top:8px}.qpdfrow .btn{flex:1;min-height:44px}
+.tobot{bottom:22px;transition:transform .15s,opacity .15s,bottom .15s}
 @media(min-width:761px){.qed textarea{height:38px;white-space:nowrap;overflow:hidden}.qed tbody td:nth-child(3){width:100%}.qed tbody td:nth-child(2){min-width:200px}}
 @media(max-width:760px){
   .qtw{max-height:none;overflow:visible}
@@ -386,6 +391,7 @@ body{max-width:100%}
 <dialog id="kw"><div class="h"><b>تنبيه: نوع العرض</b><button class="btn sm" id="kw-x" type="button" aria-label="إلغاء رفع العرض">✕ إلغاء الرفع</button></div><div class="b"><p id="kw-t"></p></div><div class="f"><button class="btn primary" id="kw-mv" type="button">نقله إلى المقارنة الصحيحة</button><button class="btn" id="kw-ok" type="button">إبقاؤه هنا</button></div></dialog>
 <dialog id="reset"><div class="h"><b>تعيين كلمة مرور جديدة</b></div><div class="b"><p class="note" style="margin:0">اكتب كلمة المرور الجديدة مرتين، وبعدها يُسجَّل دخولك تلقائيًا.</p><label for="rs-p">كلمة المرور الجديدة</label><input id="rs-p" type="password" autocomplete="new-password"><label for="rs-c">تأكيد كلمة المرور</label><input id="rs-c" type="password" autocomplete="new-password"><div class="err" id="rs-err" role="alert"></div></div><div class="f"><button class="btn primary" id="rs-go">حفظ كلمة المرور</button></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button id="tobot" class="totop tobot" type="button" aria-label="النزول إلى أسفل الصفحة" title="إلى أسفل الصفحة" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button>
 <button id="totop" class="totop" type="button" aria-label="الصعود إلى أعلى الصفحة" title="إلى أعلى الصفحة" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <input id="file-in" type="file" multiple accept=".pdf,.xlsx,.xls,.xlsm,.csv,.tsv,.txt" style="display:none">
 <input id="file-quote" type="file" multiple accept=".pdf,.xlsx,.xls,.xlsm,.csv,.tsv,.txt" style="display:none">
@@ -1187,9 +1193,11 @@ function viewQuote() {
   <div class="qgrid"><label class="qf1"><span>شهر العرض</span><select data-qf="month"><option value="" ${Q.month === '' ? 'selected' : ''}>بدون شهر</option>${QMON.map((m, i) => `<option value="${i}" ${String(Q.month) === String(i) ? 'selected' : ''}>${m}</option>`).join('')}</select></label><label class="qf1 qnaf"><span>نوع العرض</span><span class="qnac"><input type="checkbox" data-qf="na" ${Q.na ? 'checked' : ''}> وصل حديثًا</span></label><label class="qf1 qnaf"><span>ترتيب الأصناف</span><span class="qnac"><input type="checkbox" data-qf="split" ${Q.split ? 'checked' : ''}> فصل نيسان عن تويوتا</span></label><label class="qf1 qnaf"><span>الفئات</span><span class="qnac"><input type="checkbox" data-qf="flat" ${Q.flat ? 'checked' : ''}> بدون تقسيم الفئات</span></label><label class="qf1"><span>نوع القطع</span><select data-qf="kind"><option value="" ${!Q.kind ? 'selected' : ''}>تلقائي</option>${Object.keys(QKIND).map(k => `<option value="${k}" ${Q.kind === k ? 'selected' : ''}>${QKIND[k]}</option>`).join('')}</select></label>${fld('no', 'رقم العرض (تلقائي)', 'readonly tabindex="-1" style="opacity:.7;cursor:not-allowed"')}${fld('date', 'التاريخ', 'type="date"')}${fld('valid', 'مدة الصلاحية (أيام)', 'type="number" min="0" placeholder="اتركها فارغة لعرض بلا صلاحية"')}</div>
   
     <div class="tool"><div class="grow"><input id="q-search" type="search" placeholder="ابحث في الأصناف المرفوعة" value="${esc(Q.q || '')}"></div><button class="btn" data-qact="add">إضافة صنف يدوياً</button><button class="btn" data-qact="all">تحديد الكل</button><button class="btn" data-qact="none">إلغاء التحديد</button><button class="btn" data-qact="clear">حذف كل الأصناف</button><button class="btn" data-qact="undo" title="التراجع عن آخر إضافة أو حذف">تراجع</button></div>
-  <div class="tw qtw"><table class="qed"><thead><tr><th></th><th>رقم القطعة</th><th>اسم الصنف</th><th>السعر</th><th></th></tr></thead><tbody id="q-rows">${qRows()}</tbody><tfoot><tr><td colspan="5"><button class="btn qplus" data-qact="addend" aria-label="إضافة صنف" title="إضافة صنف">+</button></td></tr></tfoot></table></div>
+  <div class="tool qpdfrow"><button class="btn primary" data-qact="pdf">حفظ العرض PDF</button></div>
+  <button type="button" class="qfold${Q.fold ? ' shut' : ''}" data-qact="fold" aria-expanded="${Q.fold ? 'false' : 'true'}" title="${Q.fold ? 'فتح القائمة' : 'طي القائمة'}"><b>قائمة الأصناف</b><span class="qcnt" id="q-lc">${Q.items.length} صنف</span><svg class="qar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="tw qtw" id="q-list" ${Q.fold ? 'hidden' : ''}><table class="qed"><thead><tr><th></th><th>رقم القطعة</th><th>اسم الصنف</th><th>السعر</th><th></th></tr></thead><tbody id="q-rows">${qRows()}</tbody><tfoot><tr><td colspan="5"><button class="btn qplus" data-qact="addend" aria-label="إضافة صنف" title="إضافة صنف">+</button></td></tr></tfoot></table></div>
   <p class="mut" style="margin:6px 2px 0;font-size:13px">عند إضافة صنف يدوياً: اكتب اسم القطعة (مثل «مقص التيما») أو أول رقمين من رقمها لتظهر الاقتراحات من قاعدة بيانات القطع، ثم اختر منها لتُملأ البيانات كاملة.</p>
-  <div class="tool" style="margin-top:14px"><span class="mut" id="q-count"></span><span id="q-warn" class="qwarn" hidden></span><button class="btn primary" data-qact="pdf">حفظ العرض PDF</button></div>
+  <div class="tool" style="margin-top:14px"><span class="mut" id="q-count"></span><span id="q-warn" class="qwarn" hidden></span></div>
   <h3 style="margin:18px 0 8px">معاينة العرض</h3><div id="qpaper" class="qpaper">${qPaper()}</div></div>`;
 }
 const qUndo = [];
@@ -1207,7 +1215,7 @@ let qrT = 0;
 function qRefreshSoon() { clearTimeout(qrT); qrT = setTimeout(() => { qrT = 0; qRefresh(); }, 150); }
 const qFlush = () => { if (qrT) { clearTimeout(qrT); qrT = 0; qRefresh(); } };
 document.addEventListener('visibilitychange', () => { if (document.hidden) qFlush(); }); window.addEventListener('pagehide', qFlush);
-function qRefresh() { qUndoBtn(); qFit(); { const pe = document.getElementById('qpaper'); if (pe) pe.classList.toggle('na', !!Q.na); } const p = $('#qpaper'); if (p) { p.innerHTML = qPaper(); qFit(); } const c = $('#q-count'); if (c) c.textContent = qTotals().sel.length + ' صنف في العرض من ' + Q.items.length + (qKind() ? ' · النوع: ' + QKIND[qKind()] + (Q.kind ? '' : ' (تلقائي)') : ''); const nb = document.querySelector('[data-qact=new]'); if (nb) nb.classList.toggle('dim', !Q.items.some(i => String(i.desc).trim())); const w = $('#q-warn'); if (w) { w.textContent = qWarn(); w.hidden = !w.textContent; } qSave(); }
+function qRefresh() { qUndoBtn(); qFit(); { const pe = document.getElementById('qpaper'); if (pe) pe.classList.toggle('na', !!Q.na); } const p = $('#qpaper'); if (p) { p.innerHTML = qPaper(); qFit(); } const lc = $('#q-lc'); if (lc) lc.textContent = Q.items.length + ' صنف'; const c = $('#q-count'); if (c) c.textContent = qTotals().sel.length + ' صنف في العرض من ' + Q.items.length + (qKind() ? ' · النوع: ' + QKIND[qKind()] + (Q.kind ? '' : ' (تلقائي)') : ''); const nb = document.querySelector('[data-qact=new]'); if (nb) nb.classList.toggle('dim', !Q.items.some(i => String(i.desc).trim())); const w = $('#q-warn'); if (w) { w.textContent = qWarn(); w.hidden = !w.textContent; } qSave(); }
 async function qImport(list) {
   let n = 0; qSnap();
   for (const f of list) {
@@ -8843,11 +8851,29 @@ function qKeep(silent) {
   else saved.push({ id: uid(), name, sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: false, mine: true, qk, na: !!Q.na, split: !!Q.split, flat: !!Q.flat });
   sync(); save(); return true;
 }
+/* عنوان المستند (يصبح اسم ملف الـPDF) */
+function qDocTitle() { const d = String(Q.date || '').split('-'), dd = d.length === 3 ? d[2] + '-' + d[1] + '-' + d[0] : new Date().toLocaleDateString('en-GB').replaceAll('/', '-'); return (Q.na ? 'وصل حديثًا ' + dd : qTitle() + ' ' + (Q.year || new Date().getFullYear())) + (qKind() ? ' - ' + QKIND[qKind()] : '') + ' - ' + (Q.no || ''); }
+/* الجوال: الطباعة من داخل التطبيق المثبّت لا تعمل ولا تُنهي وضع الطباعة، فنفتح العرض في صفحة مستقلة جاهزة للحفظ */
+const qIsMobile = () => matchMedia('(pointer:coarse)').matches && !matchMedia('(hover:hover)').matches;
+function qOpenPrintTab() {
+  const w = window.open('', '_blank'); if (!w) return false;
+  const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n'), fonts = [...document.querySelectorAll('link[href*="fonts.googleapis"]')].map(l => l.outerHTML).join('');
+  const title = qDocTitle().replace(/</g, '&lt;');
+  w.document.open();
+  w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title>${fonts}<style>${css}</style><style>
+@media screen{html,body{background:#e9ebee!important;margin:0!important;padding:0!important;display:block!important;overflow-x:hidden}body{padding:10px!important}.pbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fff;color:#15181c;border-radius:10px;padding:10px;margin-bottom:10px;font-family:Cairo,Tahoma,sans-serif;font-size:14px;line-height:1.7}.pbar button{flex:none;border:0;border-radius:10px;background:#c52b22;color:#fff;font:inherit;font-weight:700;padding:10px 18px}.pbar span{flex:1;min-width:200px;color:#555}}
+@media print{.pbar{display:none!important}}</style></head><body class="pq"><div class="pbar"><button type="button" onclick="window.print()">طباعة / حفظ PDF</button><span>على الآيفون: اضغط زر المشاركة في المتصفح ثم «طباعة»، وبعدها زر المشاركة في المعاينة واختر «حفظ في الملفات». وعلى أندرويد اختر «حفظ بصيغة PDF» من نافذة الطباعة.</span></div><div id="qpaper" class="qpaper">${qPaper()}</div></body></html>`);
+  w.document.close();
+  try { const s = w.document.createElement('script'); s.textContent = "(function(){var el=document.getElementById('qpaper');function fit(){el.style.cssText='';var w=document.documentElement.clientWidth-20;if(w<800){var s=w/800;el.style.cssText='min-width:800px;width:800px;max-width:none;margin:0;transform-origin:top right;transform:scale('+s+')';el.style.marginBottom=-(el.offsetHeight*(1-s))+'px'}}fit();addEventListener('load',fit);addEventListener('resize',fit);setTimeout(fit,150);setTimeout(fit,600);addEventListener('beforeprint',function(){el.style.cssText=''});addEventListener('afterprint',fit)})();"; w.document.body.appendChild(s); } catch (e) { }
+  return true;
+}
 function qPdf() {
   if (window.self !== window.top && !/github\.io$/.test(location.hostname)) { toast('الطباعة لا تعمل داخل هذه النافذة. افتح الموقع من رابط GitHub ثم اضغط حفظ العرض PDF.'); return; }
   if (!qTotals().sel.length) { toast('أضف صنفاً واحداً على الأقل إلى العرض'); return; }
-  qKeep(true); qUnfit();
-  const title = document.title; { const d = String(Q.date || '').split('-'), dd = d.length === 3 ? d[2] + '-' + d[1] + '-' + d[0] : new Date().toLocaleDateString('en-GB').replaceAll('/', '-'); document.title = (Q.na ? 'وصل حديثًا ' + dd : qTitle() + ' ' + (Q.year || new Date().getFullYear())) + (qKind() ? ' - ' + QKIND[qKind()] : '') + ' - ' + (Q.no || ''); } document.body.classList.add('pq');
+  qKeep(true);
+  if (qIsMobile()) { if (qOpenPrintTab()) return; toast('اسمح للموقع بفتح النوافذ المنبثقة ثم أعد المحاولة.'); return; }
+  qUnfit();
+  const title = document.title; document.title = qDocTitle(); document.body.classList.add('pq');
   const done = () => { document.body.classList.remove('pq'); qFit(); document.title = title; window.removeEventListener('afterprint', done); };
   window.addEventListener('afterprint', done);
   setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة هنا. افتح الموقع من رابط GitHub.'); done(); } }, 150);
@@ -8880,8 +8906,9 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-qact]'); if (!b) return; const a = b.dataset.qact;
   if (a === 'pick') $('#file-quote').click();
   else if (a === 'pdf') qPdf();
-  else if (a === 'addend') { Q.q = ''; const si = $('#q-search'); if (si) si.value = ''; if (!Q.no) Q.no = qNewNo(); Q.items.push({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); const ins = document.querySelectorAll('#q-rows tr input[data-qi="no"]'); const f = ins[ins.length - 1]; if (f) { f.focus(); f.scrollIntoView({ block: 'center' }); } }
-  else if (a === 'add') { Q.items.unshift({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); Q.q = ''; if (!Q.no) Q.no = qNewNo(); render(); const f = $('#q-rows textarea[data-qi="desc"]'); if (f) f.focus(); }
+  else if (a === 'fold') { Q.fold = !Q.fold; const l = $('#q-list'); if (l) l.hidden = Q.fold; b.classList.toggle('shut', Q.fold); b.setAttribute('aria-expanded', Q.fold ? 'false' : 'true'); b.title = Q.fold ? 'فتح القائمة' : 'طي القائمة'; qSave(); }
+  else if (a === 'addend') { if (Q.fold) { Q.fold = false; const l = $('#q-list'); if (l) l.hidden = false; const fb = document.querySelector('[data-qact=fold]'); if (fb) { fb.classList.remove('shut'); fb.setAttribute('aria-expanded', 'true'); } } Q.q = ''; const si = $('#q-search'); if (si) si.value = ''; if (!Q.no) Q.no = qNewNo(); Q.items.push({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); const ins = document.querySelectorAll('#q-rows tr input[data-qi="no"]'); const f = ins[ins.length - 1]; if (f) { f.focus(); f.scrollIntoView({ block: 'center' }); } }
+  else if (a === 'add') { Q.fold = false; Q.items.unshift({ id: uid(), on: true, no: '', desc: '', brand: '', qty: 1, price: 0 }); Q.q = ''; if (!Q.no) Q.no = qNewNo(); render(); const f = $('#q-rows textarea[data-qi="desc"]'); if (f) f.focus(); }
   else if (a === 'all' || a === 'none') { const q = normAr(Q.q || ''); Q.items.forEach(i => { if (!q || normAr(i.desc + ' ' + i.no).includes(q)) i.on = a === 'all'; }); $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); }
   else if (a === 'clear') { if (!Q.items.length) { toast('لا توجد أصناف لحذفها'); return; } if (b.dataset.armed) { qSnap(); const ok = qKeep(true), no = Q.no; Q.items = []; Q.q = ''; if (ok) { Q.no = qNewNo(); Q.date = qToday(); } render(); toast(ok ? 'حُذفت كل الأصناف وحُفظ العرض ' + no + ' في عروضي، ورقم العرض الجديد ' + Q.no : 'حُذفت كل الأصناف'); } else { b.dataset.armed = '1'; b.textContent = 'اضغط مرة أخرى لحذف ' + Q.items.length + ' صنف'; setTimeout(() => { b.dataset.armed = ''; b.textContent = 'حذف كل الأصناف'; }, 3000); } }
   else if (a === 'del') {
@@ -8912,6 +8939,8 @@ function downloadXlsx() {
   const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'المقارنة');
   try { XLSX.writeFile(wb, 'مقارنة-الأسعار.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
 }
+/* تعطيل التكبير بالقرص ليبدو كتطبيق (آيفون) */
+['gesturestart', 'gesturechange', 'gestureend'].forEach(n => document.addEventListener(n, e => e.preventDefault(), { passive: false }));
 window.addEventListener('hashchange', () => { const p = ['history', 'mine', 'toyota', 'quote'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan'; if (p !== page) { page = p; render(); } });
 render();
 cloud.run();
@@ -8934,8 +8963,9 @@ cloud.run();
   if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}
   fit();
 })();
-{ const tb = document.getElementById('totop'), chk = () => { tb.hidden = (window.scrollY || document.documentElement.scrollTop) < 300; };
-  window.addEventListener('scroll', chk, { passive: true }); chk();
+{ const tb = document.getElementById('totop'), bb = document.getElementById('tobot'), chk = () => { const y = window.scrollY || document.documentElement.scrollTop, left = document.documentElement.scrollHeight - innerHeight - y; tb.hidden = y < 300; bb.hidden = left < 300; bb.style.bottom = tb.hidden ? '22px' : '76px'; };
+  window.addEventListener('scroll', chk, { passive: true }); window.addEventListener('resize', chk); new MutationObserver(chk).observe(document.body, { childList: true, subtree: true }); chk();
+  bb.addEventListener('click', () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }));
   tb.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' })); }
 
 /* تسجيل خدمة العمل دون اتصال (تعمل على GitHub Pages فقط) */
