@@ -399,6 +399,7 @@ body{max-width:100%}
 #dl-d[open]{display:flex;flex-direction:column;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}#dl-d .h,#dl-d .f{flex:none}#dl-d .b{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto}#dl-d .f.dla{flex-wrap:wrap}
 .vfold{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.vf{background:var(--panel);border:1px solid var(--line);color:inherit;font:inherit;font-size:13px;padding:6px 12px;border-radius:18px;cursor:pointer}.vf.on{border-color:#e03b3b;color:#fff;background:#2a1a1a}.vf .n{margin-inline-start:6px;color:#8a8f96;font-size:12px}.vf.add{border-style:dashed;color:#9aa0a8}
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.vc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}.vt{display:flex;align-items:center;justify-content:center;height:110px;background:#0f1113;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0}.vt img{width:100%;height:100%;object-fit:cover}.vx{font-weight:800;font-size:20px;color:#9aa0a8;letter-spacing:1px}.vn{font-size:13px;padding:6px 8px}.vm{font-size:11.5px;color:#8a8f96}.vb{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+#v-view{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(960px,calc(100vw - 20px));max-width:none}#v-view[open]{display:flex;flex-direction:column;height:calc(100dvh - 24px)}#v-view .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}#v-view .h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#v-view .b{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}#v-view::backdrop{background:rgba(0,0,0,.65)}.vpdf{width:100%;height:100%;border:0;background:#fff}.vimg{max-width:100%;max-height:100%;object-fit:contain}
 </style>
 </head>
 <body>
@@ -9244,6 +9245,23 @@ async function vUpload(list) {
   if (ok) toast(ok === 1 ? 'تم رفع الملف' : 'تم رفع ' + ok + ' ملفات');
 }
 function vBusy() { const b = document.querySelector('[data-vact=pick]'); if (b) { b.disabled = V.up > 0; b.textContent = V.up > 0 ? 'جارٍ الرفع (' + V.up + ')...' : 'رفع ملفات'; } }
+/* معاينة الملف داخل التطبيق (صورة أو PDF) بدل فتح موقع خارجي */
+let vObj = '';
+async function vView(it, url) {
+  let d = document.getElementById('v-view');
+  if (!d) { d = document.createElement('dialog'); d.id = 'v-view'; document.body.appendChild(d); d.addEventListener('click', e => { if (e.target === d) d.close(); }); d.addEventListener('close', () => { if (vObj) { URL.revokeObjectURL(vObj); vObj = ''; } d.innerHTML = ''; }); }
+  const isPdf = /pdf/i.test(it.mime || '') || /\.pdf$/i.test(it.name), img = vIsImg(it);
+  d.innerHTML = `<div class="h"><b>${esc(it.name)}</b><button type="button" class="btn sm" data-vx="1">إغلاق</button></div><div class="b" id="v-vb"><p class="note">جارٍ التحميل...</p></div>`;
+  d.querySelector('[data-vx]').onclick = () => d.close(); d.showModal();
+  try {
+    const r = await fetch(url); if (!r.ok) throw new Error('http ' + r.status);
+    let b = await r.blob(); if (isPdf) b = new Blob([b], { type: 'application/pdf' });
+    vObj = URL.createObjectURL(b); const box = d.querySelector('#v-vb');
+    if (img) box.innerHTML = `<img src="${vObj}" alt="" class="vimg">`;
+    else if (isPdf) box.innerHTML = `<iframe src="${vObj}" class="vpdf" title="${esc(it.name)}"></iframe>`;
+    else { d.close(); toast('لا تتوفر معاينة لهذا النوع، استخدم «تنزيل»'); }
+  } catch (e) { d.close(); toast('تعذر فتح الملف'); }
+}
 document.addEventListener('click', async e => {
   const t = e.target.closest('[data-vact]'); if (!t) return; const a = t.dataset.vact, card = t.closest('.vc'), it = card && V.items.find(x => x.id === card.dataset.id);
   if (a === 'pick') $('#v-in').click();
@@ -9252,7 +9270,7 @@ document.addEventListener('click', async e => {
   else if (a === 'newfold') { const n = (prompt('اسم المجلد الجديد') || '').trim().slice(0, 30); if (n) { V.folder = n; (V.extra = V.extra || new Set()).add(n); vGrid(); toast('اختر «رفع ملفات» ليُضاف الملف إلى مجلد «' + n + '»'); } }
   else if (a === 'open' || a === 'dl') {
     if (!it) return; await vSign([it]); const u = V.urls[it.id]; if (!u) { toast('تعذر فتح الملف'); return; }
-    if (a === 'open') { const w = window.open(u.u, '_blank', 'noopener'); if (!w) location.href = u.u; }
+    if (a === 'open') vView(it, u.u);
     else { const l = document.createElement('a'); l.href = u.u + (u.u.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(it.name); l.rel = 'noopener'; document.body.appendChild(l); l.click(); l.remove(); }
   }
   else if (a === 'del') {
