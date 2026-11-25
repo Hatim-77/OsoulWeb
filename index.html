@@ -319,7 +319,7 @@ body{max-width:100%}
 }
 @media print{
   .totop{display:none!important}
-  body.pq .qpaper{zoom:1!important;min-width:0!important}
+  body.pq .qpaper{zoom:1!important;min-width:0!important;width:auto!important;transform:none!important;margin-bottom:0!important}
   html:has(body.pq),body.pq{background:#fff!important}
   body.pq .qpaper,body.pq .qpaper *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body.pq .side,body.pq #app,body.pq .toast{display:none!important}
@@ -1170,13 +1170,17 @@ const qSnap = () => { qUndo.push({ items: Q.items.map(i => ({ ...i })), no: Q.no
 const qUndoBtn = () => { const u = document.querySelector('[data-qact=undo]'); if (u) u.classList.toggle('dim', !qUndo.length); };
 const qGrow = el => { if (window.innerWidth > 760) { el.style.height = ''; return; } el.style.height = 'auto'; el.style.height = el.scrollHeight + 2 + 'px'; };
 const qGrowAll = () => document.querySelectorAll('#q-rows textarea').forEach(qGrow);
-const qFit = () => { const el = document.getElementById('qpaper'); if (!el || !el.parentElement) return; el.style.zoom = ''; el.style.minWidth = ''; const w = el.parentElement.clientWidth; if (w && w < 800) { el.style.minWidth = '800px'; el.style.zoom = (w / 800).toFixed(3); } };
+/* ملاءمة المعاينة لعرض الشاشة: نكبّر/نصغّر بـ transform بدل zoom لأن zoom يتصرف بشكل مختلف في سفاري */
+const qUnfit = () => { const el = document.getElementById('qpaper'); if (!el) return; el.style.cssText = ''; if (el.parentElement) el.parentElement.style.overflow = ''; };
+const qFit = () => { const el = document.getElementById('qpaper'); if (!el || !el.parentElement) return; const host = el.parentElement;
+  el.style.cssText = ''; host.style.overflow = ''; const w = host.clientWidth;
+  if (w && w < 800) { const s = w / 800; el.style.cssText = `min-width:800px;width:800px;max-width:none;margin:0;transform-origin:top right;transform:scale(${s.toFixed(4)})`; host.style.overflow = 'hidden'; el.style.marginBottom = -(el.offsetHeight * (1 - s)).toFixed(1) + 'px'; } };
 window.addEventListener('resize', () => { qFit(); qGrowAll(); });
 let qrT = 0;
 function qRefreshSoon() { clearTimeout(qrT); qrT = setTimeout(() => { qrT = 0; qRefresh(); }, 150); }
 const qFlush = () => { if (qrT) { clearTimeout(qrT); qrT = 0; qRefresh(); } };
 document.addEventListener('visibilitychange', () => { if (document.hidden) qFlush(); }); window.addEventListener('pagehide', qFlush);
-function qRefresh() { qUndoBtn(); qFit(); { const pe = document.getElementById('qpaper'); if (pe) pe.classList.toggle('na', !!Q.na); } const p = $('#qpaper'); if (p) p.innerHTML = qPaper(); const c = $('#q-count'); if (c) c.textContent = qTotals().sel.length + ' صنف في العرض من ' + Q.items.length + (qKind() ? ' · النوع: ' + QKIND[qKind()] + (Q.kind ? '' : ' (تلقائي)') : ''); const nb = document.querySelector('[data-qact=new]'); if (nb) nb.classList.toggle('dim', !Q.items.some(i => String(i.desc).trim())); const w = $('#q-warn'); if (w) { w.textContent = qWarn(); w.hidden = !w.textContent; } qSave(); }
+function qRefresh() { qUndoBtn(); qFit(); { const pe = document.getElementById('qpaper'); if (pe) pe.classList.toggle('na', !!Q.na); } const p = $('#qpaper'); if (p) { p.innerHTML = qPaper(); qFit(); } const c = $('#q-count'); if (c) c.textContent = qTotals().sel.length + ' صنف في العرض من ' + Q.items.length + (qKind() ? ' · النوع: ' + QKIND[qKind()] + (Q.kind ? '' : ' (تلقائي)') : ''); const nb = document.querySelector('[data-qact=new]'); if (nb) nb.classList.toggle('dim', !Q.items.some(i => String(i.desc).trim())); const w = $('#q-warn'); if (w) { w.textContent = qWarn(); w.hidden = !w.textContent; } qSave(); }
 async function qImport(list) {
   let n = 0; qSnap();
   for (const f of list) {
@@ -8815,9 +8819,9 @@ function qKeep(silent) {
 function qPdf() {
   if (window.self !== window.top && !/github\.io$/.test(location.hostname)) { toast('الطباعة لا تعمل داخل هذه النافذة. افتح الموقع من رابط GitHub ثم اضغط حفظ العرض PDF.'); return; }
   if (!qTotals().sel.length) { toast('أضف صنفاً واحداً على الأقل إلى العرض'); return; }
-  qKeep(true);
+  qKeep(true); qUnfit();
   const title = document.title; { const d = String(Q.date || '').split('-'), dd = d.length === 3 ? d[2] + '-' + d[1] + '-' + d[0] : new Date().toLocaleDateString('en-GB').replaceAll('/', '-'); document.title = (Q.na ? 'وصل حديثًا ' + dd : qTitle() + ' ' + (Q.year || new Date().getFullYear())) + (qKind() ? ' - ' + QKIND[qKind()] : '') + ' - ' + (Q.no || ''); } document.body.classList.add('pq');
-  const done = () => { document.body.classList.remove('pq'); document.title = title; window.removeEventListener('afterprint', done); };
+  const done = () => { document.body.classList.remove('pq'); qFit(); document.title = title; window.removeEventListener('afterprint', done); };
   window.addEventListener('afterprint', done);
   setTimeout(() => { try { window.print(); } catch (e) { toast('تعذرت الطباعة هنا. افتح الموقع من رابط GitHub.'); done(); } }, 150);
 }
