@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0e0f10">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="أصول القطع"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="color-scheme" content="dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -379,8 +383,8 @@ const oemRaw = v => {
 };
 const codeKey = s => oemRaw(s) || normNo(s);
 const headOf = d => (normAr(d).split(/\s+/)[0] || '').replace(/^ال/, '');
-const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'روماني': 'رمان', 'رومانه': 'رمان', 'رومانات': 'رمان', 'رماني': 'رمان', 'رمانه': 'رمان', 'رمانات': 'رمان', 'باكم': 'قماش', 'مساعدات': 'مساعد' };
-const CAT_NAME = { 'رمان': 'الرمانات', 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك' };
+const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'روماني': 'رمان', 'رومانه': 'رمان', 'رومانات': 'رمان', 'رماني': 'رمان', 'رمانه': 'رمان', 'رمانات': 'رمان', 'باكم': 'باكم', 'باكمات': 'باكم', 'باكما': 'باكم', 'مساعدات': 'مساعد' };
+const CAT_NAME = { 'مجموعه': 'مجموعة قزاز', 'باكم': 'الباكمات', 'رمان': 'الرمانات', 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك' };
 const EN_CAT = { arm: 'مقص', arms: 'مقص', shock: 'مساعد', absorber: 'مساعد', strut: 'مساعد', filter: 'فلتر', pump: 'طرمبه', pad: 'فحمات', pads: 'فحمات', disc: 'دسك', rotor: 'دسك', belt: 'سير', radiator: 'لديتر', starter: 'سلف', alternator: 'دينمو', coil: 'كويل', sensor: 'حساس', fan: 'مروحه', compressor: 'كمبروسر', tensioner: 'شداد', pulley: 'بكره', bush: 'جلبه', bushing: 'جلبه', cylinder: 'سلندر', clutch: 'دسك', screw: 'مسمار', bolt: 'مسمار', gasket: 'جلده', seal: 'جلده' };
 const catOf = d => {
   const toks = String(d ?? '').split(/[^\w\u0600-\u06FF]+/).filter(Boolean), h = headOf(d);
@@ -1032,6 +1036,7 @@ function qPaper() {
   const t = qTotals(), co = Q.co, hasBrand = t.sel.some(i => i.brand), logo = document.querySelector('.brand svg').outerHTML.replaceAll('#f3f1ea', '#15181c').replace('class="logo"', 'class="qlogo"').replace('viewBox="62 0 262 84"', 'viewBox="62 0 270 84"').replace(/<g><text id="os-mark".*?<\/text><\/g>/, `<image href="${QOWN}" x="244" y="8" width="72" height="67" preserveAspectRatio="xMidYMid meet"/>`);
   const ncol = (hasBrand ? 7 : 6) - (Q.gen ? 2 : 0), line = (i, n) => `<tr><td class="qc">${n}</td><td class="qno">${esc(i.no || '')}</td><td>${esc(i.desc)}</td>${hasBrand ? `<td class="qc">${esc(i.brand || '')}</td>` : ''}${Q.gen ? '' : `<td class="qc">${nf.format(+i.qty || 0)}</td>`}<td class="qn1">${qNum.format(+i.price || 0)}</td>${Q.gen ? '' : `<td class="qn1"><b>${qNum.format((+i.qty || 0) * (+i.price || 0))}</b></td>`}</tr>`;
   const build = (items) => {
+    if (Q.flat) return items.map((i, n) => line(i, n + 1)).join('');
     const cnt = {}, grp = new Map(); items.forEach(i => { const k = catOf(i.desc); cnt[k] = (cnt[k] || 0) + 1; });
     items.forEach(i => { let k = catOf(i.desc); if (cnt[k] < 2 && !CAT_NAME[k]) k = 'أخرى'; if (!grp.has(k)) grp.set(k, []); grp.get(k).push(i); });
     let sn = 0; return [...grp.entries()].sort((x, y) => (x[0] === 'أخرى') - (y[0] === 'أخرى')).map(([k, list]) => `<tr class="qg"><td colspan="${ncol}">${esc(CAT_NAME[k] || k)}</td></tr>` + list.map(i => line(i, ++sn)).join('')).join('');
@@ -1062,7 +1067,7 @@ function viewQuote() {
   const mine = saved.filter(f => f.mine), fld = (k, l, ex = '') => `<label class="qf1"><span>${l}</span><input data-qf="${k}" value="${esc(Q[k] === 0 ? '' : Q[k])}" ${ex}></label>`, co = (k, l) => `<label class="qf1"><span>${l}</span><input data-qco="${k}" value="${esc(Q.co[k])}"></label>`;
   return `<div id="qwrap"><h2>إنشاء عرض سعر</h2><p class="sub">ارفع قائمة الأصناف بملف PDF أو Excel، أو اختر أحد عروضك، ثم أكمل بيانات العميل واحفظ العرض بتصميم شركة أصول بصيغة PDF.</p>
   <div class="drop mini"><p>ارفع ملف الأصناف هنا (PDF أو Excel أو CSV)، أو اسحبه وأفلته في الصفحة.</p><div><button class="btn primary" data-qact="pick">رفع ملف الأصناف</button> ${mine.length ? `<select id="q-mine" aria-label="عروضي"><option value="">من أحد عروضي...</option>${mine.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join('')}</select>` : ''} <button class="btn link" data-qact="new">عرض جديد</button></div></div>
-  <div class="qgrid"><label class="qf1"><span>شهر العرض</span><select data-qf="month"><option value="" ${Q.month === '' ? 'selected' : ''}>بدون شهر</option>${QMON.map((m, i) => `<option value="${i}" ${String(Q.month) === String(i) ? 'selected' : ''}>${m}</option>`).join('')}</select></label><label class="qf1 qnaf"><span>نوع العرض</span><span class="qnac"><input type="checkbox" data-qf="na" ${Q.na ? 'checked' : ''}> وصل حديثًا</span></label><label class="qf1 qnaf"><span>ترتيب الأصناف</span><span class="qnac"><input type="checkbox" data-qf="split" ${Q.split ? 'checked' : ''}> فصل نيسان عن تويوتا</span></label><label class="qf1"><span>نوع القطع</span><select data-qf="kind"><option value="" ${!Q.kind ? 'selected' : ''}>تلقائي</option>${Object.keys(QKIND).map(k => `<option value="${k}" ${Q.kind === k ? 'selected' : ''}>${QKIND[k]}</option>`).join('')}</select></label>${fld('no', 'رقم العرض (تلقائي)', 'readonly tabindex="-1" style="opacity:.7;cursor:not-allowed"')}${fld('date', 'التاريخ', 'type="date"')}${fld('valid', 'مدة الصلاحية (أيام)', 'type="number" min="0" placeholder="اتركها فارغة لعرض بلا صلاحية"')}</div>
+  <div class="qgrid"><label class="qf1"><span>شهر العرض</span><select data-qf="month"><option value="" ${Q.month === '' ? 'selected' : ''}>بدون شهر</option>${QMON.map((m, i) => `<option value="${i}" ${String(Q.month) === String(i) ? 'selected' : ''}>${m}</option>`).join('')}</select></label><label class="qf1 qnaf"><span>نوع العرض</span><span class="qnac"><input type="checkbox" data-qf="na" ${Q.na ? 'checked' : ''}> وصل حديثًا</span></label><label class="qf1 qnaf"><span>ترتيب الأصناف</span><span class="qnac"><input type="checkbox" data-qf="split" ${Q.split ? 'checked' : ''}> فصل نيسان عن تويوتا</span><span class="qnac"><input type="checkbox" data-qf="flat" ${Q.flat ? 'checked' : ''}> بدون تقسيم الفئات</span></label><label class="qf1"><span>نوع القطع</span><select data-qf="kind"><option value="" ${!Q.kind ? 'selected' : ''}>تلقائي</option>${Object.keys(QKIND).map(k => `<option value="${k}" ${Q.kind === k ? 'selected' : ''}>${QKIND[k]}</option>`).join('')}</select></label>${fld('no', 'رقم العرض (تلقائي)', 'readonly tabindex="-1" style="opacity:.7;cursor:not-allowed"')}${fld('date', 'التاريخ', 'type="date"')}${fld('valid', 'مدة الصلاحية (أيام)', 'type="number" min="0" placeholder="اتركها فارغة لعرض بلا صلاحية"')}</div>
   
     <div class="tool"><div class="grow"><input id="q-search" type="search" placeholder="ابحث في الأصناف المرفوعة" value="${esc(Q.q || '')}"></div><button class="btn" data-qact="add">إضافة صنف يدوياً</button><button class="btn" data-qact="all">تحديد الكل</button><button class="btn" data-qact="none">إلغاء التحديد</button><button class="btn" data-qact="clear">حذف كل الأصناف</button><button class="btn" data-qact="undo" title="التراجع عن آخر إضافة أو حذف">تراجع</button></div>
   <div class="tw qtw"><table class="qed"><thead><tr><th></th><th>رقم القطعة</th><th>اسم الصنف</th><th>السعر</th><th></th></tr></thead><tbody id="q-rows">${qRows()}</tbody><tfoot><tr><td colspan="5"><button class="btn qplus" data-qact="addend" aria-label="إضافة صنف" title="إضافة صنف">+</button></td></tr></tfoot></table></div>
@@ -8709,8 +8714,8 @@ function qKeep(silent) {
   const rows = [['رقم القطعة', 'اسم الصنف', 'السعر'], ...sel.map(i => [i.no || '', i.desc, +i.price || 0])], g = guessMap(rows), sig = 'quote:' + Q.no, name = qTitle() + (Q.na ? ' - وصل حديثًا' : '') + ' - ' + Q.no;
   let f = saved.find(x => x.sig === sig && x.mine);
   const qk = qKind();
-  if (f) { f.rows = rows; f.hdr = g.hdr; f.map = g.map; f.name = name; f.date = Date.now(); f.qk = qk; f.na = !!Q.na; f.split = !!Q.split; }
-  else saved.push({ id: uid(), name, sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: false, mine: true, qk, na: !!Q.na, split: !!Q.split });
+  if (f) { f.rows = rows; f.hdr = g.hdr; f.map = g.map; f.name = name; f.date = Date.now(); f.qk = qk; f.na = !!Q.na; f.split = !!Q.split; f.flat = !!Q.flat; }
+  else saved.push({ id: uid(), name, sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: false, mine: true, qk, na: !!Q.na, split: !!Q.split, flat: !!Q.flat });
   sync(); save(); return true;
 }
 function qPdf() {
@@ -8741,7 +8746,7 @@ document.addEventListener('change', e => {
       /* عرض سبق حفظه من هذه الصفحة: يُفتح للتعديل بالرقم نفسه. وما كان قيد العمل يُحفظ قبل ذلك */
       if (Q.no !== own) qKeep(true);
       qSnap(); Q.items = itemsOf(f).map(it => ({ id: uid(), on: true, no: it.no, desc: it.desc, brand: it.brand || '', qty: 1, price: it.price }));
-      Q.no = own; Q.kind = f.qk || ''; Q.na = !!f.na; Q.split = !!f.split; Q.q = ''; toast('فُتح العرض ' + own + ' للتعديل بالرقم نفسه'); render();
+      Q.no = own; Q.kind = f.qk || ''; Q.na = !!f.na; Q.split = !!f.split; Q.flat = !!f.flat; Q.q = ''; toast('فُتح العرض ' + own + ' للتعديل بالرقم نفسه'); render();
     } else { qSnap(); itemsOf(f).forEach(it => Q.items.push({ id: uid(), on: true, no: it.no, desc: it.desc, brand: it.brand || '', qty: 1, price: it.price })); if (!Q.no) Q.no = qNewNo(); toast('أُضيفت أصناف ' + f.name + '. للتراجع اضغط «تراجع»'); render(); }
   } }
   else if (t.id === 'file-quote') { qImport([...t.files]); t.value = ''; }
@@ -8807,6 +8812,9 @@ cloud.run();
 { const tb = document.getElementById('totop'), chk = () => { tb.hidden = (window.scrollY || document.documentElement.scrollTop) < 300; };
   window.addEventListener('scroll', chk, { passive: true }); chk();
   tb.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' })); }
+
+/* تسجيل خدمة العمل دون اتصال (تعمل على GitHub Pages فقط) */
+try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && /github\.io$/.test(location.hostname)) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { })); } catch (e) { }
 </script>
 </body>
 </html>
