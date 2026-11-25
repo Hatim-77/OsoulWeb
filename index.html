@@ -321,9 +321,9 @@ body{max-width:100%}
 #povl .pdlg p{margin:0;color:var(--ink2);font-size:14px;line-height:1.8}#povl .pbt{display:flex;gap:8px}#povl .pbt .btn{flex:1}
 #qpp{display:none}
 .qpage{width:210mm;box-sizing:border-box;padding:12mm 12mm 14mm;background:#fff;position:relative;overflow:hidden}
-.qpage.fin{height:296mm;page-break-after:always;break-after:page}.qpage.fin:last-child{page-break-after:auto;break-after:auto}
-.qpage.fin .qpg{height:100%}.qpage.fin .qpg>thead>tr,.qpage.fin .qpg>tfoot>tr{height:1px}.qpage.fin .qpg>tbody>tr{height:100%}.qpage .qpg>tbody>tr>td{vertical-align:top}
-.qpage .pn{position:absolute;bottom:5mm;left:0;right:0;text-align:center;font:600 10px Cairo,Arial,sans-serif;color:#555;direction:rtl}
+.qpage.fin{height:auto;page-break-after:always;break-after:page}.qpage.fin:last-child{page-break-after:auto;break-after:auto}
+.qpage .qpg>tbody>tr>td{vertical-align:top}
+.qpage .pn{margin:2mm 0 0;text-align:center;font:600 10px Cairo,Arial,sans-serif;color:#555;direction:rtl}
 @media print{
   body.povl>*:not(#povl){display:none!important}
   body.povl #povl{position:static!important;display:block!important;padding:0!important;background:#fff!important;-webkit-backdrop-filter:none;backdrop-filter:none}
@@ -8889,7 +8889,7 @@ function qPaginate(html) {
   try {
     const src = document.createElement('div'); src.innerHTML = html; const qpg = src.querySelector('.qpg'); if (!qpg) return [];
     const probe = document.createElement('div'); probe.style.cssText = 'width:100mm;height:1px'; tmp.appendChild(probe); const mm = probe.offsetWidth / 100; tmp.removeChild(probe);
-    const isHead = r => r.classList.contains('qg') || r.classList.contains('qb'), H = qPageH(), LIM = (H - 5) * mm, rows = [...qpg.querySelector('.qtb tbody').children], pages = [];
+    const isHead = r => r.classList.contains('qg') || r.classList.contains('qb'), H = qPageH(), LIM = (H - 9) * mm, rows = [...qpg.querySelector('.qtb tbody').children], pages = [];
     const W = qPageW(), mk = (list, last) => { const pg = document.createElement('div'); pg.className = 'qpage'; if (qIOS()) pg.style.cssText = 'width:' + W + 'mm;padding:5mm 3mm 5mm'; const c = qpg.cloneNode(true), tb = c.querySelector('.qtb tbody'); tb.innerHTML = ''; list.forEach(r => tb.appendChild(r.cloneNode(true))); const sg = c.querySelector('.qs'); if (sg && !last) sg.remove(); pg.appendChild(c); return pg; };
     let i = 0;
     while (i < rows.length) {
@@ -8904,7 +8904,13 @@ function qPaginate(html) {
       if (!ov || pages[li].length < 2) break;
       const mv = [pages[li].pop()]; while (pages[li].length > 1 && isHead(pages[li][pages[li].length - 1])) mv.unshift(pages[li].pop()); pages.push(mv);
     }
-    return pages.map((l, k) => { const pg = mk(l, k === pages.length - 1); pg.className = 'qpage fin'; pg.style.height = H + 'mm'; if (qIOS()) pg.style.width = W + 'mm'; const n = document.createElement('div'); n.className = 'pn'; n.textContent = 'صفحة ' + (k + 1) + ' من ' + pages.length; pg.appendChild(n); return pg.outerHTML; });
+    return pages.map((l, k) => {
+      const last = k === pages.length - 1, pg = mk(l, last);
+      if (!last) { /* توزيع المتبقي من ارتفاع الصفحة على صفوف الأصناف لتمتلئ الصفحة حتى نهايتها بلا فراغ قبل الشريط السفلي */
+        tmp.appendChild(pg); const extra = LIM - pg.offsetHeight, trs = [...pg.querySelectorAll('.qtb tbody tr')].filter(r => !isHead(r));
+        if (extra > 0 && trs.length) { const per = Math.min(extra / trs.length, 16), hs = trs.map(r => r.offsetHeight); trs.forEach((r, j) => { r.style.height = (hs[j] + per).toFixed(1) + 'px'; }); }
+        tmp.removeChild(pg);
+      } pg.className = 'qpage fin'; if (qIOS()) pg.style.width = W + 'mm'; const n = document.createElement('div'); n.className = 'pn'; n.textContent = 'صفحة ' + (k + 1) + ' من ' + pages.length; pg.appendChild(n); return pg.outerHTML; });
   } finally { tmp.remove(); document.body.classList.remove('pq'); st.remove(); if (pv) pv.hidden = pvh; }
 }
 function qPrintClose() {
