@@ -1289,10 +1289,15 @@ function qPaper() {
   };
   let rows;
   if (Q.split) {
-    const part = { nissan: [], toyota: [], other: [] };
-    t.sel.forEach(i => { const x = normAr(String(i.desc || '')), tn = TOY_W.test(x), nn = NIS_W.test(x); part[nn && !tn ? 'nissan' : tn && !nn ? 'toyota' : 'other'].push(i); });
-    const hd = { nissan: ['نيسان', 'NISSAN'], toyota: ['تويوتا', 'TOYOTA'], other: ['أصناف عامة', 'GENERAL'] };
-    rows = ['nissan', 'toyota', 'other'].filter(k => part[k].length).map(k => `<tr class="qb k-${k}"><td colspan="${ncol}">${hd[k][0]}<small>${hd[k][1]}</small></td></tr>` + build(part[k])).join('');
+    /* لا أصناف عامة: الرقم أولًا (Y تويوتا، J نيسان)، ثم الاسم (الموديل)، وما بقي يتبع نوع العرض أو الأغلبية */
+    const part = { nissan: [], toyota: [] }, rest = [];
+    t.sel.forEach(i => { const x = normAr(String(i.desc || '')), tn = TOY_W.test(x), nn = NIS_W.test(x), pn = String(i.no || '').trim().toUpperCase();
+      const k = /^Y[0-9A-Z]/.test(pn) ? 'toyota' : /^J[0-9A-Z]/.test(pn) ? 'nissan' : nn && !tn ? 'nissan' : tn && !nn ? 'toyota' : '';
+      if (k) part[k].push(i); else rest.push(i); });
+    const dflt = (Q.kind === 'nissan' || Q.kind === 'toyota') ? Q.kind : (part.toyota.length > part.nissan.length ? 'toyota' : 'nissan');
+    rest.forEach(i => part[dflt].push(i));
+    const hd = { nissan: ['نيسان', 'NISSAN'], toyota: ['تويوتا', 'TOYOTA'] };
+    rows = ['nissan', 'toyota'].filter(k => part[k].length).map(k => `<tr class="qb k-${k}"><td colspan="${ncol}">${hd[k][0]}<small>${hd[k][1]}</small></td></tr>` + build(part[k])).join('');
   } else rows = build(t.sel);
   rows = rows || `<tr><td colspan="${ncol}" class="qc qempty">لا توجد أصناف في العرض بعد</td></tr>`;
   const foot = [co.addr, co.phone && 'هاتف: ' + co.phone, co.email, co.vat && 'الرقم الضريبي: ' + co.vat, co.cr && 'السجل التجاري: ' + co.cr].filter(Boolean).map(esc).join('  •  ');
