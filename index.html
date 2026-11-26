@@ -9234,7 +9234,7 @@ async function vLoad(force) {
   catch (e) { V.err = vErr(e); }
   V.loading = false; vGrid(); vUsage();
 }
-function vInit() { vLoad(); }
+function vInit() { vGrid(); vUsage(); vLoad(); }
 function vUsage() { const u = $('#v-use'); if (u) u.textContent = V.loaded ? V.items.length + ' ملف · المستخدم ' + vSize(V.items.reduce((a, i) => a + (+i.size || 0), 0)) : ''; }
 function viewVault() {
   const head = '<h2>المخزن</h2>';
