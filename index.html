@@ -400,6 +400,11 @@ body{max-width:100%}
 .vfold{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.vf{background:var(--panel);border:1px solid var(--line);color:inherit;font:inherit;font-size:13px;padding:6px 12px;border-radius:18px;cursor:pointer}.vf.on{border-color:#e03b3b;color:#fff;background:#2a1a1a}.vf .n{margin-inline-start:6px;color:#8a8f96;font-size:12px}.vfnew{display:inline-flex;gap:6px;align-items:center}.vfnew input{width:160px;padding:6px 10px;font-size:13px}.vf.del{border-color:#6b2a2a;color:#ff8a8a;margin-inline-start:auto}.vf.add{border-style:dashed;color:#9aa0a8}
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.vc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}.vt{display:flex;align-items:center;justify-content:center;height:110px;background:#0f1113;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0}.vt img{width:100%;height:100%;object-fit:cover}.vx{font-weight:800;font-size:20px;color:#9aa0a8;letter-spacing:1px}.vn{font-size:13px;padding:6px 8px}.vm{font-size:11.5px;color:#8a8f96}.vb{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 #v-view{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(960px,calc(100vw - 20px));max-width:none}#v-view[open]{display:flex;flex-direction:column;height:calc(100dvh - 24px)}#v-view .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}#v-view .h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#v-view .b{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}#v-view::backdrop{background:rgba(0,0,0,.65)}.vpdf{width:100%;height:100%;border:0;background:#fff}.vimg{max-width:100%;max-height:100%;object-fit:contain}
+.file .fh{flex-wrap:wrap;row-gap:8px}.file .fh input.nm{flex:1 1 calc(100% - 46px);min-width:120px}.file .btn.rm{flex:none}
+.hprow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.hprow:last-child{border-bottom:0}
+.file .x.del1{color:#ff8a8a;font-size:12px}
+.file.off{opacity:.62}.file.off:hover{opacity:1}
+td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-weight:600}.ogw{margin-top:3px;font-size:12px;color:var(--warn)}td.p .b.pn{direction:ltr;unicode-bidi:isolate;max-width:none!important;overflow:visible;text-overflow:clip;font-variant-numeric:tabular-nums;letter-spacing:.2px}
 </style>
 </head>
 <body>
@@ -647,7 +652,7 @@ saved.forEach(f => { if (!f.mine && f.kind !== 'nissan' && f.kind !== 'toyota') 
 const sync = () => {
   /* لون مختلف لكل شركة داخل المقارنة: لا يحجز اللون إلا الملفات الفعّالة. ولكل قسم مقارنته الخاصة */
   const act = f => f.active !== false;
-  filesN = saved.filter(f => act(f) && !f.mine && f.kind !== 'toyota'); filesT = saved.filter(f => act(f) && !f.mine && f.kind === 'toyota'); filesM = []; let ch = false;
+  filesN = saved.filter(f => act(f) && !f.mine && f.kind !== 'toyota'); filesT = saved.filter(f => act(f) && !f.mine && f.kind === 'toyota'); filesM = []; [filesN, filesT].forEach(l => l.sort((a, b) => !!b.ref - !!a.ref)); let ch = false;
   [filesN, filesT, filesM].forEach(list => {
     const used = new Set();
     list.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
@@ -669,6 +674,14 @@ const isCmp = p => p === 'nissan' || p === 'toyota', KIND_AR = { nissan: 'نيس
 function fmtWhen(ts) { if (!ts) return 'تاريخ غير معروف'; const d = new Date(ts), p = n => String(n).padStart(2, '0'); return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}`; }
 let armedAll = null, armedAllT;
 const delAllBtn = (kind, n) => n ? `<div style="margin:16px 0 14px"><button type="button" class="btn sm${armedAll === kind ? ' primary' : ''}" data-purgeall="${kind}">${armedAll === kind ? 'اضغط مرة أخرى للتأكيد: حذف نهائي' : 'حذف الكل (' + n + ')'}</button></div>` : '';
+/* إضافة عرض محفوظ إلى المقارنة من داخل صفحة المقارنة */
+function hpOpen() {
+  let d = document.getElementById('hp-d');
+  if (!d) { d = document.createElement('dialog'); d.id = 'hp-d'; document.body.appendChild(d); d.addEventListener('click', e => { if (e.target === d || e.target.dataset.hpx) d.close(); }); }
+  const list = saved.filter(f => !f.mine && f.active === false && (page === 'toyota' ? f.kind === 'toyota' : f.kind !== 'toyota')).sort((a, b) => (b.date || 0) - (a.date || 0));
+  d.innerHTML = `<div class="h"><b>إضافة من العروض السابقة</b><button type="button" class="btn sm" data-hpx="1">إغلاق</button></div><div class="b" style="max-height:60vh;overflow:auto;padding:12px 18px">${list.length ? list.map(f => `<div class="hprow"><div><div class="h-n">${esc(f.name)}</div><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div></div><button type="button" class="btn sm primary" data-hpadd="${f.id}">إضافة</button></div>`).join('') : '<p class="note">لا توجد عروض سابقة خارج المقارنة لهذا القسم.</p>'}</div>`;
+  if (!d.open) d.showModal();
+}
 function viewHistory() {
   const list = saved.filter(f => !f.mine).sort((a, b) => (b.date || 0) - (a.date || 0));
   return `<h2>العروض السابقة</h2><p class="sub">كل ملف رفعته محفوظ هنا. أضف أي عرض إلى المقارنة أو أزله منها دون حذفه.</p>${delAllBtn('hist', list.length)}${list.length ? '<div class="hgrid">' + list.map(f => {
@@ -691,6 +704,10 @@ const ORIGINS = [['ياباني', /(يابان|japan|\bjpn\b)/], ['ماليزي'
 /* «ساكا ياباني» غير «ياباني»: صنف ساكا (علامتنا) له سعر وجودة مختلفان فلا يُدمج مع الياباني العادي. ويُقرأ من الوصف أو الماركة أو لاحقة الرقم (SACAA / JAPAN / TW ...) */
 const NOSUF = { JAPAN: 'ياباني', JAPN: 'ياباني', JP: 'ياباني', TW: 'تايواني', TIW: 'تايواني', MALEZE: 'ماليزي', CH: 'صيني', THAILAND: 'تايلندي', THELEND: 'تايلندي', THLEND: 'تايلندي', ATHLEND: 'تايلندي' };
 const SFX_RE = /(SACAA|SACA|JAPAN|JAPN|JP|TW|TIW|CASP|MALEZE|CH|NEW|JORDAN|OEM|THAILAND|ATHLEND|THELEND|THLEND|TYC|KYB|YMC|FUJI)$/;
+/* مفتاح ترتيب رقم القطعة: نتجاوز الحرف الأول إن كان حرفًا، ثم نأخذ ٨ خانات فقط (بلا شرطات)، فتتجاور القطع التي تختلف في آخر رمز */
+/* طول مفتاح رقم القطعة: ٧ خانات في نيسان و٨ في تويوتا */
+const keyLen = () => ctxPage === 'toyota' ? 8 : 7;
+const partKey = no => { const KL = keyLen(), r = oemRaw(no); if (r) return r.slice(0, KL); let t = String(no || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); if (/^J/.test(t) && t.length >= KL + 1) t = t.slice(1); return t.slice(0, KL); };
 const originOf = it => {
   const t = normAr((it.brand || '') + ' ' + (it.desc || '')), n = String(it.no || '').toUpperCase().replace(/[^A-Z0-9]/g, ''), sm = n.match(SFX_RE), sx = sm ? sm[1] : ''; let o = '';
   for (const [k, re] of ORIGINS) if (re.test(t)) { o = k; break; }
@@ -699,22 +716,30 @@ const originOf = it => {
   return (sk ? 'ساكا ' : '') + o + extra;
 };
 /* الرقم أولاً: رقمان مختلفان يعنيان قطعتين مختلفتين مهما تشابه الاسم. رقم الصنف يطابق الآخر إن كان أحدهما بداية الآخر (لاحقة الشركة) */
-const numSame = (a, b) => { const x = oemRaw(a), y = oemRaw(b); if (x && y) return x === y; const u = normNo(a), v = normNo(b), m = Math.min(u.length, v.length); return m >= 6 && (u.startsWith(v) || v.startsWith(u)); };
+const numSame = (a, b) => { const x = oemRaw(a), y = oemRaw(b); if (x && y) return x.slice(0, 8) === y.slice(0, 8); const u = normNo(a), v = normNo(b), m = Math.min(u.length, v.length); return m >= 6 && (u.startsWith(v) || v.startsWith(u)); };
 const hasNum = v => { const n = normNo(v); return n.length >= 5 && /\d/.test(n); };
 function build() {
   const groups = [], byNo = new Map(), inv = new Map();
   const reg = g => g.t.forEach(w => { if (!inv.has(w)) inv.set(w, []); inv.get(w).push(g); });
   files.forEach(f => itemsOf(f).forEach(it => {
-    const ok = oemRaw(it.no), og = originOf(it); let n = codeKey(it.no);
+    const ok = oemRaw(it.no), og = originOf(it);
+    /* مفتاح الدمج: ٨ خانات بعد حرف الشركة (J) في رقم القطعة، فتُطابَق أرقام قاعدتنا مع أرقام الموردين وإن اختلفت في آخر رمز */
+    /* مفاتيح الدمج: ٨ خانات من رقم الوكالة، ومفتاح ثانٍ بعد حذف حرف J الأول (ترقيم قاعدتنا) لأن بعض الأرقام نفسها تبدأ بحرف مثل E4303-4CE1C فيصير رقمنا JE4303-4CE1C */
+    const tn = String(it.no || '').toUpperCase().replace(/[^A-Z0-9]/g, ''), ks = [];
+    const KL = keyLen();
+    if (ok) ks.push(ok.slice(0, KL));
+    if (/^J/.test(tn) && tn.length >= KL + 1) { const k2 = tn.slice(1, KL + 1); if (/\d/.test(k2) && !ks.includes(k2)) ks.push(k2); }
     /* رقم ضعيف (قصير أو أرقام فقط، مثل سعر قُرئ خطأً) لا يصلح لدمج صنفين */
-    if (!ok && !(n.length >= 5 && /\d/.test(n) && /[A-Z]/.test(n))) n = '';
+    if (!ks.length) { const w = codeKey(it.no); if (w.length >= 5 && /\d/.test(w) && /[A-Z]/.test(w)) ks.push(w); }
+    const n = ks[0] || '';
     let g = null;
     /* الرقم هو المرجع: نفس رقم الوكالة = نفس الصنف مهما اختلف الاسم، بشرط ألا يتعارض نوعان مكتوبان صراحةً (ساكا / ياباني / ماليزي...). وغياب النوع في أحد العرضين لا يمنع الدمج.
        والاسم لا يُستعمل للدمج إلا للأصناف التي ليس لها رقم صالح */
-    if (n && byNo.has(n)) {
+    const L0 = [...new Set(ks.flatMap(k => byNo.get(k) || []))];
+    if (L0.length) {
       /* الرقم هو المرجع: صنف ساكا يُدمج مع نظيره بنفس الرقم حتى لو اختلف النوع المكتوب (ياباني / ماليزي...) */
-      const L = byNo.get(n), sk = v => /^ساكا/.test(v || '');
-      g = L.find(x => x.og === og || !x.og || !og) || L.find(x => sk(x.og) !== sk(og)) || null; if (g && !g.og && og) g.og = og;
+      const L = L0, sk = v => /^ساكا/.test(v || '');
+      g = L[0]; if (g && !g.og && og) g.og = og; /* الرقم وحده يحدد القطعة: لا يمنع الدمجَ اختلافُ النوع المكتوب في الوصف (ياباني / ماليزي / ساكا) */
     }
     if (!g && !n) {
       const t = toks(it.desc);
@@ -733,12 +758,12 @@ function build() {
       }
     }
     if (!g) { g = { desc: it.desc, no: it.no, t: toks(it.desc), side: sideOf(it.desc), head: headOf(it.desc), cells: {}, og, nums: [], keys: new Set(), nm: [...toks(it.desc)].filter(w => /\d/.test(w)).sort().join(',') }; groups.push(g); reg(g); }
-    if (n) { if (!byNo.has(n)) byNo.set(n, []); if (!byNo.get(n).includes(g)) byNo.get(n).push(g); }
-    if (!g.no && it.no) g.no = it.no;
+    ks.forEach(k => { if (!byNo.has(k)) byNo.set(k, []); if (!byNo.get(k).includes(g)) byNo.get(k).push(g); });
+    if (it.no && (!g.no || f.mine)) g.no = it.no;
     if (ok) g.keys.add(ok);
     if (hasNum(it.no) && !g.nums.some(m => numSame(m, it.no))) g.nums.push(it.no);
     if (it.no) { (g.nos = g.nos || new Set()).add(it.no); if (!g.oem) g.oem = oemNo(it.no); }
-    const c = g.cells[f.id]; if (!c || it.price < c.price) g.cells[f.id] = { price: it.price, brand: it.brand, i: it.i };
+    const c = g.cells[f.id]; if (!c || it.price < c.price) g.cells[f.id] = { price: it.price, brand: it.brand, i: it.i, no: it.no, og: og.replace(/\s*#.*$/, '') };
   }));
   return groups.map(g => {
     const list = Object.entries(g.cells), prices = list.map(([, c]) => c.price);
@@ -754,20 +779,23 @@ function build() {
 /* ---------- العرض ---------- */
 const fileHead = f => `${f.name}`;
 function viewFiles() {
-  return `<div class="files">${files.map((f, i) => {
-    const n = itemsOf(f).length, bad = f.map.price < 0 || (f.map.desc < 0 && f.map.no < 0);
+  /* كل عروض هذا القسم تظهر هنا: الفعّالة في المقارنة، وغيرها بلون باهت وعلامة «خارج المقارنة» ليعود إليها بضغطة */
+  const off = saved.filter(f => !f.mine && f.active === false && (page === 'toyota' ? f.kind === 'toyota' : f.kind !== 'toyota')).sort((a, b) => (b.date || 0) - (a.date || 0));
+  return `<div class="files">${[...files, ...off].map((f, i) => {
+    const on = f.active !== false, n = itemsOf(f).length, bad = f.map.price < 0 || (f.map.desc < 0 && f.map.no < 0);
     const cols = Math.max(0, ...f.rows.slice(0, 30).map(r => r.length)), hr = f.hdr >= 0 ? f.rows[f.hdr] || [] : [];
     const opt = sel => `<option value="-1">— لا يوجد —</option>` + Array.from({ length: cols }, (_, c) => `<option value="${c}" ${sel === c ? 'selected' : ''}>${c + 1}${String(hr[c] ?? '').trim() ? ' · ' + esc(String(hr[c]).slice(0, 22)) : ''}</option>`).join('');
-    return `<div class="file" style="--c:${colorOf(f)}"><div class="fh"><span class="no">${i + 1}</span><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم الشركة"><button class="btn sm op" data-open="${f.id}">فتح العرض</button><button class="x" data-del="${f.id}" title="إزالة من المقارنة" aria-label="إزالة من المقارنة">إزالة</button></div>
-    <div class="fm"><span class="cnt"><b>${n}</b> صنف</span>${bad ? '<span class="warn">لم أتعرف على الأعمدة، اخترها من «الأعمدة»</span>' : ''}</div>
+    return `<div class="file${on ? '' : ' off'}" style="--c:${on ? colorOf(f) : '#6b7075'}"><div class="fh"><span class="no">${on ? i + 1 : '–'}</span><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم الشركة"><button class="btn sm op" data-open="${f.id}">فتح العرض</button>${on ? `<button class="btn sm rm" data-del="${f.id}" title="إزالة من المقارنة" aria-label="إزالة من المقارنة">إزالة من المقارنة</button>` : `<button class="btn sm rm" data-toggle="${f.id}">إضافة للمقارنة</button>`}<button class="btn sm ${f.ref ? 'primary' : ''}" data-ref="${f.id}" title="قاعدة بياناتنا: مرجع المقارنة">${f.ref ? 'مرجع ✓' : 'تعيين مرجعًا'}</button><button class="x del1" data-purge1="${f.id}" title="حذف العرض نهائيًا" aria-label="حذف العرض نهائيًا">حذف</button></div>
+    <div class="fm"><span class="cnt"><b>${n}</b> صنف</span> ${on ? '<span class="chip lo">في المقارنة</span>' : '<span class="chip">خارج المقارنة</span>'}${f.ref ? '<span class="chip hi">مرجع · قاعدتنا</span>' : ''}${bad ? '<span class="warn">لم أتعرف على الأعمدة، اخترها من «الأعمدة»</span>' : ''}</div>
     <details ${bad ? 'open' : ''}><summary>الأعمدة</summary><div class="cols">${[['price', 'السعر'], ['desc', 'اسم الصنف'], ['no', 'رقم الصنف'], ['brand', 'الماركة']].map(([k, t]) => `<div><label>${t}</label><select data-col="${f.id}:${k}">${opt(f.map[k])}</select></div>`).join('')}
     <div><label>صف العناوين</label><select data-hdr="${f.id}"><option value="-1" ${f.hdr < 0 ? 'selected' : ''}>بلا عناوين</option>${Array.from({ length: Math.min(10, f.rows.length) }, (_, r) => `<option value="${r}" ${f.hdr === r ? 'selected' : ''}>الصف ${r + 1}</option>`).join('')}</select></div></div></details></div>`;
   }).join('')}</div>`;
 }
 function resultsData() {
   const q = normAr(ui.q), all = build(), multi = files.length > 1 && !ui.single;
-  let rows = all.filter(g => (!multi || g.count >= 2) && (!q || normAr(g.desc + ' ' + g.no + ' ' + [...(g.nos || [])].join(' ')).includes(q)));
-  rows.sort({ diff: (a, b) => (b.count > 1) - (a.count > 1) || b.pct - a.pct || b.diff - a.diff, name: (a, b) => a.desc.localeCompare(b.desc, 'ar'), amount: (a, b) => b.diff - a.diff }[ui.sort]);
+  const rf = files.find(f => f.ref);
+  let rows = all.filter(g => (!multi || (g.count >= 2 && (!rf || g.cells[rf.id]))) && (!q || normAr(g.desc + ' ' + g.no + ' ' + [...(g.nos || [])].join(' ')).includes(q)));
+  rows.sort({ diff: (a, b) => (b.count > 1) - (a.count > 1) || b.pct - a.pct || b.diff - a.diff, name: (a, b) => { const x = partKey(a.no), y = partKey(b.no); if (!x !== !y) return x ? -1 : 1; const dx = /^\d/.test(x), dy = /^\d/.test(y); if (dx !== dy) return dx ? -1 : 1; return x.localeCompare(y, 'en') || a.desc.localeCompare(b.desc, 'ar'); }, amount: (a, b) => b.diff - a.diff }[ui.sort]);
   return { all, rows, multi };
 }
 function groupCats(rows) {
@@ -786,12 +814,14 @@ function viewResults() {
     <div class="tile"><div class="l">أصناف موجودة عند أكثر من شركة</div><div class="v">${cmp.length}</div><div class="s">من ${all.length} صنف في كل الملفات</div></div>
     <div class="tile"><div class="l">الأرخص في أكثر الأصناف</div><div class="v" style="font-size:20px">${tf ? `<span class="bn" style="--c:${colorOf(tf)}"><span class="dot"></span>${esc(tf.name)}</span>` : '—'}</div><div class="s">${top ? top[1] + ' صنف' : ''}</div></div>
     <div class="tile"><div class="l">متوسط الفرق بين أرخص وأغلى سعر</div><div class="v">${avg.toFixed(0)}%</div><div class="s">نسبة الزيادة عن الأرخص</div></div></div>` : '';
-  const head = files.map(f => `<th class="co" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(fileHead(f))}</th>`).join('');
+  const head = files.map(f => `<th class="co" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(fileHead(f))}${f.ref ? ' <span class="chip hi">مرجع</span>' : ''}</th>`).join('');
+  /* الأصفر لمنشأ غير الياباني (ماليزي، تايواني، صيني...)؛ الياباني وساكا والأصلي كما هي */
+  const ogDiff = (g, c) => !!c.og && !/ياباني|ساكا|اصلي/.test(c.og);
   const rowHtml = (g, ix) => {
     const cells = files.map(f => {
       const c = g.cells[f.id]; if (!c) return '<td class="p"><span class="mut">—</span></td>';
       const best = c.price === g.min && g.count > 1;
-      return `<td class="p has ${best ? 'best' : ''}" data-src="${f.id}:${c.i}" style="--c:${colorOf(f)}"><b>${nf.format(c.price)}</b>${best ? '<span class="mk sq" title="الأرخص" aria-label="الأرخص"></span>' : ''}${!best && g.count > 1 && c.price === g.max ? '<span class="mk tri" title="الأغلى" aria-label="الأغلى"></span>' : ''}${!best && g.count > 1 ? `<span class="u">+${((c.price - g.min) / g.min * 100).toFixed(0)}%</span>` : ''}<div class="b">${esc(c.brand || '')}</div></td>`;
+      return `<td class="p has ${best ? 'best' : ''}" data-src="${f.id}:${c.i}" style="--c:${colorOf(f)}"><b>${nf.format(c.price)}</b>${best ? '<span class="mk sq" title="الأرخص" aria-label="الأرخص"></span>' : ''}${!best && g.count > 1 && c.price === g.max ? '<span class="mk tri" title="الأغلى" aria-label="الأغلى"></span>' : ''}${!best && g.count > 1 ? `<span class="u">+${((c.price - g.min) / g.min * 100).toFixed(0)}%</span>` : ''}<div class="b">${esc(c.brand || '')}</div>${c.no ? `<div class="b pn" title="رقم الصنف في هذا العرض">${esc(c.no)}</div>` : ''}${c.og ? `<div class="og${ogDiff(g, c) ? ' w' : ''}">${esc(c.og)}</div>` : ''}</td>`;
     }).join('');
     const cls = g.pct >= 30 ? 'hi' : (g.pct >= 10 ? 'mid' : 'lo');
     const names = g.best.map(id => files.find(f => f.id === id)).filter(Boolean).map(f => `<span class="bn" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(f.name)}</span>`).join('');
@@ -819,8 +849,8 @@ function render() {
   ctxPage = page; ui = page === 'mine' ? uiM : page === 'toyota' ? uiT : uiN; files = page === 'mine' ? filesM : page === 'toyota' ? filesT : filesN;
   const a = document.activeElement, keep = a && a.id === 'q' ? [a.selectionStart, a.selectionEnd] : null;
   const dz = !isCmp(page) ? '' : !files.length
-    ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض ${KIND_AR[page]}</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
-    : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة لمقارنة ${KIND_AR[page]}.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
+    ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض ${KIND_AR[page]}</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button> <button class="btn" id="frombtn">إضافة من العروض السابقة</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
+    : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة لمقارنة ${KIND_AR[page]}.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn" id="frombtn">إضافة من العروض السابقة</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
   $('#app').innerHTML = !isCmp(page) ? '' : `<div class="kseg" role="tablist">${['nissan', 'toyota'].map(k => `<button data-page="${k}" role="tab" aria-selected="${page === k}" class="${page === k ? 'on' : ''}">${KIND_AR[k]}<span class="n">${(k === 'nissan' ? filesN : filesT).length}</span></button>`).join('')}</div>` + dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
   $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button data-page="vault" class="${page === 'vault' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>المخزن</button>`;
   $('#app').hidden = !isCmp(page); $('#hist').hidden = isCmp(page);
@@ -880,7 +910,8 @@ $('#kw-mv').addEventListener('click', e => { const f = saved.find(x => x.id === 
 function addRows(rows, name, sig, mine) {
   rows = rows.filter(r => r.some(x => String(x ?? '').trim() !== '')).slice(0, 20000).map(r => r.map(x => typeof x === 'number' ? x : String(x ?? '')));
   if (!rows.length) { toast('لم أجد بيانات في الملف'); return; }
-  const g = guessMap(rows), id = uid(); sig = sig || headerSig(rows, g.hdr); saved.push({ id, name: mine ? name : (knownName(sig) || name), sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: true, ...(mine ? { mine: true } : { kind: page === 'toyota' ? 'toyota' : 'nissan' }) }); sync(); save(); render(); return id;
+  const g = guessMap(rows), id = uid(); sig = sig || headerSig(rows, g.hdr); const nm = mine ? name : (knownName(sig) || name);
+  saved.push({ id, name: nm, sig, rows, hdr: g.hdr, map: g.map, date: Date.now(), active: true, ...(mine ? { mine: true } : { kind: page === 'toyota' ? 'toyota' : 'nissan' }) }); sync(); save(); render(); return id;
 }
 const GEN = /^(microsoft|untitled|document|word|pdf|هاتف|جوال|العنوان|الرياض|جدة|الدمام|المملكة|ص\.?\s?ب|سجل|ضريب|فاتورة|الرقم|sheet|ورقة|صفحة|page|عرض|قائمة|كشف|تسعير|اسعار|أسعار|السعر|الصنف|البيان|اسم|رقم|الماركة|الماركه|الكمية|المجموع|تاريخ|شهر|نيسان|تويوتا|nissan|toyota|جدول|ملاحظ)/i;
 const KEYWORD = /(شركة|مؤسسة|معرض|مصنع|مستودع)\s+/;
@@ -1105,12 +1136,16 @@ document.addEventListener('click', e => {
   else if (t.id === 'pick-mine') $('#file-mine').click();
   else if (t.id === 'pastebtn') { ui.paste = !ui.paste; render(); }
   else if (t.id === 'padd') { const tx = $('#ptext').value; if (!tx.trim()) { toast('الصق النص أولاً'); return; } ui.paste = false; addRows(parseText(tx), $('#pname').value.trim() || 'شركة ' + (files.length + 1)); }
+  else if (t.id === 'frombtn') hpOpen();
+  else if (t.dataset.hpadd) { const f = saved.find(x => x.id === t.dataset.hpadd); if (f) { f.active = true; sync(); save(); render(); hpOpen(); toast('أُضيف «' + f.name + '» إلى المقارنة'); } }
   else if (t.id === 'clear') { files.forEach(f => { f.active = false; }); sync(); save(); render(); }
   else if (t.dataset.kind) { const f = saved.find(x => x.id === t.dataset.kind); if (f) { f.kind = f.kind === 'toyota' ? 'nissan' : 'toyota'; f.ci = undefined; sync(); save(); render(); toast('نُقل العرض إلى ' + KIND_AR[f.kind]); } }
+  else if (t.dataset.ref) { const f = saved.find(x => x.id === t.dataset.ref); if (f) { const was = !!f.ref, k = f.kind === 'toyota'; saved.forEach(x => { if (!x.mine && (x.kind === 'toyota') === k) x.ref = false; }); f.ref = !was; if (f.ref) f.active = true; sync(); save(); render(); toast(f.ref ? 'عُيّن العرض مرجعًا (قاعدة بياناتنا)' : 'أُلغي المرجع'); } }
   else if (t.dataset.del || t.dataset.toggle) { const f = saved.find(x => x.id === (t.dataset.del || t.dataset.toggle)); if (f) { f.active = t.dataset.del ? false : f.active === false; sync(); save(); render(); } }
   else if (t.dataset.purgeall) { const k = t.dataset.purgeall, mine = k === 'mine', n = saved.filter(f => !!f.mine === mine).length; if (!n) return;
     if (armedAll === k) { saved = saved.filter(f => !!f.mine !== mine); armedAll = null; sync(); save(); render(); toast(mine ? 'حُذفت كل عروضي' : 'حُذفت كل العروض السابقة'); }
     else { armedAll = k; clearTimeout(armedAllT); armedAllT = setTimeout(() => { armedAll = null; render(); }, 4000); render(); } }
+  else if (t.dataset.purge1) { const f = saved.find(x => x.id === t.dataset.purge1); saved = saved.filter(x => x.id !== t.dataset.purge1); sync(); save(); render(); toast('حُذف العرض' + (f ? ' «' + f.name + '»' : '') + ' نهائيًا'); }
   else if (t.dataset.purge) { const id = t.dataset.purge; if (armed === id) { saved = saved.filter(f => f.id !== id); armed = null; sync(); save(); render(); } else { armed = id; clearTimeout(armT); armT = setTimeout(() => { armed = null; render(); }, 4000); render(); } }
   else if (t.dataset.cat !== undefined) { const k = t.dataset.cat; ui.open.has(k) ? ui.open.delete(k) : ui.open.add(k); refreshResults(); }
   else if (t.id === 'catall') { const keys = [...document.querySelectorAll('.cat > button.ch')].map(b => b.dataset.cat); if (ui.open.size >= keys.length) ui.open.clear(); else keys.forEach(k => ui.open.add(k)); refreshResults(); }
@@ -1157,7 +1192,7 @@ function exportTable() {
   const { rows } = resultsData();
   /* بلا أسماء أصناف: الرقم هو المرجع. الترتيب: القسم ثم رقم الصنف (الأرقام قبل الحروف) */
   const head = ['القسم', 'رقم الصنف', ...files.flatMap(f => [f.name + ' - السعر', f.name + ' - الماركة']), 'الفرق', 'نسبة الفرق %', 'الأرخص عند'];
-  const aoa = [head], nk = g => String(g.no || '').trim().toUpperCase(), pc = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
+  const aoa = [head], nk = g => partKey(g.no), pc = new Intl.Collator('en', { numeric: false, sensitivity: 'base' });
   const cmp = (a, b) => { const x = nk(a), y = nk(b); if (!x !== !y) return x ? -1 : 1; const dx = /^\d/.test(x), dy = /^\d/.test(y); if (dx !== dy) return dx ? -1 : 1; return pc.compare(x, y); };
   groupCats(rows).filter(([k]) => !ui.dls || ui.dls.has(k)).sort((a, b) => (a[0] === 'أخرى') - (b[0] === 'أخرى') || dlName(a[0]).localeCompare(dlName(b[0]), 'ar')).forEach(([k, list]) => [...list].sort(cmp).forEach(g => aoa.push([dlName(k), g.no || '', ...files.flatMap(f => { const x = g.cells[f.id]; return x ? [x.price, x.brand || ''] : ['', '']; }), g.count > 1 ? g.diff : '', g.count > 1 ? +g.pct.toFixed(1) : '', g.count > 1 ? g.best.map(id => (files.find(f => f.id === id) || {}).name || '').join('، ') : ''])));
   return aoa;
@@ -9075,7 +9110,7 @@ document.addEventListener('click', e => {
     if (Q.items.length < 2) { toast('لا توجد أصناف كافية للترتيب'); return; }
     const k = b.dataset.k, [f, d] = k.split('-'), dir = d === 'asc' ? 1 : -1, cmp = new Intl.Collator('ar', { numeric: true, sensitivity: 'base' }), pc = new Intl.Collator('en', { numeric: false, sensitivity: 'base' });
     qSnap();
-    const nk = i => String(i.no || '').trim().toUpperCase(), dk = i => normAr(String(i.desc || ''));
+    const nk = i => partKey(i.no), dk = i => normAr(String(i.desc || ''));
     Q.items.sort((x, y) => f === 'alpha' ? (!nk(x) !== !nk(y) ? (nk(x) ? -1 : 1) : (dir * ((/^\d/.test(nk(x)) ? 0 : 1) - (/^\d/.test(nk(y)) ? 0 : 1) || pc.compare(nk(x), nk(y))) || cmp.compare(dk(x), dk(y))))
       : dir * ((+(f === 'qty' ? x.qty : x.price) || 0) - (+(f === 'qty' ? y.qty : y.price) || 0)) || pc.compare(nk(x), nk(y)));
     Q.sortKey = k; $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); qSave(); toast('رُتّبت الأصناف: ' + b.textContent + '. للتراجع اضغط «تراجع».');
