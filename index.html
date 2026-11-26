@@ -652,7 +652,7 @@ saved.forEach(f => { if (!f.mine && f.kind !== 'nissan' && f.kind !== 'toyota') 
 const sync = () => {
   /* لون مختلف لكل شركة داخل المقارنة: لا يحجز اللون إلا الملفات الفعّالة. ولكل قسم مقارنته الخاصة */
   const act = f => f.active !== false;
-  filesN = saved.filter(f => act(f) && !f.mine && f.kind !== 'toyota'); filesT = saved.filter(f => act(f) && !f.mine && f.kind === 'toyota'); filesM = []; [filesN, filesT].forEach(l => l.sort((a, b) => !!b.ref - !!a.ref)); let ch = false;
+  filesN = saved.filter(f => act(f) && !f.mine && f.kind !== 'toyota'); filesT = saved.filter(f => act(f) && !f.mine && f.kind === 'toyota'); filesM = []; let ch = false;
   [filesN, filesT, filesM].forEach(list => {
     const used = new Set();
     list.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
@@ -785,15 +785,15 @@ function viewFiles() {
     const on = f.active !== false, n = itemsOf(f).length, bad = f.map.price < 0 || (f.map.desc < 0 && f.map.no < 0);
     const cols = Math.max(0, ...f.rows.slice(0, 30).map(r => r.length)), hr = f.hdr >= 0 ? f.rows[f.hdr] || [] : [];
     const opt = sel => `<option value="-1">— لا يوجد —</option>` + Array.from({ length: cols }, (_, c) => `<option value="${c}" ${sel === c ? 'selected' : ''}>${c + 1}${String(hr[c] ?? '').trim() ? ' · ' + esc(String(hr[c]).slice(0, 22)) : ''}</option>`).join('');
-    return `<div class="file${on ? '' : ' off'}" style="--c:${on ? colorOf(f) : '#6b7075'}"><div class="fh"><span class="no">${on ? i + 1 : '–'}</span><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم الشركة"><button class="btn sm op" data-open="${f.id}">فتح العرض</button>${on ? `<button class="btn sm rm" data-del="${f.id}" title="إزالة من المقارنة" aria-label="إزالة من المقارنة">إزالة من المقارنة</button>` : `<button class="btn sm rm" data-toggle="${f.id}">إضافة للمقارنة</button>`}<button class="btn sm ${f.ref ? 'primary' : ''}" data-ref="${f.id}" title="قاعدة بياناتنا: مرجع المقارنة">${f.ref ? 'مرجع ✓' : 'تعيين مرجعًا'}</button><button class="x del1" data-purge1="${f.id}" title="حذف العرض نهائيًا" aria-label="حذف العرض نهائيًا">حذف</button></div>
-    <div class="fm"><span class="cnt"><b>${n}</b> صنف</span> ${on ? '<span class="chip lo">في المقارنة</span>' : '<span class="chip">خارج المقارنة</span>'}${f.ref ? '<span class="chip hi">مرجع · قاعدتنا</span>' : ''}${bad ? '<span class="warn">لم أتعرف على الأعمدة، اخترها من «الأعمدة»</span>' : ''}</div>
+    return `<div class="file${on ? '' : ' off'}" style="--c:${on ? colorOf(f) : '#6b7075'}"><div class="fh"><span class="no">${on ? i + 1 : '–'}</span><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم الشركة"><button class="btn sm op" data-open="${f.id}">فتح العرض</button>${on ? `<button class="btn sm rm" data-del="${f.id}" title="إزالة من المقارنة" aria-label="إزالة من المقارنة">إزالة من المقارنة</button>` : `<button class="btn sm rm" data-toggle="${f.id}">إضافة للمقارنة</button>`}<button class="x del1" data-purge1="${f.id}" title="حذف العرض نهائيًا" aria-label="حذف العرض نهائيًا">حذف</button></div>
+    <div class="fm"><span class="cnt"><b>${n}</b> صنف</span> ${on ? '<span class="chip lo">في المقارنة</span>' : '<span class="chip">خارج المقارنة</span>'}${bad ? '<span class="warn">لم أتعرف على الأعمدة، اخترها من «الأعمدة»</span>' : ''}</div>
     <details ${bad ? 'open' : ''}><summary>الأعمدة</summary><div class="cols">${[['price', 'السعر'], ['desc', 'اسم الصنف'], ['no', 'رقم الصنف'], ['brand', 'الماركة']].map(([k, t]) => `<div><label>${t}</label><select data-col="${f.id}:${k}">${opt(f.map[k])}</select></div>`).join('')}
     <div><label>صف العناوين</label><select data-hdr="${f.id}"><option value="-1" ${f.hdr < 0 ? 'selected' : ''}>بلا عناوين</option>${Array.from({ length: Math.min(10, f.rows.length) }, (_, r) => `<option value="${r}" ${f.hdr === r ? 'selected' : ''}>الصف ${r + 1}</option>`).join('')}</select></div></div></details></div>`;
   }).join('')}</div>`;
 }
 function resultsData() {
   const q = normAr(ui.q), all = build(), multi = files.length > 1 && !ui.single;
-  const rf = files.find(f => f.ref);
+  const rf = null;
   let rows = all.filter(g => (!multi || (g.count >= 2 && (!rf || g.cells[rf.id]))) && (!q || normAr(g.desc + ' ' + g.no + ' ' + [...(g.nos || [])].join(' ')).includes(q)));
   rows.sort({ diff: (a, b) => (b.count > 1) - (a.count > 1) || b.pct - a.pct || b.diff - a.diff, name: (a, b) => { const x = partKey(a.no), y = partKey(b.no); if (!x !== !y) return x ? -1 : 1; const dx = /^\d/.test(x), dy = /^\d/.test(y); if (dx !== dy) return dx ? -1 : 1; return x.localeCompare(y, 'en') || a.desc.localeCompare(b.desc, 'ar'); }, amount: (a, b) => b.diff - a.diff }[ui.sort]);
   return { all, rows, multi };
@@ -814,7 +814,7 @@ function viewResults() {
     <div class="tile"><div class="l">أصناف موجودة عند أكثر من شركة</div><div class="v">${cmp.length}</div><div class="s">من ${all.length} صنف في كل الملفات</div></div>
     <div class="tile"><div class="l">الأرخص في أكثر الأصناف</div><div class="v" style="font-size:20px">${tf ? `<span class="bn" style="--c:${colorOf(tf)}"><span class="dot"></span>${esc(tf.name)}</span>` : '—'}</div><div class="s">${top ? top[1] + ' صنف' : ''}</div></div>
     <div class="tile"><div class="l">متوسط الفرق بين أرخص وأغلى سعر</div><div class="v">${avg.toFixed(0)}%</div><div class="s">نسبة الزيادة عن الأرخص</div></div></div>` : '';
-  const head = files.map(f => `<th class="co" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(fileHead(f))}${f.ref ? ' <span class="chip hi">مرجع</span>' : ''}</th>`).join('');
+  const head = files.map(f => `<th class="co" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(fileHead(f))}</th>`).join('');
   /* الأصفر لمنشأ غير الياباني (ماليزي، تايواني، صيني...)؛ الياباني وساكا والأصلي كما هي */
   const ogDiff = (g, c) => !!c.og && !/ياباني|ساكا|اصلي/.test(c.og);
   const rowHtml = (g, ix) => {
@@ -1140,7 +1140,6 @@ document.addEventListener('click', e => {
   else if (t.dataset.hpadd) { const f = saved.find(x => x.id === t.dataset.hpadd); if (f) { f.active = true; sync(); save(); render(); hpOpen(); toast('أُضيف «' + f.name + '» إلى المقارنة'); } }
   else if (t.id === 'clear') { files.forEach(f => { f.active = false; }); sync(); save(); render(); }
   else if (t.dataset.kind) { const f = saved.find(x => x.id === t.dataset.kind); if (f) { f.kind = f.kind === 'toyota' ? 'nissan' : 'toyota'; f.ci = undefined; sync(); save(); render(); toast('نُقل العرض إلى ' + KIND_AR[f.kind]); } }
-  else if (t.dataset.ref) { const f = saved.find(x => x.id === t.dataset.ref); if (f) { const was = !!f.ref, k = f.kind === 'toyota'; saved.forEach(x => { if (!x.mine && (x.kind === 'toyota') === k) x.ref = false; }); f.ref = !was; if (f.ref) f.active = true; sync(); save(); render(); toast(f.ref ? 'عُيّن العرض مرجعًا (قاعدة بياناتنا)' : 'أُلغي المرجع'); } }
   else if (t.dataset.del || t.dataset.toggle) { const f = saved.find(x => x.id === (t.dataset.del || t.dataset.toggle)); if (f) { f.active = t.dataset.del ? false : f.active === false; sync(); save(); render(); } }
   else if (t.dataset.purgeall) { const k = t.dataset.purgeall, mine = k === 'mine', n = saved.filter(f => !!f.mine === mine).length; if (!n) return;
     if (armedAll === k) { saved = saved.filter(f => !!f.mine !== mine); armedAll = null; sync(); save(); render(); toast(mine ? 'حُذفت كل عروضي' : 'حُذفت كل العروض السابقة'); }
