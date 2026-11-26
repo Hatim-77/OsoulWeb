@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Montserrat:wght@800;900&family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js" onerror="var x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';document.head.appendChild(x)"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 /* تخطيط: عمود واحد، منطقة رفع ثم جدول مقارنة عريض بعمود أول ثابت. الوضع الداكن فقط بقرار من المستخدم */
@@ -389,6 +389,13 @@ body{max-width:100%}
 #qpv-f.min{height:auto!important;min-height:0;resize:none}#qpv-f.min .qpvb{display:none}
 #qpv-f.max{inset:8px!important;left:8px!important;top:8px!important;right:8px!important;bottom:8px!important;width:auto!important;height:auto!important;resize:none}
 @media (max-width:760px){body:has(input:focus,textarea:focus,select:focus) #qpv-f:not(.max){display:none}#qpv-f:not(.max){width:calc(100vw - 12px);height:60dvh;resize:none}}
+
+.gearb{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;height:32px;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--ink2);font:inherit;font-size:13px;cursor:pointer}
+.gearb[hidden]{display:none}.gearb:hover{color:var(--ink);background:var(--panel2)}.gearb svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#set-d .b{padding:14px 18px;max-height:70vh;overflow:auto}.sup{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;background:var(--panel2)}
+.sup .un{font-weight:700}.sup .ue{color:var(--ink2);font-size:12.5px;direction:ltr;text-align:right}
+.sup .pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px;margin-top:8px}
+.sup label{display:flex;align-items:center;gap:7px;font-size:13.5px;cursor:pointer}.sup input{width:auto}.sup.adm{opacity:.7}
 @media print{
   .totop,#gov-f,#qpv-f{display:none!important}
   body.pq .qpaper{zoom:1!important;min-width:0!important;width:auto!important;transform:none!important;margin-bottom:0!important}
@@ -454,6 +461,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
     <button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
+    <button type="button" class="gearb" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -884,6 +892,7 @@ function viewResults() {
   <p class="note">لكل شركة لون ثابت، المربع الأخضر بجانب السعر يدل على الأرخص، والمثلث الأحمر على الأغلى، والنسبة بجانب بقية الأسعار هي زيادتها عن الأرخص. اضغط على اسم القسم لفتح جدوله. يُعرض ${rows.length} صنف.</p>` : `<div class="drop mini"><p>${files.length > 1 ? 'لا توجد أصناف مشتركة بين الملفات بهذا البحث. جرّب «إظهار الأصناف الموجودة عند شركة واحدة».' : 'لا توجد أصناف مطابقة.'}</p></div>`}`;
 }
 function render() {
+  if (typeof guardPage === 'function' && guardPage()) { /* انتقل إلى قسم مسموح */ }
   if (isCmp(page)) lastCmp = page;
   ctxPage = page; ui = page === 'mine' ? uiM : page === 'toyota' ? uiT : uiN; files = page === 'mine' ? filesM : page === 'toyota' ? filesT : filesN;
   const a = document.activeElement, keep = a && a.id === 'q' ? [a.selectionStart, a.selectionEnd] : null;
@@ -892,6 +901,7 @@ function render() {
     : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة لمقارنة ${KIND_AR[page]}.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn" id="frombtn">إضافة من العروض السابقة</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
   $('#app').innerHTML = !isCmp(page) ? '' : `<div class="kseg" role="tablist">${['nissan', 'toyota'].map(k => `<button data-page="${k}" role="tab" aria-selected="${page === k}" class="${page === k ? 'on' : ''}">${KIND_AR[k]}<span class="n">${(k === 'nissan' ? filesN : filesT).length}</span></button>`).join('')}</div>` + dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
   $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button data-page="vault" class="${page === 'vault' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>المخزن</button><button data-gov="1" type="button"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 21h18"/></svg>الدوائر الحكومية</button>`;
+  if (typeof applyPerms === 'function') applyPerms();
   $('#app').hidden = !isCmp(page); $('#hist').hidden = isCmp(page);
   if (isCmp(page)) $('#hist').innerHTML = '';
   else if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine(); else if (page === 'quote') { $('#hist').innerHTML = viewQuote(); qGrowAll(); qRefresh(); } else if (page === 'vault') { $('#hist').innerHTML = viewVault(); vInit(); }
@@ -1026,7 +1036,7 @@ const cloud = {
     this.busy = true; this.state = 'wait'; renderAcct();
     try { const ch = await this.pull(); await this.push(); this.state = 'ok'; if (ch) { sync(); store.set(JSON.stringify(saved)); const a = document.activeElement; if (!(a && a.closest && a.closest('.file')) && !document.querySelector('dialog[open]')) render(); } }
     catch (e) { this.state = this.sess ? 'bad' : 'expired'; this.err = String((e && e.message) || e).slice(0, 160) + (e && e.status ? ' (' + e.status + ')' : ''); }
-    this.busy = false; renderAcct(); if (this.again) { this.again = false; this.touch(); }
+    this.busy = false; renderAcct(); meLoad(); if (this.again) { this.again = false; this.touch(); }
   },
   strOf(f) { return JSON.stringify({ ...f, upd: 0 }); },
   async pull() {
@@ -9234,30 +9244,53 @@ document.addEventListener('click', e => {
 function qXlsx() {
   if (!window.XLSX) { toast('تعذر تحميل مكتبة Excel. تأكد من الاتصال بالإنترنت.'); return; }
   const { sel } = qTotals(); if (!sel.length) { toast('أضف صنفاً واحداً على الأقل إلى العرض'); return; }
-  /* نفس ترتيب ورقة PDF: عنوان العرض، بيانات العرض، ثم الجدول بأقسام نيسان وتويوتا وأنواع الأصناف، ثم بيانات الشركة */
-  const hasBrand = sel.some(i => i.brand), co = Q.co, nc = 2 + (hasBrand ? 1 : 0) + (Q.gen ? 1 : 3), aoa = [], merges = [];
-  const full = r => merges.push({ s: { r, c: 0 }, e: { r, c: nc - 1 } });
-  const line1 = (t, bold) => { aoa.push([t, ...Array(nc - 1).fill('')]); full(aoa.length - 1); };
-  line1('شركة أصول القطع - OSOUL PARTS CO.');
-  line1(Q.na ? 'وصل حديثًا ★' : qTitle() + ' - PRICE QUOTATION');
-  if (qKind()) line1(QKIND[qKind()]);
-  line1('رقم العرض: ' + (Q.no || '-') + '    التاريخ: ' + qDate(Q.date) + (+Q.valid > 0 ? '    صالح حتى: ' + qDate(qEnd()) : ''));
-  aoa.push(Array(nc).fill(''));
-  aoa.push(['رقم القطعة', 'اسم الصنف', ...(hasBrand ? ['الماركة'] : []), ...(Q.gen ? ['السعر'] : ['الكمية', 'سعر الوحدة', 'الإجمالي'])]);
-  const hdrRow = aoa.length - 1, numCells = [];
+  /* تصميم الملف كورقة العرض: عنوان أحمر، شريط بيانات رمادي، رأس جدول أسود، شريط نيسان (أسود) وتويوتا (أحمر)، أقسام وردية، وصفوف متبادلة اللون */
+  const hasBrand = sel.some(i => i.brand), nc = 2 + (hasBrand ? 1 : 0) + (Q.gen ? 1 : 3), aoa = [], merges = [], kinds = [];
+  const FONT = 'Cairo', thin = c => ({ style: 'thin', color: { rgb: c } });
+  const push = (row, kind, h) => { aoa.push(row); kinds.push([kind, h || 0]); };
+  const one = (t, kind, h) => { push([t, ...Array(nc - 1).fill('')], kind, h); merges.push({ s: { r: aoa.length - 1, c: 0 }, e: { r: aoa.length - 1, c: nc - 1 } }); };
+  one('شركة أصول القطع  -  OSOUL PARTS CO.', 'co', 26);
+  one(Q.na ? '★  وصل حديثًا  ★' : qTitle(), 'title', 24);
+  if (!Q.na) one('PRICE QUOTATION', 'sub', 16);
+  if (qKind()) one(QKIND[qKind()] + '  -  ' + ({ nissan: 'NISSAN', toyota: 'TOYOTA', mixed: 'NISSAN & TOYOTA' }[qKind()]), 'kd', 20);
+  one('رقم العرض: ' + (Q.no || '-') + '      التاريخ: ' + qDate(Q.date) + (+Q.valid > 0 ? '      صالح حتى: ' + qDate(qEnd()) : ''), 'meta', 22);
+  push(Array(nc).fill(''), 'gap', 6);
+  push(['رقم القطعة', 'اسم الصنف', ...(hasBrand ? ['الماركة'] : []), ...(Q.gen ? ['السعر'] : ['الكمية', 'سعر الوحدة', 'الإجمالي'])], 'hdr', 22);
+  const hdrRow = aoa.length - 1;
   qSections(sel).forEach(sc => {
-    if (sc.banner) { aoa.push([sc.banner[0] + ' - ' + sc.banner[1], ...Array(nc - 1).fill('')]); full(aoa.length - 1); }
+    if (sc.banner) one(sc.banner[0] + '   ' + sc.banner[1], 'b-' + sc.kind, 22);
     sc.cats.forEach(([nm, list]) => {
-      if (nm) { aoa.push([nm, ...Array(nc - 1).fill('')]); full(aoa.length - 1); }
-      list.forEach(i => { const q = +i.qty || 0, pr = +i.price || 0; aoa.push([i.no || '', i.desc, ...(hasBrand ? [i.brand || ''] : []), ...(Q.gen ? [pr] : [q, pr, q * pr])]); numCells.push(aoa.length - 1); });
+      if (nm) one(nm, 'cat', 18);
+      list.forEach((i, n) => { const q = +i.qty || 0, pr = +i.price || 0; push([i.no || '', i.desc, ...(hasBrand ? [i.brand || ''] : []), ...(Q.gen ? [pr] : [q, pr, q * pr])], 'it' + (n % 2), 0); });
     });
   });
-  aoa.push(Array(nc).fill(''));
-  line1(QCO.addr); line1(QCO.rows.map(([i, l, v]) => l + ': ' + v).join('   •   '));
+  push(Array(nc).fill(''), 'gap', 8);
+  one(QCO.addr, 'foot', 18); one(QCO.rows.map(([i, l, v]) => l + ': ' + v).join('   •   '), 'foot', 30);
   const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!merges'] = merges;
-  ws['!cols'] = [{ wch: 22 }, { wch: 46 }, ...(hasBrand ? [{ wch: 16 }] : []), ...(Q.gen ? [{ wch: 12 }] : [{ wch: 9 }, { wch: 12 }, { wch: 12 }])];
-  numCells.forEach(r => { for (let c = 2 + (hasBrand ? 1 : 0); c < nc; c++) { const x = ws[XLSX.utils.encode_cell({ r, c })]; if (x && typeof x.v === 'number') x.z = Q.gen || c > 2 + (hasBrand ? 1 : 0) ? '#,##0.00' : '0'; } });
-  ws['!freeze'] = { xSplit: 0, ySplit: hdrRow + 1 };
+  ws['!cols'] = [{ wch: 24 }, { wch: 48 }, ...(hasBrand ? [{ wch: 16 }] : []), ...(Q.gen ? [{ wch: 13 }] : [{ wch: 10 }, { wch: 13 }, { wch: 13 }])];
+  ws['!rows'] = kinds.map(([, h]) => (h ? { hpt: h } : {}));
+  const numFrom = 2 + (hasBrand ? 1 : 0);
+  const ST = {
+    co: { font: { name: FONT, sz: 15, bold: true, color: { rgb: '15181C' } }, alignment: { horizontal: 'center', vertical: 'center' } },
+    title: { font: { name: FONT, sz: 14, bold: true, color: { rgb: 'C52B22' } }, alignment: { horizontal: 'center', vertical: 'center' } },
+    sub: { font: { name: FONT, sz: 9, color: { rgb: '7A828A' } }, alignment: { horizontal: 'center' } },
+    kd: { font: { name: FONT, sz: 11, bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '15181C' } }, alignment: { horizontal: 'center', vertical: 'center' } },
+    meta: { font: { name: FONT, sz: 10, color: { rgb: '3A4047' } }, fill: { fgColor: { rgb: 'F7F8F9' } }, alignment: { horizontal: 'center', vertical: 'center' }, border: { top: thin('DFE2E6'), bottom: thin('DFE2E6'), left: thin('DFE2E6'), right: thin('DFE2E6') } },
+    hdr: { font: { name: FONT, sz: 10.5, bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '15181C' } }, alignment: { horizontal: 'center', vertical: 'center' } },
+    'b-nissan': { font: { name: FONT, sz: 12, bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '15181C' } }, alignment: { horizontal: 'center', vertical: 'center' } },
+    'b-toyota': { font: { name: FONT, sz: 12, bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: 'A8221A' } }, alignment: { horizontal: 'center', vertical: 'center' } },
+    cat: { font: { name: FONT, sz: 10.5, bold: true, color: { rgb: 'A8221A' } }, fill: { fgColor: { rgb: 'F8DEDB' } }, alignment: { horizontal: 'right', vertical: 'center' }, border: { right: { style: 'thick', color: { rgb: 'C52B22' } }, bottom: thin('ECB9B4') } },
+    it0: { font: { name: FONT, sz: 10, color: { rgb: '15181C' } }, fill: { fgColor: { rgb: 'FFFFFF' } }, border: { bottom: thin('E6E8EB') }, alignment: { vertical: 'center', wrapText: true } },
+    it1: { font: { name: FONT, sz: 10, color: { rgb: '15181C' } }, fill: { fgColor: { rgb: 'E8EBEE' } }, border: { bottom: thin('E6E8EB') }, alignment: { vertical: 'center', wrapText: true } },
+    foot: { font: { name: FONT, sz: 9, color: { rgb: '3A4047' } }, fill: { fgColor: { rgb: 'F2F3F5' } }, alignment: { horizontal: 'center', vertical: 'center', wrapText: true } }
+  };
+  kinds.forEach(([k], r) => { const base = ST[k]; if (!base) return;
+    for (let c = 0; c < nc; c++) { const ref = XLSX.utils.encode_cell({ r, c }); let cell = ws[ref]; if (!cell) cell = ws[ref] = { t: 's', v: '' };
+      const sty = JSON.parse(JSON.stringify(base));
+      if (k === 'it0' || k === 'it1') { if (c >= numFrom || c === 0 && false) sty.alignment = { ...sty.alignment, horizontal: 'center' }; if (c === 0) sty.alignment = { ...sty.alignment, horizontal: 'center' }; if (c >= numFrom && typeof cell.v === 'number') { cell.z = !Q.gen && c === numFrom ? '0' : '#,##0.00'; if (!Q.gen && c === nc - 1) sty.font = { ...sty.font, bold: true }; } }
+      cell.s = sty; } });
+  ws['!views'] = [{ rightToLeft: true }]; ws['!freeze'] = { xSplit: 0, ySplit: hdrRow + 1 };
+  ws['!pageSetup'] = { orientation: 'portrait', paperSize: 9, fitToWidth: 1, fitToHeight: 0 }; ws['!sheetPr'] = { pageSetUpPr: { fitToPage: true } };
   const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'عرض السعر');
   const nm = String(qDocTitle()).replace(/[\\/:*?"<>|]/g, '-') + (DLS && DLS.size === 1 ? ' - ' + dlName([...DLS][0]) : '');
   try { XLSX.writeFile(wb, nm + '.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
@@ -9511,6 +9544,46 @@ function qpvOpen() {
     x = Math.max(4 - w + 80, Math.min(innerWidth - 80, x)); y = Math.max(0, Math.min(innerHeight - 40, y)); el.style.left = x + 'px'; el.style.top = y + 'px'; });
   const end = () => { drag = null; };
   document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end); }
+
+/* ---------- الصلاحيات: الحساب الرئيسي يمنح أو يسحب الأقسام عن بقية الحسابات (يتطلب perms.sql في Supabase) ---------- */
+const SECS = [['cmp', 'المقارنة'], ['history', 'العروض السابقة'], ['mine', 'عروضي'], ['quote', 'عرض سعر'], ['vault', 'المخزن'], ['gov', 'الدوائر الحكومية'], ['acc', 'النظام المحاسبي']];
+const ME_KEY = 'usool.me';
+let ME = (() => { try { return JSON.parse(lsGet(ME_KEY) || 'null') || { role: 'user', perms: {} }; } catch (e) { return { role: 'user', perms: {} }; } })();
+const allowed = k => ME.role === 'admin' || !ME.perms || ME.perms[k] !== false;
+const pageKey = p => (p === 'nissan' || p === 'toyota') ? 'cmp' : p;
+const uidOf = () => { try { return JSON.parse(atob(cloud.sess.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub; } catch (e) { return ''; } };
+function applyPerms() {
+  const hide = (el, k) => { if (el) el.hidden = !allowed(k); };
+  document.querySelectorAll('#tabs [data-page]').forEach(b => hide(b, pageKey(b.dataset.page)));
+  document.querySelectorAll('#tabs [data-gov]').forEach(b => hide(b, 'gov'));
+  document.querySelectorAll('.accb').forEach(b => hide(b, 'acc'));
+  const g = document.getElementById('gear'); if (g) g.hidden = !cloud.sess;
+}
+function guardPage() { if (allowed(pageKey(page))) return false; const nx = [['cmp', lastCmp || 'nissan'], ['history', 'history'], ['mine', 'mine'], ['quote', 'quote'], ['vault', 'vault']].find(([k]) => allowed(k)); if (nx) { page = nx[1]; try { location.hash = page; } catch (e) { } return true; } return false; }
+let meBusy = false;
+async function meLoad() {
+  if (meBusy || !cloud.on || !cloud.sess) return; meBusy = true;
+  try { const id = uidOf(); const r = id ? await cloud.http('/rest/v1/app_users?select=role,perms&user_id=eq.' + id) : null; const row = r && r[0];
+    const nm = row ? { role: row.role || 'user', perms: row.perms || {} } : { role: 'user', perms: {} };
+    if (JSON.stringify(nm) !== JSON.stringify(ME)) { ME = nm; lsSet(ME_KEY, JSON.stringify(ME)); if (guardPage() || true) render(); } else applyPerms();
+  } catch (e) { applyPerms(); }
+  meBusy = false;
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) meLoad(); });
+applyPerms(); meLoad();
+{ let d = null;
+  const load = async () => { const b = d.querySelector('.b'); b.innerHTML = '<p class="note">جارٍ التحميل...</p>';
+    try { const rows = await cloud.http('/rest/v1/app_users?select=user_id,email,name,role,perms&order=created_at.asc'); const me = uidOf();
+      if (ME.role !== 'admin') { b.innerHTML = '<p class="note">هذه الصفحة للحساب الرئيسي فقط. إن كنتَ الحساب الرئيسي فنفّذ ملف perms.sql في Supabase مرة واحدة (مع بريدك في آخر سطر)، ثم أغلق التطبيق وافتحه من جديد.</p>'; return; }
+      b.innerHTML = '<p class="note" style="margin-top:0">فعّل الأقسام التي يُسمح لكل حساب باستخدامها، وألغِ التفعيل لسحب الصلاحية. يسري التغيير عند فتح الحساب الآخر للتطبيق من جديد.</p>' + (rows || []).map(u => `<div class="sup${u.role === 'admin' ? ' adm' : ''}" data-u="${esc(u.user_id)}"><div class="un">${esc(u.name || u.email || '')}${u.role === 'admin' ? ' · الحساب الرئيسي' : ''}${u.user_id === me ? ' (أنت)' : ''}</div><div class="ue">${esc(u.email || '')}</div>${u.role === 'admin' ? '' : `<div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div>`}</div>`).join('');
+    } catch (e) { b.innerHTML = '<p class="note" style="color:var(--bad)">تعذر تحميل الحسابات. تأكد من تنفيذ ملف perms.sql في Supabase. (' + esc(String((e && e.message) || e).slice(0, 120)) + ')</p>'; } };
+  document.addEventListener('click', e => { if (e.target.closest('[data-gear]')) { if (!d) { d = document.createElement('dialog'); d.id = 'set-d'; d.innerHTML = '<div class="h"><b>الإعدادات · صلاحيات الحسابات</b><button class="btn sm" type="button" data-sx="1">إغلاق</button></div><div class="b"></div>'; document.body.appendChild(d);
+      d.addEventListener('click', ev => { if (ev.target === d || ev.target.closest('[data-sx]')) d.close(); });
+      d.addEventListener('change', async ev => { const cb = ev.target.closest('input[data-k]'); if (!cb) return; const card = cb.closest('.sup'), perms = {}; card.querySelectorAll('input[data-k]').forEach(x => { if (!x.checked) perms[x.dataset.k] = false; });
+        try { await cloud.http('/rest/v1/app_users?user_id=eq.' + card.dataset.u, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ perms }) }); toast('حُفظت الصلاحيات'); }
+        catch (x) { cb.checked = !cb.checked; toast('تعذر حفظ الصلاحيات'); } }); }
+    if (!d.open) d.showModal(); load(); } });
+}
 </script>
 </body>
 </html>
