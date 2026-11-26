@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Montserrat:wght@800;900&family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" onerror="var x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';document.head.appendChild(x)"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js" onerror="var x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';document.head.appendChild(x)"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
@@ -1308,7 +1309,7 @@ function qSections(sel) {
 function qPaper() {
   const t = qTotals(), co = Q.co, hasBrand = t.sel.some(i => i.brand), logo = document.querySelector('.brand svg').outerHTML.replaceAll('#f3f1ea', '#15181c').replace('class="logo"', 'class="qlogo"').replace('viewBox="62 0 262 84"', 'viewBox="62 0 270 84"').replace(/<g><text id="os-mark".*?<\/text><\/g>/, `<image href="${QOWN}" x="244" y="8" width="72" height="67" preserveAspectRatio="xMidYMid meet"/>`);
   /* مجموع عرض الأعمدة على يمين اسم الصنف يساوي مجموع ما على يساره، فيقع اسم الصنف في منتصف الصفحة تحت عنوان العرض ونوعه */
-  const cw = Q.gen ? (hasBrand ? [29, 42, 11, 18] : [29, 42, 29]) : (hasBrand ? [29, 42, 8, 6, 7.5, 7.5] : [29, 42, 8, 10.5, 10.5]);
+  const cw = Q.gen ? (hasBrand ? [22, 56, 10, 12] : [22, 56, 22]) : (hasBrand ? [26, 48, 8, 5, 6.5, 6.5] : [24, 52, 8, 8, 8]);
   const ncol = (hasBrand ? 6 : 5) - (Q.gen ? 2 : 0), line = (i) => `<tr><td class="qno">${esc(i.no || '')}</td><td>${esc(i.desc)}</td>${hasBrand ? `<td class="qc">${esc(i.brand || '')}</td>` : ''}${Q.gen ? '' : `<td class="qc">${nf.format(+i.qty || 0)}</td>`}<td class="qn1">${qNum.format(+i.price || 0)}</td>${Q.gen ? '' : `<td class="qn1"><b>${qNum.format((+i.qty || 0) * (+i.price || 0))}</b></td>`}</tr>`;
   const rows0 = qSections(t.sel).map(sc => (sc.banner ? `<tr class="qb k-${sc.kind}"><td colspan="${ncol}">${sc.banner[0]}<small>${sc.banner[1]}</small></td></tr>` : '') + sc.cats.map(([nm, list]) => (nm ? `<tr class="qg"><td colspan="${ncol}">${esc(nm)}</td></tr>` : '') + list.map(i => line(i)).join('')).join('')).join('');
   let rows = rows0;
@@ -9249,6 +9250,7 @@ function qXlsx() {
   const FONT = 'Cairo', thin = c => ({ style: 'thin', color: { rgb: c } });
   const push = (row, kind, h) => { aoa.push(row); kinds.push([kind, h || 0]); };
   const one = (t, kind, h) => { push([t, ...Array(nc - 1).fill('')], kind, h); merges.push({ s: { r: aoa.length - 1, c: 0 }, e: { r: aoa.length - 1, c: nc - 1 } }); };
+  one('', 'logo', 58);
   one('شركة أصول القطع  -  OSOUL PARTS CO.', 'co', 26);
   one(Q.na ? '★  وصل حديثًا  ★' : qTitle(), 'title', 24);
   if (!Q.na) one('PRICE QUOTATION', 'sub', 16);
@@ -9267,10 +9269,11 @@ function qXlsx() {
   push(Array(nc).fill(''), 'gap', 8);
   one(QCO.addr, 'foot', 18); one(QCO.rows.map(([i, l, v]) => l + ': ' + v).join('   •   '), 'foot', 30);
   const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!merges'] = merges;
-  ws['!cols'] = [{ wch: 24 }, { wch: 48 }, ...(hasBrand ? [{ wch: 16 }] : []), ...(Q.gen ? [{ wch: 13 }] : [{ wch: 10 }, { wch: 13 }, { wch: 13 }])];
+  ws['!cols'] = [{ wch: 24 }, { wch: 60 }, ...(hasBrand ? [{ wch: 16 }] : []), ...(Q.gen ? [{ wch: 13 }] : [{ wch: 10 }, { wch: 13 }, { wch: 13 }])];
   ws['!rows'] = kinds.map(([, h]) => (h ? { hpt: h } : {}));
   const numFrom = 2 + (hasBrand ? 1 : 0);
   const ST = {
+    logo: { fill: { fgColor: { rgb: 'FFFFFF' } } },
     co: { font: { name: FONT, sz: 15, bold: true, color: { rgb: '15181C' } }, alignment: { horizontal: 'center', vertical: 'center' } },
     title: { font: { name: FONT, sz: 14, bold: true, color: { rgb: 'C52B22' } }, alignment: { horizontal: 'center', vertical: 'center' } },
     sub: { font: { name: FONT, sz: 9, color: { rgb: '7A828A' } }, alignment: { horizontal: 'center' } },
@@ -9293,7 +9296,45 @@ function qXlsx() {
   ws['!pageSetup'] = { orientation: 'portrait', paperSize: 9, fitToWidth: 1, fitToHeight: 0 }; ws['!sheetPr'] = { pageSetUpPr: { fitToPage: true } };
   const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'عرض السعر');
   const nm = String(qDocTitle()).replace(/[\\/:*?"<>|]/g, '-') + (DLS && DLS.size === 1 ? ' - ' + dlName([...DLS][0]) : '');
-  try { XLSX.writeFile(wb, nm + '.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
+  const cw = ws['!cols'].map(c => Math.round(c.wch * 7 + 5));
+  qXlsxSave(wb, nm + '.xlsx', cw);
+}
+/* الشعارات: مكتبة Excel لا تدعم الصور، فتُضاف إلى الملف الناتج (ملف مضغوط) بعد إنشائه */
+async function qXlsxSave(wb, fname, cw) {
+  const save = blob => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click(); setTimeout(() => { a.remove(); URL.revokeObjectURL(a.href); }, 4000); toast('جارٍ تنزيل ملف Excel'); };
+  let buf; try { buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' }); } catch (e) { toast('تعذر إنشاء الملف.'); return; }
+  const plain = () => save(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+  if (!window.JSZip) { plain(); return; }
+  try {
+    const u8 = d => { const b = atob(d.split(',')[1]), a = new Uint8Array(b.length); for (let k = 0; k < b.length; k++) a[k] = b.charCodeAt(k); return a; };
+    const dim = a => ({ w: (a[16] << 24 | a[17] << 16 | a[18] << 8 | a[19]) >>> 0, h: (a[20] << 24 | a[21] << 16 | a[22] << 8 | a[23]) >>> 0 });
+    const H = 52, GAP = 12, E = 9525, total = cw.reduce((x, y) => x + y, 0);
+    const imgs = [QD.own, QD.fixed.nissan, QD.fixed.toyota, QD.brand].map(d => { const a = u8(d), m = dim(a); return { a, w: Math.round(H * m.w / m.h), h: H }; });
+    /* الشعار الرئيسي على اليمين (بداية الورقة RTL) وبقية الشعارات على اليسار */
+    const pos = []; let x = 10; pos[0] = x;
+    let xr = total - 10; for (let k = 3; k >= 1; k--) { xr -= imgs[k].w; pos[k] = xr; xr -= GAP; }
+    const own = imgs[0]; pos[0] = 10;
+    const place = px => { let c = 0, o = px; while (c < cw.length - 1 && o >= cw[c]) { o -= cw[c]; c++; } return [c, Math.max(0, Math.min(o, cw[c] - 1))]; };
+    const zip = await JSZip.loadAsync(buf);
+    let anchors = '', rels = '';
+    imgs.forEach((im, k) => {
+      const [c, o] = place(pos[k]); zip.file('xl/media/logo' + (k + 1) + '.png', im.a);
+      rels += `<Relationship Id="rId${k + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/logo${k + 1}.png"/>`;
+      anchors += `<xdr:oneCellAnchor><xdr:from><xdr:col>${c}</xdr:col><xdr:colOff>${o * E}</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>${4 * E}</xdr:rowOff></xdr:from><xdr:ext cx="${im.w * E}" cy="${im.h * E}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${k + 2}" name="Logo ${k + 1}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId${k + 1}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${im.w * E}" cy="${im.h * E}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`;
+    });
+    zip.file('xl/drawings/drawing1.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">' + anchors + '</xdr:wsDr>');
+    zip.file('xl/drawings/_rels/drawing1.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + rels + '</Relationships>');
+    zip.file('xl/worksheets/_rels/sheet1.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing1.xml"/></Relationships>');
+    let sh = await zip.file('xl/worksheets/sheet1.xml').async('string');
+    if (!/xmlns:r=/.test(sh)) sh = sh.replace('<worksheet ', '<worksheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ');
+    sh = sh.replace('</worksheet>', '<drawing r:id="rId1"/></worksheet>');
+    zip.file('xl/worksheets/sheet1.xml', sh);
+    let ct = await zip.file('[Content_Types].xml').async('string');
+    if (!/Extension="png"/.test(ct)) ct = ct.replace('<Override', '<Default Extension="png" ContentType="image/png"/><Override');
+    ct = ct.replace('</Types>', '<Override PartName="/xl/drawings/drawing1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/></Types>');
+    zip.file('[Content_Types].xml', ct);
+    save(await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+  } catch (e) { plain(); }
 }
 /* ---------- المخزن: ملفات وصور محفوظة في Supabase Storage (لكل حساب مخزنه الخاص) ---------- */
 const VAULT = { bucket: 'vault', max: 25 * 1024 * 1024 };
