@@ -388,7 +388,7 @@ body{max-width:100%}
 #qpv-f .qpvb{flex:1;overflow:auto;padding:6px;background:#2a2d31;min-height:0}
 #qpv-f.min{height:auto!important;min-height:0;resize:none}#qpv-f.min .qpvb{display:none}
 #qpv-f.max{inset:8px!important;left:8px!important;top:8px!important;right:8px!important;bottom:8px!important;width:auto!important;height:auto!important;resize:none}
-@media (max-width:760px){#qpv-f:not(.max){width:calc(100vw - 12px);height:60dvh;resize:none}}
+@media (max-width:760px){body:has(input:focus,textarea:focus,select:focus) #qpv-f:not(.max){display:none}#qpv-f:not(.max){width:calc(100vw - 12px);height:60dvh;resize:none}}
 @media print{
   .totop,#gov-f,#qpv-f{display:none!important}
   body.pq .qpaper{zoom:1!important;min-width:0!important;width:auto!important;transform:none!important;margin-bottom:0!important}
@@ -501,7 +501,7 @@ const oemRaw = v => {
 const codeKey = s => oemRaw(s) || normNo(s);
 const headOf = d => (normAr(d).split(/\s+/)[0] || '').replace(/^ال/, '');
 const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'روماني': 'رمان', 'رومانه': 'رمان', 'رومانات': 'رمان', 'رماني': 'رمان', 'رمانه': 'رمان', 'رمانات': 'رمان', 'باكم': 'باكم', 'باكمات': 'باكم', 'باكما': 'باكم', 'مساعدات': 'مساعد' };
-const CAT_NAME = { 'مجموعه': 'مجموعة قزاز', 'باكم': 'الباكمات', 'رمان': 'الرمانات', 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك' };
+const CAT_NAME = { 'مجموعه': 'مجموعة قزاز', 'باكم': 'الباكمات', 'رمان': 'الرمانات', 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك', 'شيال': 'الشيالات' };
 const EN_CAT = { arm: 'مقص', arms: 'مقص', shock: 'مساعد', absorber: 'مساعد', strut: 'مساعد', filter: 'فلتر', pump: 'طرمبه', pad: 'فحمات', pads: 'فحمات', disc: 'دسك', rotor: 'دسك', belt: 'سير', radiator: 'لديتر', starter: 'سلف', alternator: 'دينمو', coil: 'كويل', sensor: 'حساس', fan: 'مروحه', compressor: 'كمبروسر', tensioner: 'شداد', pulley: 'بكره', bush: 'جلبه', bushing: 'جلبه', cylinder: 'سلندر', clutch: 'دسك', screw: 'مسمار', bolt: 'مسمار', gasket: 'جلده', seal: 'جلده' };
 const catOf = d => {
   const toks = String(d ?? '').split(/[^\w\u0600-\u06FF]+/).filter(Boolean), h = headOf(d);
@@ -1276,29 +1276,32 @@ function qFoot() {
   const r = QCO.rows.map(([i, l, v]) => cell(i, l, v));
   return `<div class="qft"><div class="qfg"><div class="qfr">${cell('pin', '', QCO.addr, '')}${r.slice(0, 3).join('')}</div><div class="qfr">${r.slice(3).join('')}</div></div></div>`;
 }
+/* بنية الورقة: أقسام (نيسان / تويوتا) ثم مجموعات الأنواع، وهي مشتركة بين معاينة PDF وملف Excel ليتطابقا */
+function qSections(sel) {
+  const cnt = {}; sel.forEach(i => { const k = catOf(i.desc); cnt[k] = (cnt[k] || 0) + 1; });
+  const groupsOf = items => {
+    if (Q.flat) return [['', items]];
+    const grp = new Map(); items.forEach(i => { let k = catOf(i.desc); if (cnt[k] < 2 && !CAT_NAME[k]) k = 'أخرى'; if (!grp.has(k)) grp.set(k, []); grp.get(k).push(i); });
+    return [...grp.entries()].sort((x, y) => (x[0] === 'أخرى') - (y[0] === 'أخرى')).map(([k, list]) => [CAT_NAME[k] || k, list]);
+  };
+  if (!Q.split) return [{ banner: null, cats: groupsOf(sel) }];
+  /* لا أصناف عامة: الرقم أولًا (Y تويوتا، J نيسان)، ثم الاسم (الموديل)، وما بقي يتبع نوع العرض أو الأغلبية */
+  const part = { nissan: [], toyota: [] }, rest = [];
+  sel.forEach(i => { const x = normAr(String(i.desc || '')), tn = TOY_W.test(x), nn = NIS_W.test(x), pn = String(i.no || '').trim().toUpperCase();
+    const k = /^Y[0-9A-Z]/.test(pn) ? 'toyota' : /^J[0-9A-Z]/.test(pn) ? 'nissan' : nn && !tn ? 'nissan' : tn && !nn ? 'toyota' : '';
+    if (k) part[k].push(i); else rest.push(i); });
+  const dflt = (Q.kind === 'nissan' || Q.kind === 'toyota') ? Q.kind : (part.toyota.length > part.nissan.length ? 'toyota' : 'nissan');
+  rest.forEach(i => part[dflt].push(i));
+  const hd = { nissan: ['نيسان', 'NISSAN'], toyota: ['تويوتا', 'TOYOTA'] };
+  return ['nissan', 'toyota'].filter(k => part[k].length).map(k => ({ kind: k, banner: hd[k], cats: groupsOf(part[k]) }));
+}
 function qPaper() {
   const t = qTotals(), co = Q.co, hasBrand = t.sel.some(i => i.brand), logo = document.querySelector('.brand svg').outerHTML.replaceAll('#f3f1ea', '#15181c').replace('class="logo"', 'class="qlogo"').replace('viewBox="62 0 262 84"', 'viewBox="62 0 270 84"').replace(/<g><text id="os-mark".*?<\/text><\/g>/, `<image href="${QOWN}" x="244" y="8" width="72" height="67" preserveAspectRatio="xMidYMid meet"/>`);
   /* مجموع عرض الأعمدة على يمين اسم الصنف يساوي مجموع ما على يساره، فيقع اسم الصنف في منتصف الصفحة تحت عنوان العرض ونوعه */
   const cw = Q.gen ? (hasBrand ? [29, 42, 11, 18] : [29, 42, 29]) : (hasBrand ? [29, 42, 8, 6, 7.5, 7.5] : [29, 42, 8, 10.5, 10.5]);
   const ncol = (hasBrand ? 6 : 5) - (Q.gen ? 2 : 0), line = (i) => `<tr><td class="qno">${esc(i.no || '')}</td><td>${esc(i.desc)}</td>${hasBrand ? `<td class="qc">${esc(i.brand || '')}</td>` : ''}${Q.gen ? '' : `<td class="qc">${nf.format(+i.qty || 0)}</td>`}<td class="qn1">${qNum.format(+i.price || 0)}</td>${Q.gen ? '' : `<td class="qn1"><b>${qNum.format((+i.qty || 0) * (+i.price || 0))}</b></td>`}</tr>`;
-  const build = (items) => {
-    if (Q.flat) return items.map((i, n) => line(i, n + 1)).join('');
-    const cnt = {}, grp = new Map(); items.forEach(i => { const k = catOf(i.desc); cnt[k] = (cnt[k] || 0) + 1; });
-    items.forEach(i => { let k = catOf(i.desc); if (cnt[k] < 2 && !CAT_NAME[k]) k = 'أخرى'; if (!grp.has(k)) grp.set(k, []); grp.get(k).push(i); });
-    let sn = 0; return [...grp.entries()].sort((x, y) => (x[0] === 'أخرى') - (y[0] === 'أخرى')).map(([k, list]) => `<tr class="qg"><td colspan="${ncol}">${esc(CAT_NAME[k] || k)}</td></tr>` + list.map(i => line(i)).join('')).join('');
-  };
-  let rows;
-  if (Q.split) {
-    /* لا أصناف عامة: الرقم أولًا (Y تويوتا، J نيسان)، ثم الاسم (الموديل)، وما بقي يتبع نوع العرض أو الأغلبية */
-    const part = { nissan: [], toyota: [] }, rest = [];
-    t.sel.forEach(i => { const x = normAr(String(i.desc || '')), tn = TOY_W.test(x), nn = NIS_W.test(x), pn = String(i.no || '').trim().toUpperCase();
-      const k = /^Y[0-9A-Z]/.test(pn) ? 'toyota' : /^J[0-9A-Z]/.test(pn) ? 'nissan' : nn && !tn ? 'nissan' : tn && !nn ? 'toyota' : '';
-      if (k) part[k].push(i); else rest.push(i); });
-    const dflt = (Q.kind === 'nissan' || Q.kind === 'toyota') ? Q.kind : (part.toyota.length > part.nissan.length ? 'toyota' : 'nissan');
-    rest.forEach(i => part[dflt].push(i));
-    const hd = { nissan: ['نيسان', 'NISSAN'], toyota: ['تويوتا', 'TOYOTA'] };
-    rows = ['nissan', 'toyota'].filter(k => part[k].length).map(k => `<tr class="qb k-${k}"><td colspan="${ncol}">${hd[k][0]}<small>${hd[k][1]}</small></td></tr>` + build(part[k])).join('');
-  } else rows = build(t.sel);
+  const rows0 = qSections(t.sel).map(sc => (sc.banner ? `<tr class="qb k-${sc.kind}"><td colspan="${ncol}">${sc.banner[0]}<small>${sc.banner[1]}</small></td></tr>` : '') + sc.cats.map(([nm, list]) => (nm ? `<tr class="qg"><td colspan="${ncol}">${esc(nm)}</td></tr>` : '') + list.map(i => line(i)).join('')).join('')).join('');
+  let rows = rows0;
   rows = rows || `<tr><td colspan="${ncol}" class="qc qempty">لا توجد أصناف في العرض بعد</td></tr>`;
   const foot = [co.addr, co.phone && 'هاتف: ' + co.phone, co.email, co.vat && 'الرقم الضريبي: ' + co.vat, co.cr && 'السجل التجاري: ' + co.cr].filter(Boolean).map(esc).join('  •  ');
   const qtB = `<div class="qt">${Q.na ? '' : `<b>${esc(qTitle())}</b>`}${Q.na ? '<div class="qnew"><i>★</i>وصل حديثًا<i>★</i></div>' : '<span>PRICE QUOTATION</span>'}</div>`;
@@ -1322,7 +1325,7 @@ function viewQuote() {
   
     <div class="tool"><div class="grow"><input id="q-search" type="search" placeholder="ابحث في الأصناف المرفوعة" value="${esc(Q.q || '')}"></div><button class="btn" data-qact="add">إضافة صنف يدوياً</button><button class="btn" data-qact="all">تحديد الكل</button><button class="btn" data-qact="none">إلغاء التحديد</button><button class="btn" data-qact="clear">حذف كل الأصناف</button><button class="btn" data-qact="undo" title="التراجع عن آخر إضافة أو حذف">تراجع</button></div>
   <div class="tool qpdfrow"><button class="btn" data-qact="dl">تنزيل ▾</button><button class="btn" data-qact="pvfloat" title="فتح المعاينة في نافذة عائمة تبقى مفتوحة أثناء التنقل بين الأقسام">معاينة منبثقة</button><span class="mut" id="q-dls-note" hidden></span></div>
-  <div class="qfrow"><button type="button" class="qfold${Q.fold ? ' shut' : ''}" data-qact="fold" aria-expanded="${Q.fold ? 'false' : 'true'}" title="${Q.fold ? 'فتح القائمة' : 'طي القائمة'}"><b>قائمة الأصناف</b><span class="qcnt" id="q-lc">${Q.items.length} صنف</span><svg class="qar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="qsw"><button type="button" class="btn qsort" data-qact="sort" aria-haspopup="menu" aria-expanded="false" aria-label="ترتيب الأصناف" title="ترتيب الأصناف"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h11M4 17h6"/></svg></button><div class="qmenu" id="q-smenu" role="menu" hidden><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-asc">رقم القطعة: من الألف إلى الياء</button><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-desc">رقم القطعة: من الياء إلى الألف</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-asc">الكمية: من الأقل إلى الأكثر</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-desc">الكمية: من الأكثر إلى الأقل</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-asc">السعر: من الأقل إلى الأعلى</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-desc">السعر: من الأعلى إلى الأقل</button></div></div></div>
+  <div class="qfrow"><button type="button" class="qfold${Q.fold ? ' shut' : ''}" data-qact="fold" aria-expanded="${Q.fold ? 'false' : 'true'}" title="${Q.fold ? 'فتح القائمة' : 'طي القائمة'}"><b>قائمة الأصناف</b><span class="qcnt" id="q-lc">${Q.items.length} صنف</span><svg class="qar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="qsw"><button type="button" class="btn qsort" data-qact="sort" aria-haspopup="menu" aria-expanded="false" aria-label="ترتيب الأصناف" title="ترتيب الأصناف"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h11M4 17h6"/></svg></button><div class="qmenu" id="q-smenu" role="menu" hidden><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-asc">رقم القطعة: من الألف إلى الياء</button><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-desc">رقم القطعة: من الياء إلى الألف</button><button type="button" role="menuitem" data-qact="sortby" data-k="name-asc">اسم الصنف: من الألف إلى الياء (أبجدي)</button><button type="button" role="menuitem" data-qact="sortby" data-k="name-desc">اسم الصنف: من الياء إلى الألف</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-asc">الكمية: من الأقل إلى الأكثر</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-desc">الكمية: من الأكثر إلى الأقل</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-asc">السعر: من الأقل إلى الأعلى</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-desc">السعر: من الأعلى إلى الأقل</button></div></div></div>
   <div class="tw qtw" id="q-list" ${Q.fold ? 'hidden' : ''}><table class="qed"><thead><tr><th></th><th>رقم القطعة</th><th>اسم الصنف</th><th>السعر</th><th></th></tr></thead><tbody id="q-rows">${qRows()}</tbody><tfoot><tr><td colspan="5"><button class="btn qplus" data-qact="addend" aria-label="إضافة صنف" title="إضافة صنف">+</button></td></tr></tfoot></table></div>
   <p class="mut" style="margin:6px 2px 0;font-size:13px">عند إضافة صنف يدوياً: اكتب اسم القطعة (مثل «مقص التيما») أو أول رقمين من رقمها لتظهر الاقتراحات من قاعدة بيانات القطع، ثم اختر منها لتُملأ البيانات كاملة.</p>
   <div class="tool" style="margin-top:14px"><span class="mut" id="q-count"></span><span id="q-warn" class="qwarn" hidden></span></div>
@@ -9155,7 +9158,7 @@ document.addEventListener('click', e => {
     const k = b.dataset.k, [f, d] = k.split('-'), dir = d === 'asc' ? 1 : -1, cmp = new Intl.Collator('ar', { numeric: true, sensitivity: 'base' }), pc = new Intl.Collator('en', { numeric: false, sensitivity: 'base' });
     qSnap();
     const nk = i => partKey(i.no), dk = i => normAr(String(i.desc || ''));
-    Q.items.sort((x, y) => f === 'alpha' ? (!nk(x) !== !nk(y) ? (nk(x) ? -1 : 1) : (dir * ((/^\d/.test(nk(x)) ? 0 : 1) - (/^\d/.test(nk(y)) ? 0 : 1) || pc.compare(nk(x), nk(y))) || cmp.compare(dk(x), dk(y))))
+    Q.items.sort((x, y) => f === 'name' ? dir * cmp.compare(dk(x), dk(y)) || pc.compare(nk(x), nk(y)) : f === 'alpha' ? (!nk(x) !== !nk(y) ? (nk(x) ? -1 : 1) : (dir * ((/^\d/.test(nk(x)) ? 0 : 1) - (/^\d/.test(nk(y)) ? 0 : 1) || pc.compare(nk(x), nk(y))) || cmp.compare(dk(x), dk(y))))
       : dir * ((+(f === 'qty' ? x.qty : x.price) || 0) - (+(f === 'qty' ? y.qty : y.price) || 0)) || pc.compare(nk(x), nk(y)));
     Q.sortKey = k; $('#q-rows').innerHTML = qRows(); qGrowAll(); qRefresh(); qSave(); toast('رُتّبت الأصناف: ' + b.textContent + '. للتراجع اضغط «تراجع».');
   }
@@ -9231,13 +9234,30 @@ document.addEventListener('click', e => {
 function qXlsx() {
   if (!window.XLSX) { toast('تعذر تحميل مكتبة Excel. تأكد من الاتصال بالإنترنت.'); return; }
   const { sel } = qTotals(); if (!sel.length) { toast('أضف صنفاً واحداً على الأقل إلى العرض'); return; }
-  const c = qCatKeys(), hasBrand = sel.some(i => i.brand), order = new Map();
-  sel.forEach(i => { const k = Q.flat ? '' : c.key(i); if (!order.has(k)) order.set(k, []); order.get(k).push(i); });
-  const groups = [...order.entries()].sort((a, b) => (a[0] === 'أخرى') - (b[0] === 'أخرى'));
-  const head = ['القسم', 'رقم القطعة', 'اسم الصنف', ...(hasBrand ? ['الماركة'] : []), Q.gen ? 'السعر' : 'سعر الوحدة', ...(Q.gen ? [] : ['الكمية', 'الإجمالي'])];
-  const aoa = [head];
-  groups.forEach(([k, list]) => list.forEach(i => aoa.push([k ? dlName(k) : '', i.no || '', i.desc, ...(hasBrand ? [i.brand || ''] : []), +i.price || 0, ...(Q.gen ? [] : [+i.qty || 0, (+i.qty || 0) * (+i.price || 0)])])));
-  const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [{ wch: 16 }, { wch: 22 }, { wch: 46 }, ...(hasBrand ? [{ wch: 16 }] : []), { wch: 12 }, ...(Q.gen ? [] : [{ wch: 9 }, { wch: 12 }])];
+  /* نفس ترتيب ورقة PDF: عنوان العرض، بيانات العرض، ثم الجدول بأقسام نيسان وتويوتا وأنواع الأصناف، ثم بيانات الشركة */
+  const hasBrand = sel.some(i => i.brand), co = Q.co, nc = 2 + (hasBrand ? 1 : 0) + (Q.gen ? 1 : 3), aoa = [], merges = [];
+  const full = r => merges.push({ s: { r, c: 0 }, e: { r, c: nc - 1 } });
+  const line1 = (t, bold) => { aoa.push([t, ...Array(nc - 1).fill('')]); full(aoa.length - 1); };
+  line1('شركة أصول القطع - OSOUL PARTS CO.');
+  line1(Q.na ? 'وصل حديثًا ★' : qTitle() + ' - PRICE QUOTATION');
+  if (qKind()) line1(QKIND[qKind()]);
+  line1('رقم العرض: ' + (Q.no || '-') + '    التاريخ: ' + qDate(Q.date) + (+Q.valid > 0 ? '    صالح حتى: ' + qDate(qEnd()) : ''));
+  aoa.push(Array(nc).fill(''));
+  aoa.push(['رقم القطعة', 'اسم الصنف', ...(hasBrand ? ['الماركة'] : []), ...(Q.gen ? ['السعر'] : ['الكمية', 'سعر الوحدة', 'الإجمالي'])]);
+  const hdrRow = aoa.length - 1, numCells = [];
+  qSections(sel).forEach(sc => {
+    if (sc.banner) { aoa.push([sc.banner[0] + ' - ' + sc.banner[1], ...Array(nc - 1).fill('')]); full(aoa.length - 1); }
+    sc.cats.forEach(([nm, list]) => {
+      if (nm) { aoa.push([nm, ...Array(nc - 1).fill('')]); full(aoa.length - 1); }
+      list.forEach(i => { const q = +i.qty || 0, pr = +i.price || 0; aoa.push([i.no || '', i.desc, ...(hasBrand ? [i.brand || ''] : []), ...(Q.gen ? [pr] : [q, pr, q * pr])]); numCells.push(aoa.length - 1); });
+    });
+  });
+  aoa.push(Array(nc).fill(''));
+  line1(QCO.addr); line1(QCO.rows.map(([i, l, v]) => l + ': ' + v).join('   •   '));
+  const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!merges'] = merges;
+  ws['!cols'] = [{ wch: 22 }, { wch: 46 }, ...(hasBrand ? [{ wch: 16 }] : []), ...(Q.gen ? [{ wch: 12 }] : [{ wch: 9 }, { wch: 12 }, { wch: 12 }])];
+  numCells.forEach(r => { for (let c = 2 + (hasBrand ? 1 : 0); c < nc; c++) { const x = ws[XLSX.utils.encode_cell({ r, c })]; if (x && typeof x.v === 'number') x.z = Q.gen || c > 2 + (hasBrand ? 1 : 0) ? '#,##0.00' : '0'; } });
+  ws['!freeze'] = { xSplit: 0, ySplit: hdrRow + 1 };
   const wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] }; XLSX.utils.book_append_sheet(wb, ws, 'عرض السعر');
   const nm = String(qDocTitle()).replace(/[\\/:*?"<>|]/g, '-') + (DLS && DLS.size === 1 ? ' - ' + dlName([...DLS][0]) : '');
   try { XLSX.writeFile(wb, nm + '.xlsx'); toast('جارٍ تنزيل ملف Excel'); } catch (e) { toast('تعذر التنزيل هنا. جرّب مرة أخرى من رابط GitHub.'); }
@@ -9469,7 +9489,9 @@ try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) &&
 let qpvEl = null;
 function qpvFit() { if (!qpvEl || qpvEl.hidden || qpvEl.classList.contains('min')) return; const host = qpvEl.querySelector('.qpvb'), el = qpvEl.querySelector('.qpaper'); if (!host || !el) return;
   el.style.cssText = ''; const w = host.clientWidth - 12; if (w > 0) { const sc = Math.min(1, w / 800); el.style.cssText = `min-width:800px;width:800px;max-width:none;margin:0;transform-origin:top right;transform:scale(${sc.toFixed(4)})`; el.style.marginBottom = -(el.offsetHeight * (1 - sc)).toFixed(1) + 'px'; } }
-function qpvSync() { if (!qpvEl || qpvEl.hidden) return; const el = qpvEl.querySelector('.qpaper'); if (!el) return; el.innerHTML = qPaper(); el.classList.toggle('na', !!Q.na); qpvFit(); }
+let qpvT = 0;
+function qpvSync() { if (!qpvEl || qpvEl.hidden) return; clearTimeout(qpvT); qpvT = setTimeout(qpvDo, 350); }
+function qpvDo() { if (!qpvEl || qpvEl.hidden) return; const el = qpvEl.querySelector('.qpaper'); if (!el) return; el.innerHTML = qPaper(); el.classList.toggle('na', !!Q.na); qpvFit(); }
 function qpvOpen() {
   if (!qpvEl) { qpvEl = document.createElement('div'); qpvEl.id = 'qpv-f'; document.body.appendChild(qpvEl);
     qpvEl.addEventListener('click', e => { const t = e.target.closest('[data-pf]'); if (!t) return; const a = t.dataset.pf;
@@ -9479,7 +9501,7 @@ function qpvOpen() {
     window.addEventListener('resize', qpvFit); try { new ResizeObserver(qpvFit).observe(qpvEl); } catch (e) { } }
   qpvEl.hidden = false; qpvEl.className = '';
   qpvEl.innerHTML = '<div class="gh"><b>معاينة عرض السعر</b><span class="gb"><button type="button" data-pf="min" title="تصغير / تكبير">–</button><button type="button" data-pf="max" title="ملء الشاشة">□</button><button type="button" data-pf="close" title="إغلاق">✕</button></span></div><div class="qpvb"><div class="qpaper"></div></div>';
-  qpvSync(); setTimeout(qpvFit, 50); }
+  qpvDo(); setTimeout(qpvFit, 50); }
 
 /* تحريك النافذة العائمة بحرية بسحب شريطها العلوي (فأرة أو لمس) */
 { let drag = null;
