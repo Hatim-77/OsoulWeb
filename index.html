@@ -318,7 +318,11 @@ button,a,label,select,summary,input[type=checkbox]{touch-action:manipulation}
 html{overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (pointer:coarse){input,select,textarea{font-size:16px}}
 body{max-width:100%}
-.tw{touch-action:pan-x pan-y;overscroll-behavior-x:contain}
+.tw{touch-action:pan-x pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+/* جداول المقارنة: رأس الشركات والعمود الأول ثابتان، والتمرير داخل الإطار فقط */
+@media (max-width:760px){.cat .tw{max-height:calc(100dvh - 150px);max-height:calc(100svh - 150px)}
+  .cat .tw th:first-child,.cat .tw td:first-child{min-width:128px;max-width:148px}
+  .cat .tw thead th{transform:translateZ(0)}.cat .tw td:first-child{transform:translateZ(0)}}
 @media (min-width:1500px){.main{max-width:1500px}}
 /* ---------- طباعة الجوال داخل التطبيق ---------- */
 #povl{display:none}
@@ -350,6 +354,7 @@ body{max-width:100%}
   .qed textarea{min-width:0;width:100%}.qed input.sm{width:100%}.qed input[data-qi=no]{font-size:12.5px;padding-inline:7px}
   .qed tbody td.mut{grid-column:1/-1}
 }
+@media (max-width:760px){.totop{display:none!important}}
 @media print{
   .totop{display:none!important}
   body.pq .qpaper{zoom:1!important;min-width:0!important;width:auto!important;transform:none!important;margin-bottom:0!important}
