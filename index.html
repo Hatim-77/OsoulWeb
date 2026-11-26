@@ -219,10 +219,11 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 .toast{position:fixed;inset-inline:0;bottom:22px;display:flex;justify-content:center;pointer-events:none}
 .toast span{background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:99px;font-size:14px}
 
-.tabs{display:flex;flex-direction:column;gap:4px}
-.tabs button{display:flex;align-items:center;gap:10px;width:100%;background:transparent;border:0;border-radius:10px;padding:11px 12px;color:var(--ink2);cursor:pointer;font-weight:600;font-size:15.5px;text-align:start}
-.tabs button svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabs{display:flex;flex-direction:column;gap:2px}
+.tabs button{display:flex;align-items:center;gap:9px;width:100%;background:transparent;border:0;border-radius:9px;padding:7px 11px;color:var(--ink2);cursor:pointer;font-weight:600;font-size:14.5px;text-align:start}
+.tabs button svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tabs button:hover{background:var(--panel2);color:var(--ink)}
+.tabs button[data-gov]{background:rgba(74,196,128,.13);color:#7fd6a4;border:1px solid rgba(74,196,128,.22)}.tabs button[data-gov]:hover{background:rgba(74,196,128,.2);color:#a3e6bf}
 .tabs button.on{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
 .tabs .n{margin-inline-start:auto;min-width:24px;text-align:center;font-size:12.5px;padding:0 7px;border-radius:99px;background:var(--panel2);color:var(--ink2)}
 .tabs button.on .n{background:var(--accent-fill);color:#fff}
@@ -249,7 +250,7 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
 #acct .st{display:flex;align-items:center;gap:7px}
 #acct .st i{width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block}
 #acct .st.bad i{background:var(--bad)}#acct .st.wait i{background:var(--warn)}
-#acct .btn{width:100%}.accb{margin-top:auto;color:#fff;font:inherit;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;width:100%;height:42px;border:0;border-radius:10px;background:#2f6fed;cursor:pointer}.accb:hover{background:#4a85f5}.accb svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.accb+#acct{margin-top:0}@media (max-width:820px){.accb{margin-top:0;height:36px}}
+#acct .btn{width:100%}.govb{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;height:34px;border-radius:9px;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;background:rgba(74,196,128,.13);color:#7fd6a4;border:1px solid rgba(74,196,128,.22)}.govb:hover{background:rgba(74,196,128,.2);color:#a3e6bf}.govb svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.govb+.accb{margin-top:8px}.accb{margin-top:auto;color:#fff;font:inherit;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;width:100%;height:34px;border:0;border-radius:9px;background:#2358c4;cursor:pointer}.accb:hover{background:#2d68de}.accb{gap:7px}.accb svg{width:17px;height:17px;flex:none;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.accb+#acct{margin-top:0}@media (max-width:820px){.accb{margin-top:0;height:36px}}
 #acct .er{direction:ltr;text-align:start;font-size:11.5px;color:var(--bad);overflow-wrap:anywhere}
 #login,#reset,#kw,#lo{width:min(420px,calc(100% - 20px))}
 #lo .f{flex-wrap:wrap}#lo .f .btn{flex:1;min-width:130px}#lo p{margin:0;line-height:1.9}
@@ -360,8 +361,36 @@ body{max-width:100%}
   .qed tbody td.mut{grid-column:1/-1}
 }
 @media (max-width:760px){.totop{display:none!important}}
+
+#gov-d .b{padding:14px 18px}#gov-d input[type=search]{width:100%;margin-bottom:10px}
+.gvl{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;max-height:60vh;overflow:auto}
+.gv{display:flex;flex-direction:column;gap:3px;text-align:start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink);cursor:pointer;font:inherit}
+.gv small{color:var(--ink2);direction:ltr;text-align:right;font-size:11.5px}.gv:hover{border-color:var(--accent,#d6453d)}
+#gov-d.gfull{width:calc(100% - 16px);max-width:1200px;height:calc(100dvh - 24px);display:flex;flex-direction:column}
+#gov-d.gfull .h{flex:none;gap:8px;flex-wrap:wrap}#gov-d .gb{display:flex;gap:6px}
+.gfr{flex:1;border:0;background:#fff;width:100%;min-height:0}.gn{margin:0;padding:6px 14px;flex:none}
+
+#gov-f{position:fixed;z-index:80;inset-inline-start:12px;bottom:12px;width:min(440px,calc(100vw - 24px));height:min(62vh,560px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.55);overflow:hidden;resize:both;min-width:260px;min-height:120px}
+#gov-f[hidden]{display:none}
+#gov-f .gh{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;background:var(--panel2);border-bottom:1px solid var(--line)}
+#gov-f .gh b{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#gov-f .gb{display:flex;gap:4px;flex:none}
+#gov-f .gb button{min-width:30px;height:28px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);cursor:pointer;font:inherit;font-size:14px}
+#gov-f .gfr{flex:1;border:0;background:#fff;width:100%;min-height:0}#gov-f .gn{margin:0;padding:4px 10px;font-size:11.5px;color:var(--ink2);flex:none}
+#gov-f.min{height:auto!important;min-height:0;resize:none}#gov-f.min .gfr,#gov-f.min .gn{display:none}
+#gov-f.max{inset:8px!important;width:auto!important;height:auto!important;resize:none}
+@media (max-width:760px){#gov-f:not(.max){inset-inline:6px;width:auto;height:58dvh;bottom:6px;resize:none}}
+
+#qpv-f{position:fixed;z-index:80;inset-inline-start:12px;bottom:12px;width:min(520px,calc(100vw - 24px));height:min(70vh,640px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.55);overflow:hidden;resize:both;min-width:280px;min-height:120px}
+#qpv-f[hidden]{display:none}
+#qpv-f .gh{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;background:var(--panel2);border-bottom:1px solid var(--line)}
+#qpv-f .gh{cursor:move;touch-action:none;user-select:none;-webkit-user-select:none}#qpv-f .gh b{font-size:13.5px}#qpv-f .gb{display:flex;gap:4px}
+#qpv-f .gb button{min-width:30px;height:28px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);cursor:pointer;font:inherit;font-size:14px}
+#qpv-f .qpvb{flex:1;overflow:auto;padding:6px;background:#2a2d31;min-height:0}
+#qpv-f.min{height:auto!important;min-height:0;resize:none}#qpv-f.min .qpvb{display:none}
+#qpv-f.max{inset:8px!important;left:8px!important;top:8px!important;right:8px!important;bottom:8px!important;width:auto!important;height:auto!important;resize:none}
+@media (max-width:760px){#qpv-f:not(.max){width:calc(100vw - 12px);height:60dvh;resize:none}}
 @media print{
-  .totop{display:none!important}
+  .totop,#gov-f,#qpv-f{display:none!important}
   body.pq .qpaper{zoom:1!important;min-width:0!important;width:auto!important;transform:none!important;margin-bottom:0!important}
   html:has(body.pq),body.pq{background:#fff!important}
   body.pq .qpaper,body.pq .qpaper *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -423,7 +452,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
   <aside class="side">
     <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="62 0 262 84" direction="ltr" class="logo" role="img" aria-label="شركة أصول القطع - Osoul Parts Co."><defs><linearGradient id="lgBadge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f25a4f"/><stop offset="1" stop-color="#c62f27"/></linearGradient><linearGradient id="lgR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6a5c"/><stop offset="1" stop-color="#c92d25"/></linearGradient><linearGradient id="lgW" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9bcc0"/></linearGradient><linearGradient id="lgL" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ec4a40"/><stop offset="1" stop-color="#ec4a40" stop-opacity="0"/></linearGradient></defs><g><text id="os-mark" x="280" y="56" text-anchor="middle" font-family="Montserrat,Cairo,'Segoe UI',Arial,sans-serif" font-weight="900" font-size="40" fill="#f3f1ea" textLength="60" lengthAdjust="spacingAndGlyphs">OS</text></g><text x="236" y="38" text-anchor="end" font-family="Cairo,'Segoe UI',Tahoma,sans-serif" font-weight="900" font-size="31" fill="#f3f1ea" textLength="168" lengthAdjust="spacingAndGlyphs">شركة أصول القطع</text><rect x="68" y="47.5" width="168" height="2" rx="1" fill="url(#lgL)" transform="translate(0 0)"/><text x="236" y="68" text-anchor="end" font-family="Cairo,'Segoe UI',Arial,sans-serif" font-weight="700" font-size="15" fill="#ec4a40" textLength="168" lengthAdjust="spacing">OSOUL PARTS CO.</text></svg></div>
     <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
-    <button type="button" class="accb" data-acc="1" title="فتح البرنامج المحاسبي" aria-label="فتح البرنامج المحاسبي">البرنامج المحاسبي</button>
+    <button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
   </aside>
   <main class="main">
@@ -862,7 +891,7 @@ function render() {
     ? `<div class="drop" id="drop"><h2>ارفع ملفات عروض ${KIND_AR[page]}</h2><p>ملف لكل شركة (PDF أو Excel أو CSV). اسحبها هنا أو اخترها من جهازك، وسأقارن الأصناف تلقائياً.</p><button class="btn primary" id="pick">اختيار الملفات</button> <button class="btn link" id="pastebtn">أو الصق نصاً</button> <button class="btn" id="frombtn">إضافة من العروض السابقة</button>${ui.paste ? pasteBox() : ''}<p class="note">ملفات PDF العادية تُقرأ مباشرة. أما الصور وملفات PDF الممسوحة ضوئياً فلا يمكن قراءتها هنا.</p></div>`
     : `<div class="drop mini" id="drop"><p>أضف ملفاً آخر لإضافة شركة لمقارنة ${KIND_AR[page]}.</p><div><button class="btn primary" id="pick">إضافة ملفات</button> <button class="btn link" id="pastebtn">لصق نص</button> <button class="btn" id="frombtn">إضافة من العروض السابقة</button> <button class="btn link" id="clear">إزالة الكل من المقارنة</button></div>${ui.paste ? `<div style="flex-basis:100%">${pasteBox()}</div>` : ''}</div>`;
   $('#app').innerHTML = !isCmp(page) ? '' : `<div class="kseg" role="tablist">${['nissan', 'toyota'].map(k => `<button data-page="${k}" role="tab" aria-selected="${page === k}" class="${page === k ? 'on' : ''}">${KIND_AR[k]}<span class="n">${(k === 'nissan' ? filesN : filesT).length}</span></button>`).join('')}</div>` + dz + viewFiles() + `<div id="res">${viewResults()}</div>`;
-  $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button data-page="vault" class="${page === 'vault' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>المخزن</button>`;
+  $('#tabs').innerHTML = `<button data-page="${lastCmp}" class="${isCmp(page) ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>المقارنة<span class="n">${filesN.length + filesT.length}</span></button><button data-page="history" class="${page === 'history' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>العروض السابقة<span class="n">${saved.filter(f => !f.mine).length}</span></button><button data-page="mine" class="${page === 'mine' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>عروضي<span class="n">${saved.filter(f => f.mine).length}</span></button><button data-page="quote" class="${page === 'quote' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>عرض سعر</button><button data-page="vault" class="${page === 'vault' ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>المخزن</button><button data-gov="1" type="button"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 21h18"/></svg>الدوائر الحكومية</button>`;
   $('#app').hidden = !isCmp(page); $('#hist').hidden = isCmp(page);
   if (isCmp(page)) $('#hist').innerHTML = '';
   else if (page === 'history') $('#hist').innerHTML = viewHistory(); else if (page === 'mine') $('#hist').innerHTML = viewMine(); else if (page === 'quote') { $('#hist').innerHTML = viewQuote(); qGrowAll(); qRefresh(); } else if (page === 'vault') { $('#hist').innerHTML = viewVault(); vInit(); }
@@ -1287,7 +1316,7 @@ function viewQuote() {
   <div class="qgrid"><label class="qf1"><span>شهر العرض</span><select data-qf="month"><option value="" ${Q.month === '' ? 'selected' : ''}>بدون شهر</option>${QMON.map((m, i) => `<option value="${i}" ${String(Q.month) === String(i) ? 'selected' : ''}>${m}</option>`).join('')}</select></label><label class="qf1 qnaf"><span>نوع العرض</span><span class="qnac"><input type="checkbox" data-qf="na" ${Q.na ? 'checked' : ''}> وصل حديثًا</span></label><label class="qf1 qnaf"><span>ترتيب الأصناف</span><span class="qnac"><input type="checkbox" data-qf="split" ${Q.split ? 'checked' : ''}> فصل نيسان عن تويوتا</span></label><label class="qf1 qnaf"><span>الفئات</span><span class="qnac"><input type="checkbox" data-qf="flat" ${Q.flat ? 'checked' : ''}> بدون تقسيم الفئات</span></label><label class="qf1"><span>نوع القطع</span><select data-qf="kind"><option value="" ${!Q.kind ? 'selected' : ''}>تلقائي</option>${Object.keys(QKIND).map(k => `<option value="${k}" ${Q.kind === k ? 'selected' : ''}>${QKIND[k]}</option>`).join('')}</select></label>${fld('no', 'رقم العرض (تلقائي)', 'readonly tabindex="-1" style="opacity:.7;cursor:not-allowed"')}${fld('date', 'التاريخ', 'type="date"')}${fld('valid', 'مدة الصلاحية (أيام)', 'type="number" min="0" placeholder="اتركها فارغة لعرض بلا صلاحية"')}</div>
   
     <div class="tool"><div class="grow"><input id="q-search" type="search" placeholder="ابحث في الأصناف المرفوعة" value="${esc(Q.q || '')}"></div><button class="btn" data-qact="add">إضافة صنف يدوياً</button><button class="btn" data-qact="all">تحديد الكل</button><button class="btn" data-qact="none">إلغاء التحديد</button><button class="btn" data-qact="clear">حذف كل الأصناف</button><button class="btn" data-qact="undo" title="التراجع عن آخر إضافة أو حذف">تراجع</button></div>
-  <div class="tool qpdfrow"><button class="btn" data-qact="dl">تنزيل ▾</button><span class="mut" id="q-dls-note" hidden></span></div>
+  <div class="tool qpdfrow"><button class="btn" data-qact="dl">تنزيل ▾</button><button class="btn" data-qact="pvfloat" title="فتح المعاينة في نافذة عائمة تبقى مفتوحة أثناء التنقل بين الأقسام">معاينة منبثقة</button><span class="mut" id="q-dls-note" hidden></span></div>
   <div class="qfrow"><button type="button" class="qfold${Q.fold ? ' shut' : ''}" data-qact="fold" aria-expanded="${Q.fold ? 'false' : 'true'}" title="${Q.fold ? 'فتح القائمة' : 'طي القائمة'}"><b>قائمة الأصناف</b><span class="qcnt" id="q-lc">${Q.items.length} صنف</span><svg class="qar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="qsw"><button type="button" class="btn qsort" data-qact="sort" aria-haspopup="menu" aria-expanded="false" aria-label="ترتيب الأصناف" title="ترتيب الأصناف"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h11M4 17h6"/></svg></button><div class="qmenu" id="q-smenu" role="menu" hidden><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-asc">رقم القطعة: من الألف إلى الياء</button><button type="button" role="menuitem" data-qact="sortby" data-k="alpha-desc">رقم القطعة: من الياء إلى الألف</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-asc">الكمية: من الأقل إلى الأكثر</button><button type="button" role="menuitem" data-qact="sortby" data-k="qty-desc">الكمية: من الأكثر إلى الأقل</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-asc">السعر: من الأقل إلى الأعلى</button><button type="button" role="menuitem" data-qact="sortby" data-k="price-desc">السعر: من الأعلى إلى الأقل</button></div></div></div>
   <div class="tw qtw" id="q-list" ${Q.fold ? 'hidden' : ''}><table class="qed"><thead><tr><th></th><th>رقم القطعة</th><th>اسم الصنف</th><th>السعر</th><th></th></tr></thead><tbody id="q-rows">${qRows()}</tbody><tfoot><tr><td colspan="5"><button class="btn qplus" data-qact="addend" aria-label="إضافة صنف" title="إضافة صنف">+</button></td></tr></tfoot></table></div>
   <p class="mut" style="margin:6px 2px 0;font-size:13px">عند إضافة صنف يدوياً: اكتب اسم القطعة (مثل «مقص التيما») أو أول رقمين من رقمها لتظهر الاقتراحات من قاعدة بيانات القطع، ثم اختر منها لتُملأ البيانات كاملة.</p>
@@ -1311,7 +1340,7 @@ let qrT = 0;
 function qRefreshSoon() { clearTimeout(qrT); qrT = setTimeout(() => { qrT = 0; qRefresh(); }, 150); }
 const qFlush = () => { if (qrT) { clearTimeout(qrT); qrT = 0; qRefresh(); } };
 document.addEventListener('visibilitychange', () => { if (document.hidden) qFlush(); }); window.addEventListener('pagehide', qFlush);
-function qRefresh() { { const n = $('#q-dls-note'); if (n) { n.hidden = !DLS; if (DLS) n.innerHTML = 'الورقة تعرض: ' + esc([...DLS].map(dlName).join('، ')) + ' <button type="button" class="btn sm link" data-qact="dlreset">عرض كل الأقسام</button>'; } } qUndoBtn(); qFit(); { const pe = document.getElementById('qpaper'); if (pe) pe.classList.toggle('na', !!Q.na); } const p = $('#qpaper'); if (p) { p.innerHTML = qPaper(); qFit(); } const lc = $('#q-lc'); if (lc) lc.textContent = Q.items.length + ' صنف'; const c = $('#q-count'); if (c) c.textContent = qTotals().sel.length + ' صنف في العرض من ' + Q.items.length + (qKind() ? ' · النوع: ' + QKIND[qKind()] + (Q.kind ? '' : ' (تلقائي)') : ''); const nb = document.querySelector('[data-qact=new]'); if (nb) nb.classList.toggle('dim', !Q.items.some(i => String(i.desc).trim())); const w = $('#q-warn'); if (w) { w.textContent = qWarn(); w.hidden = !w.textContent; } qSave(); }
+function qRefresh() { { const n = $('#q-dls-note'); if (n) { n.hidden = !DLS; if (DLS) n.innerHTML = 'الورقة تعرض: ' + esc([...DLS].map(dlName).join('، ')) + ' <button type="button" class="btn sm link" data-qact="dlreset">عرض كل الأقسام</button>'; } } qUndoBtn(); qFit(); { const pe = document.getElementById('qpaper'); if (pe) pe.classList.toggle('na', !!Q.na); } const p = $('#qpaper'); if (p) { p.innerHTML = qPaper(); qFit(); } qpvSync(); const lc = $('#q-lc'); if (lc) lc.textContent = Q.items.length + ' صنف'; const c = $('#q-count'); if (c) c.textContent = qTotals().sel.length + ' صنف في العرض من ' + Q.items.length + (qKind() ? ' · النوع: ' + QKIND[qKind()] + (Q.kind ? '' : ' (تلقائي)') : ''); const nb = document.querySelector('[data-qact=new]'); if (nb) nb.classList.toggle('dim', !Q.items.some(i => String(i.desc).trim())); const w = $('#q-warn'); if (w) { w.textContent = qWarn(); w.hidden = !w.textContent; } qSave(); }
 async function qImport(list) {
   let n = 0; qSnap();
   for (const f of list) {
@@ -9112,6 +9141,7 @@ document.addEventListener('click', e => {
   else if (a === 'xlsx') qXlsx();
   else if (a === 'dl') dlOpen('q');
   else if (a === 'dlreset') { DLS = null; qRefresh(); }
+  else if (a === 'pvfloat') qpvOpen();
   else if (a === 'pfold') { Q.pfold = !Q.pfold; const l = $('#qpaper'); if (l) { l.hidden = Q.pfold; if (!Q.pfold) qFit(); } b.classList.toggle('shut', Q.pfold); b.setAttribute('aria-expanded', Q.pfold ? 'false' : 'true'); b.title = Q.pfold ? 'فتح المعاينة' : 'طي المعاينة'; qSave(); }
   else if (a === 'sort') { const m = $('#q-smenu'); if (m) { m.hidden = !m.hidden; b.setAttribute('aria-expanded', m.hidden ? 'false' : 'true'); m.querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.k === Q.sortKey)); } }
   else if (a === 'sortby') {
@@ -9385,7 +9415,7 @@ cloud.run();
 /* تسجيل خدمة العمل دون اتصال (تعمل على GitHub Pages فقط) */
 try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && /github\.io$/.test(location.hostname)) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { })); } catch (e) { }
 
-/* البرنامج المحاسبي: زر يفتح رابط النظام السحابي. الرابط ثابت ولا يمكن تغييره من الواجهة */
+/* النظام المحاسبي: زر يفتح رابط النظام السحابي. الرابط ثابت ولا يمكن تغييره من الواجهة */
 (() => {
   const URL_ACC = 'https://uat-erp-app.asaspc.net/login';
   document.addEventListener('click', e => { const b = e.target.closest('[data-acc]'); if (!b) return; e.preventDefault(); const w = window.open(URL_ACC, '_blank', 'noopener'); if (!w) location.href = URL_ACC; });
@@ -9412,6 +9442,47 @@ try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) &&
   document.addEventListener('touchmove', e => { if (!tw || lock) return; const t = e.touches[0], dx = Math.abs(t.clientX - sx), dy = Math.abs(t.clientY - sy); if (dy > 6 && dy > dx * 1.2) lock = true; }, { passive: true, capture: true });
   document.addEventListener('touchend', () => { setTimeout(() => { tw = null; lock = false; }, 350); }, { passive: true, capture: true });
   document.addEventListener('scroll', e => { if (tw && lock && e.target === tw && tw.scrollLeft !== x0) tw.scrollLeft = x0; }, { passive: true, capture: true }); }
+
+/* ---------- الدوائر الحكومية: قائمة مواقع تُفتح داخل التطبيق ---------- */
+{ const GOV = [
+  ['وزارة الاستثمار', 'https://misa.gov.sa'], ['وزارة التجارة', 'https://mc.gov.sa'], ['هيئة الزكاة والضريبة والجمارك', 'https://zatca.gov.sa'],
+  ['وزارة الموارد البشرية والتنمية الاجتماعية', 'https://hrsd.gov.sa'], ['منصة قوى', 'https://qiwa.sa'], ['أبشر', 'https://www.absher.sa'], ['مقيم', 'https://muqeem.sa'],
+  ['وزارة الشؤون البلدية والقروية والإسكان', 'https://momrah.gov.sa'], ['منصة بلدي', 'https://balady.gov.sa'], ['المؤسسة العامة للتأمينات الاجتماعية', 'https://gosi.gov.sa'],
+  ['منصة مدد', 'https://mudad.com.sa'], ['فسح', 'https://fasah.zatca.gov.sa'], ['مجلس الغرف السعودية', 'https://csc.org.sa'], ['وزارة النقل والخدمات اللوجستية', 'https://mot.gov.sa'],
+  ['وزارة الصناعة والثروة المعدنية', 'https://mim.gov.sa'], ['الهيئة السعودية للمواصفات والمقاييس والجودة', 'https://saso.gov.sa'], ['وزارة العدل (ناجز)', 'https://najiz.sa'], ['النفاذ الوطني الموحد', 'https://www.iam.gov.sa'], ['منصة معروف', 'https://maroof.sa'], ['وزارة الداخلية', 'https://moi.gov.sa']
+];
+  let d = document.getElementById('gov-d');
+  const mk = () => { d = document.createElement('dialog'); d.id = 'gov-d'; document.body.appendChild(d);
+    d.addEventListener('click', e => { const t = e.target.closest('[data-gx]'); if (e.target === d) d.close(); else if (t) { const a = t.dataset.gx; if (a === 'close') d.close(); else if (a === 'back') list(); else if (a === 'ext') { const w = window.open(t.dataset.u, '_blank', 'noopener'); if (!w) location.href = t.dataset.u; } else view(+a); } });
+    d.addEventListener('input', e => { if (e.target.id === 'gov-q') { const q = normAr(e.target.value); d.querySelectorAll('.gv').forEach(b => { b.hidden = !!q && !normAr(b.textContent).includes(q); }); } }); };
+  const list = () => { d.classList.remove('gfull'); d.innerHTML = `<div class="h"><b>الدوائر الحكومية</b><button class="btn sm" data-gx="close" type="button">إغلاق</button></div><div class="b"><input id="gov-q" type="search" placeholder="ابحث عن جهة" aria-label="بحث"><div class="gvl">${GOV.map((g, i) => `<button type="button" class="gv" data-gx="${i}"><span>${esc(g[0])}</span><small>${esc(g[1].replace(/^https?:\/\/(www\.)?/, ''))}</small></button>`).join('')}</div></div>`; };
+  const view = i => { const g = GOV[i]; d.classList.add('gfull'); d.innerHTML = `<div class="h"><b>${esc(g[0])}</b><span class="gb"><button class="btn sm" data-gx="ext" data-u="${esc(g[1])}" type="button">فتح خارج التطبيق</button><button class="btn sm" data-gx="back" type="button">القائمة</button><button class="btn sm" data-gx="close" type="button">إغلاق</button></span></div><iframe class="gfr" src="${esc(g[1])}" referrerpolicy="no-referrer" allow="fullscreen" title="${esc(g[0])}"></iframe><p class="note gn">إن ظهرت الصفحة فارغة فالجهة تمنع عرض موقعها داخل التطبيق، فاستخدم «فتح خارج التطبيق».</p>`; };
+  document.addEventListener('click', e => { if (!e.target.closest('[data-gov]')) return; e.preventDefault(); if (!d) mk(); list(); if (!d.open) d.showModal(); }); }
+
+/* ---------- معاينة عرض السعر في نافذة عائمة تبقى مفتوحة أثناء التنقل بين الأقسام ---------- */
+let qpvEl = null;
+function qpvFit() { if (!qpvEl || qpvEl.hidden || qpvEl.classList.contains('min')) return; const host = qpvEl.querySelector('.qpvb'), el = qpvEl.querySelector('.qpaper'); if (!host || !el) return;
+  el.style.cssText = ''; const w = host.clientWidth - 12; if (w > 0) { const sc = Math.min(1, w / 800); el.style.cssText = `min-width:800px;width:800px;max-width:none;margin:0;transform-origin:top right;transform:scale(${sc.toFixed(4)})`; el.style.marginBottom = -(el.offsetHeight * (1 - sc)).toFixed(1) + 'px'; } }
+function qpvSync() { if (!qpvEl || qpvEl.hidden) return; const el = qpvEl.querySelector('.qpaper'); if (!el) return; el.innerHTML = qPaper(); el.classList.toggle('na', !!Q.na); qpvFit(); }
+function qpvOpen() {
+  if (!qpvEl) { qpvEl = document.createElement('div'); qpvEl.id = 'qpv-f'; document.body.appendChild(qpvEl);
+    qpvEl.addEventListener('click', e => { const t = e.target.closest('[data-pf]'); if (!t) return; const a = t.dataset.pf;
+      if (a === 'close') { qpvEl.hidden = true; qpvEl.className = ''; }
+      else if (a === 'min') { qpvEl.classList.toggle('min'); qpvFit(); }
+      else if (a === 'max') { qpvEl.classList.remove('min'); qpvEl.classList.toggle('max'); setTimeout(qpvFit, 30); } });
+    window.addEventListener('resize', qpvFit); try { new ResizeObserver(qpvFit).observe(qpvEl); } catch (e) { } }
+  qpvEl.hidden = false; qpvEl.className = '';
+  qpvEl.innerHTML = '<div class="gh"><b>معاينة عرض السعر</b><span class="gb"><button type="button" data-pf="min" title="تصغير / تكبير">–</button><button type="button" data-pf="max" title="ملء الشاشة">□</button><button type="button" data-pf="close" title="إغلاق">✕</button></span></div><div class="qpvb"><div class="qpaper"></div></div>';
+  qpvSync(); setTimeout(qpvFit, 50); }
+
+/* تحريك النافذة العائمة بحرية بسحب شريطها العلوي (فأرة أو لمس) */
+{ let drag = null;
+  document.addEventListener('pointerdown', e => { const h = e.target.closest && e.target.closest('#qpv-f .gh'); if (!h || e.target.closest('button')) return; const el = h.parentElement; if (el.classList.contains('max')) return;
+    const r = el.getBoundingClientRect(); drag = { el, dx: e.clientX - r.left, dy: e.clientY - r.top, id: e.pointerId }; el.style.inset = 'auto'; el.style.left = r.left + 'px'; el.style.top = r.top + 'px'; el.style.right = 'auto'; el.style.bottom = 'auto'; try { h.setPointerCapture(e.pointerId); } catch (x) { } e.preventDefault(); });
+  document.addEventListener('pointermove', e => { if (!drag) return; const el = drag.el, w = el.offsetWidth, h = el.offsetHeight; let x = e.clientX - drag.dx, y = e.clientY - drag.dy;
+    x = Math.max(4 - w + 80, Math.min(innerWidth - 80, x)); y = Math.max(0, Math.min(innerHeight - 40, y)); el.style.left = x + 'px'; el.style.top = y + 'px'; });
+  const end = () => { drag = null; };
+  document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end); }
 </script>
 </body>
 </html>
