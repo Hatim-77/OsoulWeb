@@ -327,6 +327,7 @@ body{max-width:100%}
 .tw,html,body{scrollbar-width:none;-ms-overflow-style:none}
 .tw::-webkit-scrollbar,html::-webkit-scrollbar,body::-webkit-scrollbar,dialog::-webkit-scrollbar{display:none;width:0;height:0}
 .tw{overscroll-behavior:none}
+.cat .tw th:first-child,.cat .tw td:first-child{touch-action:pan-y}
 @media (min-width:1500px){.main{max-width:1500px}}
 /* ---------- طباعة الجوال داخل التطبيق ---------- */
 #povl{display:none}
@@ -9404,6 +9405,13 @@ try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) &&
   /* عند إغلاق النافذة تعود الخانات مخفية */
   document.querySelectorAll('dialog').forEach(d => d.addEventListener('close', () => d.querySelectorAll('.pw').forEach(w => { const i = w.querySelector('input'), b = w.querySelector('.pwe'); if (i.type !== 'password') { i.type = 'password'; b.innerHTML = SHUT; } })));
 })();
+
+/* قفل المحور: السحب العمودي لا يحرّك الجدول يمينًا ويسارًا */
+{ let tw = null, x0 = 0, sx = 0, sy = 0, lock = false;
+  document.addEventListener('touchstart', e => { tw = e.target.closest && e.target.closest('.tw'); if (!tw) return; const t = e.touches[0]; sx = t.clientX; sy = t.clientY; x0 = tw.scrollLeft; lock = false; }, { passive: true, capture: true });
+  document.addEventListener('touchmove', e => { if (!tw || lock) return; const t = e.touches[0], dx = Math.abs(t.clientX - sx), dy = Math.abs(t.clientY - sy); if (dy > 6 && dy > dx * 1.2) lock = true; }, { passive: true, capture: true });
+  document.addEventListener('touchend', () => { setTimeout(() => { tw = null; lock = false; }, 350); }, { passive: true, capture: true });
+  document.addEventListener('scroll', e => { if (tw && lock && e.target === tw && tw.scrollLeft !== x0) tw.scrollLeft = x0; }, { passive: true, capture: true }); }
 </script>
 </body>
 </html>
