@@ -322,7 +322,11 @@ body{max-width:100%}
 /* جداول المقارنة: رأس الشركات والعمود الأول ثابتان، والتمرير داخل الإطار فقط */
 @media (max-width:760px){.cat .tw{max-height:calc(100dvh - 150px);max-height:calc(100svh - 150px)}
   .cat .tw th:first-child,.cat .tw td:first-child{min-width:128px;max-width:148px}
-  .cat .tw thead th{transform:translateZ(0)}.cat .tw td:first-child{transform:translateZ(0)}}
+}
+/* إخفاء أشرطة التمرير ومنع ارتداد الجدول عند السحب خارج حدّه */
+.tw,html,body{scrollbar-width:none;-ms-overflow-style:none}
+.tw::-webkit-scrollbar,html::-webkit-scrollbar,body::-webkit-scrollbar,dialog::-webkit-scrollbar{display:none;width:0;height:0}
+.tw{overscroll-behavior:none}
 @media (min-width:1500px){.main{max-width:1500px}}
 /* ---------- طباعة الجوال داخل التطبيق ---------- */
 #povl{display:none}
