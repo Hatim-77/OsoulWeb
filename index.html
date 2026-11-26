@@ -1094,7 +1094,7 @@ function renderAcct() {
   const el = $('#acct'); if (!el) return; el.hidden = !cloud.on; if (!cloud.on) return;
   if (!cloud.sess) { el.innerHTML = `<span>${cloud.state === 'expired' ? 'انتهت الجلسة، سجّل الدخول من جديد.' : 'لتظهر عروضك على كل أجهزتك'}</span><button class="btn primary" id="acct-in">تسجيل الدخول للمزامنة</button>`; return; }
   const t = { ok: ['', 'متزامن'], wait: ['wait', 'جارٍ المزامنة…'], bad: ['bad', 'تعذرت المزامنة، سأعيد المحاولة'], idle: ['wait', 'جارٍ المزامنة…'] }[cloud.state] || ['', 'متزامن'];
-  el.innerHTML = `${cloud.sess.name ? `<div class="nm">${esc(cloud.sess.name)}</div>` : ''}<div class="em">${esc(cloud.sess.email || '')}</div><div class="st ${t[0]}"><i></i>${t[1]}</div>${cloud.state === 'bad' && cloud.err ? `<div class="er">${esc(cloud.err)}</div>` : ''}<button class="btn sm link" id="acct-out">تسجيل الخروج</button>`;
+  el.innerHTML = `${cloud.sess.name ? `<div class="nm">${esc(cloud.sess.name)}</div>` : ''}<div class="em">${HIDE_ACC.includes(String(cloud.sess.email || '').toLowerCase()) ? 'الحساب الرئيسي' : esc(cloud.sess.email || '')}</div><div class="st ${t[0]}"><i></i>${t[1]}</div>${cloud.state === 'bad' && cloud.err ? `<div class="er">${esc(cloud.err)}</div>` : ''}<button class="btn sm link" id="acct-out">تسجيل الخروج</button>`;
 }
 const lgMsg = m => (/invalid login|invalid_credentials/i.test(m) ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة.' : /already|registered/i.test(m) ? 'هذا البريد مسجّل من قبل، اضغط «دخول».' : /password.*(least|short|weak)|weak/i.test(m) ? 'كلمة المرور ضعيفة، استخدم 6 أحرف على الأقل.' : /valid email|invalid.*email/i.test(m) ? 'البريد الإلكتروني غير صحيح.' : /failed to fetch|network/i.test(m) ? 'تعذر الاتصال بالخادم. تأكد من الإنترنت.' : /confirm/i.test(m) ? 'أكّد بريدك الإلكتروني من الرسالة المرسلة إليك ثم سجّل الدخول.' : 'تعذر تسجيل الدخول: ' + m);
 let lgNew = false;
@@ -9548,6 +9548,8 @@ function qpvOpen() {
 /* ---------- الصلاحيات: الحساب الرئيسي يمنح أو يسحب الأقسام عن بقية الحسابات (يتطلب perms.sql في Supabase) ---------- */
 const SECS = [['cmp', 'المقارنة'], ['history', 'العروض السابقة'], ['mine', 'عروضي'], ['quote', 'عرض سعر'], ['vault', 'المخزن'], ['gov', 'الدوائر الحكومية'], ['acc', 'النظام المحاسبي']];
 const ME_KEY = 'usool.me';
+/* حسابات لا تظهر في واجهة التطبيق (حساب المالك الشخصي) */
+const HIDE_ACC = ['hatimwork4@gmail.com'];
 let ME = (() => { try { return JSON.parse(lsGet(ME_KEY) || 'null') || { role: 'user', perms: {} }; } catch (e) { return { role: 'user', perms: {} }; } })();
 const allowed = k => ME.role === 'admin' || !ME.perms || ME.perms[k] !== false;
 const pageKey = p => (p === 'nissan' || p === 'toyota') ? 'cmp' : p;
@@ -9575,7 +9577,10 @@ applyPerms(); meLoad();
   const load = async () => { const b = d.querySelector('.b'); b.innerHTML = '<p class="note">جارٍ التحميل...</p>';
     try { const rows = await cloud.http('/rest/v1/app_users?select=user_id,email,name,role,perms&order=created_at.asc'); const me = uidOf();
       if (ME.role !== 'admin') { b.innerHTML = '<p class="note">هذه الصفحة للحساب الرئيسي فقط. إن كنتَ الحساب الرئيسي فنفّذ ملف perms.sql في Supabase مرة واحدة (مع بريدك في آخر سطر)، ثم أغلق التطبيق وافتحه من جديد.</p>'; return; }
-      b.innerHTML = '<p class="note" style="margin-top:0">فعّل الأقسام التي يُسمح لكل حساب باستخدامها، وألغِ التفعيل لسحب الصلاحية. يسري التغيير عند فتح الحساب الآخر للتطبيق من جديد.</p>' + (rows || []).map(u => `<div class="sup${u.role === 'admin' ? ' adm' : ''}" data-u="${esc(u.user_id)}"><div class="un">${esc(u.name || u.email || '')}${u.role === 'admin' ? ' · الحساب الرئيسي' : ''}${u.user_id === me ? ' (أنت)' : ''}</div><div class="ue">${esc(u.email || '')}</div>${u.role === 'admin' ? '' : `<div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div>`}</div>`).join('');
+      const vis = (rows || []).filter(u => !HIDE_ACC.includes(String(u.email || '').toLowerCase())), mains = vis.filter(u => u.role === 'admin'), others = vis.filter(u => u.role !== 'admin');
+      b.innerHTML = '<p class="note" style="margin-top:0">الحساب الرئيسي يتحكم في صلاحيات بقية الحسابات: فعّل الأقسام المسموح بها لكل حساب، وألغِ التفعيل لسحب الصلاحية. يسري التغيير عند فتح الحساب الآخر للتطبيق من جديد.</p>'
+        + mains.map(u => `<div class="sup adm"><div class="un">الحساب الرئيسي</div><div class="ue">${esc(u.email || '')}</div></div>`).join('')
+        + (others.length ? others.map(u => `<div class="sup" data-u="${esc(u.user_id)}"><div class="un">${esc(u.name || u.email || '')}</div><div class="ue">${esc(u.email || '')}</div><div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div></div>`).join('') : '<p class="note">لا توجد حسابات أخرى بعد. تظهر هنا الحسابات التي تسجّل دخولها للتطبيق.</p>');
     } catch (e) { b.innerHTML = '<p class="note" style="color:var(--bad)">تعذر تحميل الحسابات. تأكد من تنفيذ ملف perms.sql في Supabase. (' + esc(String((e && e.message) || e).slice(0, 120)) + ')</p>'; } };
   document.addEventListener('click', e => { if (e.target.closest('[data-gear]')) { if (!d) { d = document.createElement('dialog'); d.id = 'set-d'; d.innerHTML = '<div class="h"><b>الإعدادات · صلاحيات الحسابات</b><button class="btn sm" type="button" data-sx="1">إغلاق</button></div><div class="b"></div>'; document.body.appendChild(d);
       d.addEventListener('click', ev => { if (ev.target === d || ev.target.closest('[data-sx]')) d.close(); });
