@@ -247,8 +247,8 @@ dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8p
   .side{display:contents}
   .brand{position:sticky;top:0;z-index:40;width:100%;max-width:none;padding:calc(8px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 8px calc(12px + env(safe-area-inset-left));background:var(--panel);border-bottom:1px solid var(--line);justify-content:flex-start;-webkit-transform:translateZ(0)}
   .brand .logo{width:150px;max-width:150px;flex:none}
-  .tabs,.sidebot{margin:0 12px}
-  .sidebot{margin-top:10px;margin-bottom:10px}
+  .tabs,.shell .sidebot{margin:0 12px;width:auto!important}
+  .shell .sidebot{margin-top:10px;margin-bottom:10px;flex-direction:row;flex-wrap:wrap;align-items:center}
   .tabs{margin-top:10px;flex-direction:row;flex-wrap:wrap;min-width:0}
   .tabs button{width:auto;padding:8px 11px;font-size:14px}
   .tabs .n{margin-inline-start:2px}
@@ -488,6 +488,13 @@ dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:a
 .vmv{width:100%;margin-top:2px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;font-size:12.5px}.vf.drop{border-color:#3fb27f;background:#1d2e26}.vc[draggable=true]{cursor:grab}
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.vc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}.vt{display:flex;align-items:center;justify-content:center;height:110px;background:#0f1113;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0}.vt img{width:100%;height:100%;object-fit:cover}.vx{font-weight:800;font-size:20px;color:#9aa0a8;letter-spacing:1px}.vn{font-size:13px;padding:6px 8px}.vm{font-size:11.5px;color:#8a8f96}.vb{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 #v-view{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(960px,calc(100vw - 20px));max-width:none}#v-view[open]{display:flex;flex-direction:column;height:calc(100dvh - 24px)}#v-view .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}#v-view .h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#v-view .b{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}#v-view::backdrop{background:rgba(0,0,0,.65)}.vpdf{width:100%;height:100%;border:0;background:#fff}.vimg{max-width:100%;max-height:100%;object-fit:contain}
+.vtip{margin:8px 0 0;font-size:12.5px;color:var(--ink3,#7d8590);line-height:1.7}.vcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:10px 0 0}.vcr{background:none;border:0;color:var(--ink2);font:inherit;font-size:14px;padding:6px 8px;border-radius:8px;cursor:pointer}.vcr:hover{background:var(--panel2)}.vcr.on{color:var(--ink);font-weight:700}.vcr.drop{background:rgba(63,178,127,.2)}.vcrumb .sep{color:var(--ink3,#7d8590)}
+.vr{display:flex;align-items:center;gap:4px;min-width:0}.vn2{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vdots{flex:none;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:none;border:0;border-radius:8px;color:var(--ink2);cursor:pointer;padding:0}.vdots:hover{background:var(--panel2);color:var(--ink)}.vdots svg{width:18px;height:18px;fill:currentColor}.vdots.tb{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:10px}
+.vt.fd{color:#e0a73b}.vt.fd svg{width:54px;height:54px;fill:rgba(224,167,59,.18);stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}.vfc.drop{border-color:#3fb27f;background:rgba(63,178,127,.12)}
+#v-menu{position:fixed;z-index:200;min-width:190px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.45);padding:5px;display:flex;flex-direction:column}#v-menu button{background:none;border:0;color:var(--ink);font:inherit;font-size:14.5px;text-align:start;padding:10px 12px;border-radius:8px;cursor:pointer}#v-menu button:hover{background:var(--panel2)}#v-menu button.bad{color:#ff6b6b}
+#v-dlg{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:16px;width:min(420px,calc(100vw - 24px))}#v-dlg::backdrop{background:rgba(0,0,0,.6)}.vq{display:flex;flex-direction:column;gap:12px}.vq p{margin:0;color:var(--ink2);line-height:1.8}.vq .r{display:flex;gap:8px;justify-content:flex-start}.vq .danger{background:#c52b22;border-color:#c52b22}
+.vpick{max-height:50vh;overflow:auto;display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:10px;padding:4px}.vpi{display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--ink);font:inherit;padding:10px 12px;border-radius:8px;cursor:pointer;text-align:start}.vpi:hover{background:var(--panel2)}.vpi svg{width:18px;height:18px;fill:none;stroke:#e0a73b;stroke-width:1.8;flex:none}
+#v-view .vhb{display:flex;gap:6px;flex:none}#v-view .b.pg{display:block;text-align:center;padding:8px;background:#e9ebee}.vpg{display:block;margin:0 auto 10px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.25);max-width:100%}
 .file .fh{flex-wrap:wrap;row-gap:8px}.file .fh input.nm{flex:1 1 calc(100% - 46px);min-width:120px}.file .btn.rm{flex:none}
 .hprow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.hprow:last-child{border-bottom:0}
 .file .x.del1{color:#ff8a8a;font-size:12px}
@@ -534,7 +541,7 @@ const SEED_NAMES = {"الرقم|السعر|الصنف|رمز الصنف|كميه
 const names = { get() { try { return JSON.parse(localStorage.getItem(NAMES_KEY) || '{}') || {}; } catch (e) { return {}; } }, set(sig, n) { if (!sig) return; try { const o = names.get(); o[sig] = n; localStorage.setItem(NAMES_KEY, JSON.stringify(o)); } catch (e) { } } };
 const knownName = sig => sig ? (names.get()[sig] || SEED_NAMES[sig] || '') : '';
 function headerSig(rows, hdr) { return hdr >= 0 && rows[hdr] ? 'x:' + rows[hdr].map(c => normAr(String(c ?? ''))).filter(Boolean).sort().join('|') : ''; }
-const store = { get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }, set(v) { try { localStorage.setItem(KEY, v); } catch (e) { } } };
+const store = { get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }, set(v) { try { localStorage.setItem(KEY, v); } catch (e) { if (!store.warned) { store.warned = 1; setTimeout(() => { try { toast('مساحة التخزين المحلية في المتصفح ممتلئة، لن تُحفظ التعديلات الجديدة على هذا الجهاز. احذف عروضًا قديمة غير لازمة.'); } catch (e2) { } store.warned = 0; }, 400); } } } };
 
 /* ---------- تطبيع النصوص وقراءة الأرقام ---------- */
 const MARKS = /[ً-ٰٟـ]/g;
@@ -750,7 +757,7 @@ async function pdfToRows(buf) {
 /* ---------- الحالة ---------- */
 let saved = [], files = [], filesN = [], filesT = [], filesM = [], ctxPage = 'nissan';
 try { saved = JSON.parse(store.get() || '[]'); if (!Array.isArray(saved)) saved = []; } catch (e) { saved = []; }
-const PAL = ['#5aa9ff', '#f2b14a', '#b58cff', '#2fc7c0', '#ff7eb6', '#c9d65a', '#ff9166', '#8fa1ff'];
+const PAL = (() => { const base = ['#4da3ff', '#ffb020', '#b06bff', '#1fd1b2', '#ff4f86', '#a3e635', '#ff6a3d', '#d4d8de', '#22c55e', '#e879f9', '#c9a36b', '#00cfff', '#ef4444', '#facc15'], a = base.slice(); for (let k = 0; k < 46; k++) a.push(`hsl(${Math.round((k * 137.508 + 20) % 360)} ${72 - (k % 3) * 8}% ${56 + (k % 4) * 5}%)`); return a; })();
 const colorOf = f => PAL[(f.ci || 0) % PAL.length];
 /* نوع العرض: نيسان أو تويوتا. العروض القديمة بلا نوع تُصنَّف من كلمات أوصافها */
 const TOY_W = /(تويوتا|هايلكس|كورولا|كرولا|كامري|لاندكروزر|لاند كروزر|بريوس|يارس|افالون|فورتشنر|سيكويا|تاكوما|راف|انوفا|كوستر|هايس|كراون|اف جي|toyota|hilux|corolla|camry|yaris|prado|prius|fortuner)/i, NIS_W = /(نيسان|باترول|صني|التيما|ماكسيما|سنترا|داتسون|ددسن|نافارا|باثفندر|اكستيرا|اورفان|تيدا|قاشقاي|ستيما|nissan|patrol|sunny|altima|maxima|sentra|navara|datsun)/i;
@@ -766,7 +773,7 @@ const sync = () => {
   [filesN, filesT, filesM].forEach(list => {
     const used = new Set();
     list.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
-    list.forEach(f => { if (f.ci === -1) { let i = 0; while (used.has(i) && i < PAL.length - 1) i++; f.ci = i; used.add(i); ch = true; } });
+    list.forEach(f => { if (f.ci === -1) { let i = 0; while (used.has(i) && i < PAL.length) i++; if (i >= PAL.length) i = list.indexOf(f) % PAL.length; f.ci = i; used.add(i); ch = true; } });
   });
   /* ترتيب ثابت للعروض على كل الأجهزة: دمج الأصناف يتأثر بترتيب العروض، فاختلاف الترتيب بين جهازين كان يعطي أعدادًا مختلفة */
   const ord = (a, b) => (a.date || 0) - (b.date || 0) || String(a.id).localeCompare(String(b.id));
@@ -9227,7 +9234,7 @@ document.addEventListener('input', e => {
     it[k] = k === 'on' ? t.checked : (k === 'qty' || k === 'price') ? (t.value === '' ? 0 : +t.value) : t.value;
     if (t.tagName === 'TEXTAREA') qGrow(t);
     k === 'on' ? qRefresh() : qRefreshSoon();
-  } else if (t.id === 'q-search') { Q.q = t.value; $('#q-rows').innerHTML = qRows(); qGrowAll(); }
+  } else if (t.id === 'q-search') { Q.q = t.value; if (Q.q.trim() && Q.fold) { Q.fold = false; const l = $('#q-list'); if (l) l.hidden = false; const fb = document.querySelector('[data-qact=fold]'); if (fb) { fb.classList.remove('shut'); fb.setAttribute('aria-expanded', 'true'); fb.title = 'طي القائمة'; } } $('#q-rows').innerHTML = qRows(); qGrowAll(); }
 });
 document.addEventListener('change', e => {
   const t = e.target;
@@ -9428,11 +9435,10 @@ async function qXlsxSave(wb, fname, cw) {
 }
 /* ---------- المخزن: ملفات وصور محفوظة في Supabase Storage (لكل حساب مخزنه الخاص) ---------- */
 const VAULT = { bucket: 'vault', max: 25 * 1024 * 1024 };
-const V = { items: [], loaded: false, loading: false, folder: '', q: '', urls: {}, err: '', up: 0 };
+const V = { items: [], loaded: false, loading: false, path: '', q: '', urls: {}, err: '', up: 0 };
 const vLs = (k, d) => { try { return JSON.parse(lsGet(k) || d); } catch (e) { return JSON.parse(d); } };
 V.extra = new Set(vLs('usool-vextra', '[]')); V.hide = new Set(vLs('usool-vhide', '[]'));
 const vSaveF = () => { lsSet('usool-vextra', JSON.stringify([...V.extra])); lsSet('usool-vhide', JSON.stringify([...V.hide])); };
-const vFolders = () => { const used = new Set(V.items.map(i => i.folder || 'عام')); return [...new Set(['عام', 'صور', 'كتالوجات', 'فواتير', ...used, ...V.extra])].filter(k => k === 'عام' || used.has(k) || !V.hide.has(k)); };
 const vUid = () => { if (typeof ME !== 'undefined' && ME && ME.owner) return ME.owner; try { return JSON.parse(atob(cloud.sess.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub || ''; } catch (e) { return ''; } };
 const vSize = n => n >= 1073741824 ? (n / 1073741824).toFixed(2) + ' جيجابايت' : n >= 1048576 ? (n / 1048576).toFixed(1) + ' ميجابايت' : Math.max(1, Math.round(n / 1024)) + ' كيلوبايت';
 const vIsImg = i => /^image\//.test(i.mime || '');
@@ -9455,32 +9461,47 @@ async function vLoad(force) {
 }
 function vInit() { vGrid(); vUsage(); vLoad(); }
 function vUsage() { const u = $('#v-use'); if (u) u.textContent = V.loaded ? V.items.length + ' ملف · المستخدم ' + vSize(V.items.reduce((a, i) => a + (+i.size || 0), 0)) : ''; }
+const vFold = i => i.folder || 'عام';
+const vPar = p => { const k = p.lastIndexOf('/'); return k < 0 ? '' : p.slice(0, k); };
+const vLeaf = p => p.slice(p.lastIndexOf('/') + 1);
+const vUnder = (f, p) => f === p || f.startsWith(p + '/');
+const vAllFolders = () => {
+  const s = new Set(), add = p => { const a = p.split('/'); for (let k = 1; k <= a.length; k++) s.add(a.slice(0, k).join('/')); };
+  V.items.forEach(i => add(vFold(i))); ['عام', 'صور', 'كتالوجات', 'فواتير'].forEach(k => { if (k === 'عام' || !V.hide.has(k)) add(k); }); V.extra.forEach(p => { if (p) add(p); });
+  return [...s].sort((a, b) => a.localeCompare(b, 'ar'));
+};
+const vKids = p => vAllFolders().filter(f => vPar(f) === p);
+const vCount = p => V.items.filter(i => vUnder(vFold(i), p)).length;
+const ICO = { dots: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>', fold: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>' };
 function viewVault() {
   const head = '<h2>المخزن</h2>';
   if (!cloud.on) return head + '<p class="note">المزامنة السحابية غير مفعّلة، والمخزن يحتاجها لحفظ الملفات.</p>';
   if (!cloud.sess) return head + '<p class="sub">المخزن لحفظ ملفاتك وصورك وتصفحها من أي جهاز. سجّل الدخول أولًا.</p><button class="btn primary" id="acct-in">تسجيل الدخول</button>';
-  return head + `<p class="sub">ملفات شركتك وصورها في مكان واحد، تظهر على كل أجهزتك بعد تسجيل الدخول. الحد الأقصى للملف الواحد ${VAULT.max / 1048576} ميجابايت، والصور الكبيرة تُصغَّر تلقائيًا لتوفير المساحة.</p>
-  <div class="tool"><div class="grow"><input id="v-q" type="search" placeholder="ابحث باسم الملف" aria-label="بحث في المخزن" value="${esc(V.q)}"></div>
-    <button class="btn primary" data-vact="pick">رفع ملفات</button><input type="file" id="v-in" multiple hidden></div>
-  <div class="vfold" id="v-fold"></div><p class="note" id="v-use" style="margin:6px 0 12px"></p><div id="v-grid"></div>`;
+  return head + `<div class="tool"><div class="grow"><input id="v-q" type="search" placeholder="ابحث باسم ملف أو مجلد" aria-label="بحث في المخزن" value="${esc(V.q)}"></div>
+    <button class="btn primary" data-vact="pick">رفع ملفات</button><button type="button" class="vdots tb" data-vact="menu" data-k="g" aria-label="خيارات المخزن" title="خيارات">${ICO.dots}</button><input type="file" id="v-in" multiple hidden></div>
+  <nav class="vcrumb" id="v-crumb" aria-label="مسار المجلد"></nav><p class="vtip">اضغط على أي ملف لفتحه (صور وملفات PDF تُفتح داخل التطبيق). ومن زر ⋮ بجانب كل ملف أو مجلد: إعادة التسمية والنقل والحذف وإنشاء مجلدات فرعية.</p><p class="note" id="v-use" style="margin:4px 0 12px"></p><div id="v-grid"></div>`;
 }
-function vFoldBar() {
-  const f = $('#v-fold'); if (!f) return;
-  const cnt = {}; V.items.forEach(i => { const k = i.folder || 'عام'; cnt[k] = (cnt[k] || 0) + 1; });
-  f.innerHTML = `<button type="button" class="vf${V.folder === '' ? ' on' : ''}" data-vact="fold" data-f="">الكل<span class="n">${V.items.length}</span></button>` + vFolders().map(k => `<button type="button" class="vf${V.folder === k ? ' on' : ''}" data-vact="fold" data-f="${esc(k)}">${esc(k)}<span class="n">${cnt[k] || 0}</span></button>`).join('') + (V.adding ? '<span class="vfnew"><input id="v-nf" maxlength="30" placeholder="اسم المجلد" aria-label="اسم المجلد الجديد"><button type="button" class="btn sm primary" data-vact="addfold">إضافة</button><button type="button" class="btn sm" data-vact="cancelfold">إلغاء</button></span>' : '<button type="button" class="vf add" data-vact="newfold">+ مجلد جديد</button>') + (V.folder && V.folder !== 'عام' ? `<button type="button" class="vf del" data-vact="delfold">حذف مجلد «${esc(V.folder)}»</button>` : '');
+function vCrumb() {
+  const c = $('#v-crumb'); if (!c) return;
+  const parts = V.path ? V.path.split('/') : [];
+  c.innerHTML = `<button type="button" class="vcr${parts.length ? '' : ' on'}" data-vact="nav" data-p="">المخزن</button>` + parts.map((n, k) => { const p = parts.slice(0, k + 1).join('/'); return `<span class="sep">›</span><button type="button" class="vcr${k === parts.length - 1 ? ' on' : ''}" data-vact="nav" data-p="${esc(p)}" data-f="${esc(p)}">${esc(n)}</button>`; }).join('');
 }
 function vGrid() {
-  const g = $('#v-grid'); if (!g) return; vFoldBar();
+  const g = $('#v-grid'); if (!g) return; vCrumb();
   if (V.loading && !V.loaded) { g.innerHTML = '<p class="note">جارٍ تحميل المخزن...</p>'; return; }
   if (V.err) { g.innerHTML = `<p class="note" style="color:var(--bad)">${esc(V.err)}</p><button class="btn" data-vact="retry">إعادة المحاولة</button>`; return; }
-  const q = normAr(V.q || ''), list = V.items.filter(i => (!V.folder || (i.folder || 'عام') === V.folder) && (!q || normAr(i.name).includes(q)));
-  if (!list.length) { g.innerHTML = `<p class="note">${V.items.length ? 'لا توجد ملفات مطابقة.' : 'المخزن فارغ. اضغط «رفع ملفات» لإضافة أول ملف.'}</p>`; return; }
-  g.innerHTML = '<div class="vgrid">' + list.map(i => {
+  const q = normAr(V.q || '');
+  const dirs = q ? vAllFolders().filter(f => normAr(vLeaf(f)).includes(q)) : vKids(V.path);
+  const files = V.items.filter(i => q ? normAr(i.name).includes(q) : vFold(i) === V.path);
+  if (!dirs.length && !files.length) { g.innerHTML = `<p class="note">${q ? 'لا توجد نتائج مطابقة.' : V.path ? 'هذا المجلد فارغ. ارفع ملفات إليه أو أنشئ مجلدًا بداخله من زر ⋮ أعلى الصفحة.' : 'المخزن فارغ. اضغط «رفع ملفات» لإضافة أول ملف.'}</p>`; return; }
+  g.innerHTML = '<div class="vgrid">' + dirs.map(f => {
+    const n = vCount(f), sub = vKids(f).length;
+    return `<div class="vc vfc" data-fp="${esc(f)}" data-f="${esc(f)}"><button type="button" class="vt fd" data-vact="openf" aria-label="فتح المجلد">${ICO.fold}</button><div class="vr"><b class="vn2" title="${esc(f)}">${esc(vLeaf(f))}</b><button type="button" class="vdots" data-vact="menu" data-k="d" aria-label="خيارات المجلد">${ICO.dots}</button></div><div class="vm">${n} ملف${sub ? ' · ' + sub + ' مجلد' : ''}${q && vPar(f) ? ' · في ' + esc(vPar(f)) : ''}</div></div>`;
+  }).join('') + files.map(i => {
     const u = V.urls[i.id], img = vIsImg(i) && u ? `<img src="${esc(u.u)}" alt="" loading="lazy">` : `<span class="vx">${esc((String(i.name).split('.').pop() || '').slice(0, 4).toUpperCase())}</span>`;
-    return `<div class="vc" data-id="${i.id}" draggable="true"><button type="button" class="vt" data-vact="open" aria-label="فتح الملف">${img}</button><input class="nm vn" value="${esc(i.name)}" data-vname="${i.id}" aria-label="اسم الملف"><div class="vm">${esc(i.folder || 'عام')} · ${vSize(+i.size || 0)} · ${fmtWhen(Date.parse(i.created_at))}</div><div class="vb">${vIsImg(i) ? '<button type="button" class="btn sm" data-vact="open">عرض</button>' : ''}<button type="button" class="btn sm" data-vact="dl">تنزيل</button><button type="button" class="btn sm link" data-vact="del">حذف</button></div><select class="vmv" data-vmove="${i.id}" aria-label="نقل إلى مجلد"><option value="">نقل إلى مجلد...</option>${vFolders().filter(k => k !== (i.folder || 'عام')).map(k => `<option value="${esc(k)}">${esc(k)}</option>`).join('')}</select></div>`;
+    return `<div class="vc" data-id="${i.id}" draggable="true"><button type="button" class="vt" data-vact="open" aria-label="فتح الملف">${img}</button><div class="vr"><b class="vn2" title="${esc(i.name)}">${esc(i.name)}</b><button type="button" class="vdots" data-vact="menu" data-k="f" aria-label="خيارات الملف">${ICO.dots}</button></div><div class="vm">${vSize(+i.size || 0)} · ${fmtWhen(Date.parse(i.created_at))}${q ? ' · ' + esc(vFold(i)) : ''}</div></div>`;
   }).join('') + '</div>';
-  /* صور لم تُوقَّع بعد */
-  const miss = list.filter(i => vIsImg(i) && !V.urls[i.id]); if (miss.length) vSign(miss).then(() => { if (page === 'vault') vGridSoft(); });
+  const miss = files.filter(i => vIsImg(i) && !V.urls[i.id]); if (miss.length) vSign(miss).then(() => { if (page === 'vault') vGridSoft(); });
 }
 let vSoft = 0; const vGridSoft = () => { clearTimeout(vSoft); vSoft = setTimeout(vGrid, 50); };
 /* تصغير الصور الكبيرة قبل الرفع */
@@ -9502,7 +9523,7 @@ async function vUpload(list) {
       const f = await vShrink(f0); if (f.size > VAULT.max) throw new Error('too large');
       const ext = (f.name.match(/\.([A-Za-z0-9]{1,8})$/) || [])[0] || '', path = uid + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + ext.toLowerCase();
       await cloud.http('/storage/v1/object/' + VAULT.bucket + '/' + path, { method: 'POST', headers: { 'Content-Type': f.type || 'application/octet-stream', 'x-upsert': 'false' }, body: f });
-      const row = await cloud.http('/rest/v1/vault_files', { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ name: f.name, folder: V.folder || (/^image\//.test(f.type) ? 'صور' : 'عام'), size: f.size, mime: f.type || '', path }) });
+      const row = await cloud.http('/rest/v1/vault_files', { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ name: f.name, folder: V.path || (/^image\//.test(f.type) ? 'صور' : 'عام'), size: f.size, mime: f.type || '', path }) });
       if (row && row[0]) { V.items.unshift(row[0]); ok++; }
     } catch (e) { toast('تعذر رفع «' + f0.name + '»: ' + vErr(e)); }
     V.up--; vBusy();
@@ -9511,77 +9532,167 @@ async function vUpload(list) {
   if (ok) toast(ok === 1 ? 'تم رفع الملف' : 'تم رفع ' + ok + ' ملفات');
 }
 function vBusy() { const b = document.querySelector('[data-vact=pick]'); if (b) { b.disabled = V.up > 0; b.textContent = V.up > 0 ? 'جارٍ الرفع (' + V.up + ')...' : 'رفع ملفات'; } }
-/* معاينة الملف داخل التطبيق (صورة أو PDF) بدل فتح موقع خارجي */
-let vObj = '';
+/* معاينة الملف داخل التطبيق (صورة أو PDF) على كل الأجهزة */
+let vObj = '', vTok = 0;
+const vPrev = it => vIsImg(it) || /pdf/i.test(it.mime || '') || /\.pdf$/i.test(it.name);
 async function vView(it, url) {
   let d = document.getElementById('v-view');
-  if (!d) { d = document.createElement('dialog'); d.id = 'v-view'; document.body.appendChild(d); d.addEventListener('click', e => { if (e.target === d) d.close(); }); d.addEventListener('close', () => { if (vObj) { URL.revokeObjectURL(vObj); vObj = ''; } d.innerHTML = ''; }); }
-  const isPdf = /pdf/i.test(it.mime || '') || /\.pdf$/i.test(it.name), img = vIsImg(it);
-  d.innerHTML = `<div class="h"><b>${esc(it.name)}</b><button type="button" class="btn sm" data-vx="1">إغلاق</button></div><div class="b" id="v-vb"><p class="note">جارٍ التحميل...</p></div>`;
-  d.querySelector('[data-vx]').onclick = () => d.close(); d.showModal();
+  if (!d) { d = document.createElement('dialog'); d.id = 'v-view'; document.body.appendChild(d); d.addEventListener('click', e => { if (e.target === d) d.close(); }); d.addEventListener('close', () => { vTok++; if (vObj) { URL.revokeObjectURL(vObj); vObj = ''; } d.innerHTML = ''; }); }
+  const my = ++vTok, isPdf = /pdf/i.test(it.mime || '') || /\.pdf$/i.test(it.name), img = vIsImg(it);
+  d.innerHTML = `<div class="h"><b>${esc(it.name)}</b><span class="vhb"><button type="button" class="btn sm" data-vx="dl">تنزيل</button><button type="button" class="btn sm" data-vx="x">إغلاق</button></span></div><div class="b" id="v-vb"><p class="note">جارٍ التحميل...</p></div>`;
+  d.querySelector('[data-vx=x]').onclick = () => d.close(); d.querySelector('[data-vx=dl]').onclick = () => vDownload(it);
+  if (!d.open) d.showModal();
   try {
     const r = await fetch(url); if (!r.ok) throw new Error('http ' + r.status);
-    let b = await r.blob(); if (isPdf) b = new Blob([b], { type: 'application/pdf' });
+    let b = await r.blob(); if (my !== vTok) return; if (isPdf) b = new Blob([b], { type: 'application/pdf' });
     vObj = URL.createObjectURL(b); const box = d.querySelector('#v-vb');
-    if (img) box.innerHTML = `<img src="${vObj}" alt="" class="vimg">`;
-    else if (isPdf) box.innerHTML = `<iframe src="${vObj}" class="vpdf" title="${esc(it.name)}"></iframe>`;
-    else { d.close(); toast('لا تتوفر معاينة لهذا النوع، استخدم «تنزيل»'); }
-  } catch (e) { d.close(); toast('تعذر فتح الملف'); }
+    if (img) { box.innerHTML = `<img src="${vObj}" alt="" class="vimg">`; return; }
+    if (isPdf) {
+      /* عرض صفحات الـ PDF بمكتبة pdf.js ليعمل على أندرويد وآيفون وسطح المكتب */
+      if (window.pdfjsLib) {
+        try {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+          const doc = await pdfjsLib.getDocument({ data: new Uint8Array(await b.arrayBuffer()) }).promise; if (my !== vTok) return;
+          box.classList.add('pg'); box.innerHTML = '';
+          const W = Math.max(280, box.clientWidth - 16), dpr = Math.min(2, window.devicePixelRatio || 1);
+          for (let n = 1; n <= doc.numPages; n++) {
+            const pg = await doc.getPage(n); if (my !== vTok) return;
+            const v0 = pg.getViewport({ scale: 1 }), sc = W / v0.width, v = pg.getViewport({ scale: sc * dpr }), c = document.createElement('canvas');
+            c.width = v.width; c.height = v.height; c.style.width = Math.round(v.width / dpr) + 'px'; c.style.height = Math.round(v.height / dpr) + 'px'; c.className = 'vpg'; box.appendChild(c);
+            await pg.render({ canvasContext: c.getContext('2d'), viewport: v }).promise;
+          }
+          return;
+        } catch (e) { if (my !== vTok) return; box.classList.remove('pg'); }
+      }
+      box.innerHTML = `<iframe src="${vObj}" class="vpdf" title="${esc(it.name)}"></iframe>`; return;
+    }
+    d.close(); toast('لا تتوفر معاينة لهذا النوع، استخدم «تنزيل»');
+  } catch (e) { if (my === vTok) { d.close(); toast('تعذر فتح الملف'); } }
 }
-/* نقل ملف إلى مجلد آخر (من القائمة أو بسحبه على اسم المجلد) */
+async function vDownload(it) {
+  await vSign([it]); const u = V.urls[it.id]; if (!u) { toast('تعذر تنزيل الملف'); return; }
+  const l = document.createElement('a'); l.href = u.u + (u.u.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(it.name); l.rel = 'noopener'; document.body.appendChild(l); l.click(); l.remove();
+}
+async function vOpen(it) { if (!vPrev(it)) { vDownload(it); return; } await vSign([it]); const u = V.urls[it.id]; if (!u) { toast('تعذر فتح الملف'); return; } vView(it, u.u); }
+/* نافذة صغيرة للأسئلة والتأكيد واختيار المجلد */
+function vDlg(html) {
+  let d = document.getElementById('v-dlg');
+  if (!d) { d = document.createElement('dialog'); d.id = 'v-dlg'; document.body.appendChild(d); }
+  d.innerHTML = html; if (!d.open) d.showModal(); return d;
+}
+const vAsk = (title, value, okTxt) => new Promise(res => {
+  const d = vDlg(`<form method="dialog" class="vq"><b>${esc(title)}</b><input id="v-dv" maxlength="60" value="${esc(value || '')}" autocomplete="off"><div class="r"><button type="button" class="btn" data-no="1">إلغاء</button><button class="btn primary" value="ok">${esc(okTxt || 'حفظ')}</button></div></form>`);
+  const inp = d.querySelector('#v-dv'); let done = false; const fin = v => { if (done) return; done = true; d.close(); res(v); };
+  d.querySelector('[data-no]').onclick = () => fin(null); d.onclose = () => fin(null); d.querySelector('form').onsubmit = e => { e.preventDefault(); fin(inp.value.trim()); };
+  setTimeout(() => { inp.focus(); inp.select(); }, 30);
+});
+const vConfirm = (title, msg, okTxt) => new Promise(res => {
+  const d = vDlg(`<div class="vq"><b>${esc(title)}</b><p>${esc(msg)}</p><div class="r"><button type="button" class="btn" data-no="1">إلغاء</button><button type="button" class="btn primary danger" data-ok="1">${esc(okTxt || 'تأكيد')}</button></div></div>`);
+  let done = false; const fin = v => { if (done) return; done = true; d.close(); res(v); };
+  d.querySelector('[data-no]').onclick = () => fin(false); d.querySelector('[data-ok]').onclick = () => fin(true); d.onclose = () => fin(false);
+});
+const vPick = (title, exclude, allowRoot) => new Promise(res => {
+  const all = vAllFolders().filter(f => !exclude || !vUnder(f, exclude)), depth = f => f.split('/').length - 1;
+  const d = vDlg(`<div class="vq"><b>${esc(title)}</b><div class="vpick">${allowRoot ? '<button type="button" class="vpi" data-pp="">المخزن (المستوى الرئيسي)</button>' : ''}${all.map(f => `<button type="button" class="vpi" data-pp="${esc(f)}" style="padding-inline-start:${12 + depth(f) * 18}px">${ICO.fold}${esc(vLeaf(f))}</button>`).join('')}</div><div class="r"><button type="button" class="btn" data-no="1">إلغاء</button></div></div>`);
+  let done = false; const fin = v => { if (done) return; done = true; d.close(); res(v); };
+  d.querySelector('[data-no]').onclick = () => fin(null); d.onclose = () => fin(null); d.querySelectorAll('[data-pp]').forEach(b => b.onclick = () => fin(b.dataset.pp));
+});
+const vName = n => { n = (n || '').trim(); if (!n) return ''; if (/[\/\\]/.test(n)) { toast('اسم المجلد لا يحتوي على /'); return ''; } return n.slice(0, 40); };
+/* نقل ملف إلى مجلد */
 async function vMove(id, folder) {
-  const it = V.items.find(x => x.id === id); if (!it || (it.folder || 'عام') === folder) return;
-  try { await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: JSON.stringify({ folder }) }); it.folder = folder; V.extra.add(folder); vSaveF(); vGrid(); toast('نُقل الملف إلى «' + folder + '»'); }
+  const it = V.items.find(x => x.id === id); if (!it || !folder || vFold(it) === folder) return;
+  try { await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: JSON.stringify({ folder }) }); it.folder = folder; vGrid(); toast('نُقل الملف إلى «' + vLeaf(folder) + '»'); }
   catch (e) { toast('تعذر النقل: ' + vErr(e)); }
 }
-document.addEventListener('dragstart', e => { const c = e.target.closest && e.target.closest('.vc'); if (c) { e.dataTransfer.setData('text/plain', c.dataset.id); e.dataTransfer.effectAllowed = 'move'; } });
-document.addEventListener('dragover', e => { const f = e.target.closest && e.target.closest('.vf[data-f]'); if (f && f.dataset.f && V.items.length) { e.preventDefault(); f.classList.add('drop'); } });
-document.addEventListener('dragleave', e => { const f = e.target.closest && e.target.closest('.vf'); if (f) f.classList.remove('drop'); });
-document.addEventListener('drop', e => { const f = e.target.closest && e.target.closest('.vf[data-f]'); if (!f || !f.dataset.f) return; e.preventDefault(); f.classList.remove('drop'); const id = e.dataTransfer.getData('text/plain'); if (id) vMove(id, f.dataset.f); });
+/* إعادة تسمية مجلد أو نقله (يغيّر مسار كل ما بداخله) */
+async function vFolderMove(oldp, newp) {
+  if (!newp || oldp === newp) return; if (vUnder(newp, oldp)) { toast('لا يمكن نقل المجلد إلى داخل نفسه'); return; }
+  try {
+    const dist = [...new Set(V.items.map(vFold).filter(f => vUnder(f, oldp)))];
+    for (const f of dist) await cloud.http('/rest/v1/vault_files?folder=eq.' + encodeURIComponent(f), { method: 'PATCH', body: JSON.stringify({ folder: newp + f.slice(oldp.length) }) });
+    V.items.forEach(i => { const f = vFold(i); if (vUnder(f, oldp)) i.folder = newp + f.slice(oldp.length); });
+    const ex = [...V.extra].map(p => vUnder(p, oldp) ? newp + p.slice(oldp.length) : p); V.extra = new Set(ex); V.extra.add(newp); V.hide.delete(newp);
+    if (['صور', 'كتالوجات', 'فواتير'].includes(oldp)) V.hide.add(oldp);
+    if (V.path && vUnder(V.path, oldp)) V.path = newp + V.path.slice(oldp.length);
+    vSaveF(); vGrid(); toast('تم');
+  } catch (e) { toast('تعذر التنفيذ: ' + vErr(e)); }
+}
+async function vFolderDel(p) {
+  const n = V.items.filter(i => vUnder(vFold(i), p)).length, dest = vPar(p) || 'عام';
+  if (p === 'عام') { toast('مجلد «عام» أساسي ولا يُحذف'); return; }
+  if (!await vConfirm('حذف المجلد «' + vLeaf(p) + '»؟', n ? 'ستُنقل ' + n + ' ملفات بداخله (مع المجلدات الفرعية) إلى «' + vLeaf(dest) + '» ولن يُحذف أي ملف.' : 'المجلد فارغ وسيُحذف.', 'حذف المجلد')) return;
+  try {
+    if (n) {
+      const dist = [...new Set(V.items.map(vFold).filter(f => vUnder(f, p)))];
+      for (const f of dist) await cloud.http('/rest/v1/vault_files?folder=eq.' + encodeURIComponent(f), { method: 'PATCH', body: JSON.stringify({ folder: dest }) });
+      V.items.forEach(i => { if (vUnder(vFold(i), p)) i.folder = dest; });
+    }
+    V.extra = new Set([...V.extra].filter(x => !vUnder(x, p))); if (['صور', 'كتالوجات', 'فواتير'].includes(p)) V.hide.add(p);
+    if (V.path && vUnder(V.path, p)) V.path = vPar(p); vSaveF(); vGrid(); vUsage(); toast('حُذف المجلد');
+  } catch (e) { toast('تعذر حذف المجلد: ' + vErr(e)); }
+}
+async function vNewFolder(parent) {
+  const n = vName(await vAsk('مجلد جديد' + (parent ? ' داخل «' + vLeaf(parent) + '»' : ''), '', 'إنشاء')); if (!n) return;
+  const p = parent ? parent + '/' + n : n; if (vAllFolders().includes(p)) { toast('يوجد مجلد بهذا الاسم'); return; }
+  V.extra.add(p); V.hide.delete(p); vSaveF(); V.path = p; V.q = ''; const qi = $('#v-q'); if (qi) qi.value = ''; vGrid(); toast('أُنشئ المجلد «' + n + '»');
+}
+/* قائمة الخيارات ⋮ */
+function vMenuClose() { const m = document.getElementById('v-menu'); if (m) m.remove(); }
+function vMenu(btn) {
+  vMenuClose(); const k = btn.dataset.k, card = btn.closest('.vc'), m = document.createElement('div'); m.id = 'v-menu'; m.setAttribute('role', 'menu');
+  let rows = [];
+  if (k === 'g') rows = [['newf', 'مجلد جديد' + (V.path ? ' هنا' : '')], ['refresh', 'تحديث القائمة']];
+  else if (k === 'd') rows = [['openf', 'فتح'], ['newsub', 'مجلد جديد بداخله'], ['renf', 'إعادة التسمية'], ['movf', 'نقل إلى...'], ['delf', 'حذف المجلد', 1]];
+  else rows = [['open', vPrev((V.items.find(x => x.id === card.dataset.id)) || {}) ? 'فتح' : 'تنزيل'], ['dl', 'تنزيل'], ['ren', 'إعادة التسمية'], ['mov', 'نقل إلى...'], ['del', 'حذف', 1]].filter((r, i, a) => !(r[0] === 'dl' && a[0][1] === 'تنزيل'));
+  m.innerHTML = rows.map(r => `<button type="button" role="menuitem" data-vm="${r[0]}"${r[2] ? ' class="bad"' : ''}>${esc(r[1])}</button>`).join('');
+  m._ctx = { card, k }; document.body.appendChild(m);
+  const r = btn.getBoundingClientRect(), w = m.offsetWidth, h = m.offsetHeight;
+  let x = r.left; if (x + w > innerWidth - 8) x = innerWidth - w - 8; if (x < 8) x = 8;
+  let y = r.bottom + 4; if (y + h > innerHeight - 8) y = Math.max(8, r.top - h - 4);
+  m.style.left = x + 'px'; m.style.top = y + 'px';
+}
+document.addEventListener('dragstart', e => { const c = e.target.closest && e.target.closest('.vc[data-id]'); if (c) { e.dataTransfer.setData('text/plain', c.dataset.id); e.dataTransfer.effectAllowed = 'move'; } });
+const vDrop = e => e.target.closest && e.target.closest('[data-f]');
+document.addEventListener('dragover', e => { const f = vDrop(e); if (f && f.dataset.f && V.items.length) { e.preventDefault(); f.classList.add('drop'); } });
+document.addEventListener('dragleave', e => { const f = vDrop(e); if (f) f.classList.remove('drop'); });
+document.addEventListener('drop', e => { const f = vDrop(e); if (!f || !f.dataset.f) return; const id = e.dataTransfer.getData('text/plain'); if (!id || !V.items.some(x => x.id === id)) return; e.preventDefault(); f.classList.remove('drop'); vMove(id, f.dataset.f); });
 document.addEventListener('click', async e => {
-  const t = e.target.closest('[data-vact]'); if (!t) return; const a = t.dataset.vact, card = t.closest('.vc'), it = card && V.items.find(x => x.id === card.dataset.id);
+  const mi = e.target.closest('#v-menu [data-vm]');
+  if (mi) {
+    const m = mi.closest('#v-menu'), c = m._ctx, card = c.card, a = mi.dataset.vm; vMenuClose();
+    const it = card && card.dataset.id ? V.items.find(x => x.id === card.dataset.id) : null, fp = card && card.dataset.fp;
+    if (a === 'newf') vNewFolder(V.path); else if (a === 'refresh') { V.loaded = false; vLoad(true); }
+    else if (a === 'openf') { V.path = fp; V.q = ''; const qi = $('#v-q'); if (qi) qi.value = ''; vGrid(); }
+    else if (a === 'newsub') vNewFolder(fp);
+    else if (a === 'renf') { const n = vName(await vAsk('إعادة تسمية المجلد', vLeaf(fp))); if (!n || n === vLeaf(fp)) return; const np = (vPar(fp) ? vPar(fp) + '/' : '') + n; if (vAllFolders().includes(np)) { toast('يوجد مجلد بهذا الاسم'); return; } vFolderMove(fp, np); }
+    else if (a === 'movf') { const to = await vPick('نقل المجلد «' + vLeaf(fp) + '» إلى', fp, true); if (to == null || to === vPar(fp)) return; const np = (to ? to + '/' : '') + vLeaf(fp); if (vAllFolders().includes(np)) { toast('يوجد مجلد بهذا الاسم في الوجهة'); return; } vFolderMove(fp, np); }
+    else if (a === 'delf') vFolderDel(fp);
+    else if (a === 'open' && it) vOpen(it); else if (a === 'dl' && it) vDownload(it);
+    else if (a === 'ren' && it) { const n = await vAsk('إعادة تسمية الملف', it.name); if (!n || n === it.name) return; try { await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(it.id), { method: 'PATCH', body: JSON.stringify({ name: n }) }); it.name = n; vGrid(); toast('تم تغيير الاسم'); } catch (e2) { toast('تعذر تغيير الاسم: ' + vErr(e2)); } }
+    else if (a === 'mov' && it) { const to = await vPick('نقل الملف إلى', '', false); if (to) vMove(it.id, to); }
+    else if (a === 'del' && it) {
+      if (!await vConfirm('حذف الملف؟', '«' + it.name + '» سيُحذف نهائيًا.', 'حذف')) return;
+      try {
+        await cloud.http('/storage/v1/object/' + VAULT.bucket, { method: 'DELETE', body: JSON.stringify({ prefixes: [it.path] }) });
+        await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(it.id), { method: 'DELETE' });
+        V.items = V.items.filter(x => x.id !== it.id); delete V.urls[it.id]; vGrid(); vUsage(); toast('حُذف الملف');
+      } catch (e2) { toast('تعذر الحذف: ' + vErr(e2)); }
+    }
+    return;
+  }
+  const t = e.target.closest('[data-vact]');
+  if (!e.target.closest('#v-menu') && !(t && t.dataset.vact === 'menu')) vMenuClose();
+  if (!t) return; const a = t.dataset.vact, card = t.closest('.vc'), it = card && card.dataset.id && V.items.find(x => x.id === card.dataset.id);
   if (a === 'pick') $('#v-in').click();
   else if (a === 'retry') { V.loaded = false; vLoad(true); }
-  else if (a === 'fold') { V.folder = t.dataset.f; vGrid(); }
-  else if (a === 'newfold') { V.adding = true; vFoldBar(); const i = $('#v-nf'); if (i) i.focus(); }
-  else if (a === 'cancelfold') { V.adding = false; vFoldBar(); }
-  else if (a === 'addfold') {
-    const n = ($('#v-nf').value || '').trim().slice(0, 30); V.adding = false;
-    if (n) { V.folder = n; V.extra.add(n); V.hide.delete(n); vSaveF(); vGrid(); toast('أُضيف المجلد «' + n + '». اضغط «رفع ملفات» لإضافة ملفات إليه'); } else vFoldBar();
-  }
-  else if (a === 'delfold') {
-    const f = V.folder; if (!f || f === 'عام') return; const n = V.items.filter(i => (i.folder || 'عام') === f).length;
-    if (!t.dataset.armed) { t.dataset.armed = '1'; t.textContent = n ? 'تأكيد: تُنقل ' + n + ' ملفات إلى «عام»' : 'تأكيد حذف المجلد'; setTimeout(() => { if (t.isConnected) { t.dataset.armed = ''; t.textContent = 'حذف مجلد «' + f + '»'; } }, 4000); return; }
-    try {
-      if (n) { await cloud.http('/rest/v1/vault_files?folder=eq.' + encodeURIComponent(f), { method: 'PATCH', body: JSON.stringify({ folder: 'عام' }) }); V.items.forEach(i => { if ((i.folder || 'عام') === f) i.folder = 'عام'; }); }
-      V.extra.delete(f); V.hide.add(f); vSaveF(); V.folder = ''; vGrid(); toast(n ? 'حُذف المجلد ونُقلت ملفاته إلى «عام»' : 'حُذف المجلد');
-    } catch (e2) { toast('تعذر حذف المجلد: ' + vErr(e2)); }
-  }
-  else if (a === 'open' || a === 'dl') {
-    if (!it) return; const act = a === 'open' && vIsImg(it) ? 'open' : 'dl'; await vSign([it]); const u = V.urls[it.id]; if (!u) { toast('تعذر فتح الملف'); return; }
-    if (act === 'open') vView(it, u.u);
-    else { const l = document.createElement('a'); l.href = u.u + (u.u.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(it.name); l.rel = 'noopener'; document.body.appendChild(l); l.click(); l.remove(); }
-  }
-  else if (a === 'del') {
-    if (!it) return;
-    if (!t.dataset.armed) { t.dataset.armed = '1'; t.textContent = 'تأكيد الحذف'; setTimeout(() => { if (t.isConnected) { t.dataset.armed = ''; t.textContent = 'حذف'; } }, 3000); return; }
-    try {
-      await cloud.http('/storage/v1/object/' + VAULT.bucket, { method: 'DELETE', body: JSON.stringify({ prefixes: [it.path] }) });
-      await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(it.id), { method: 'DELETE' });
-      V.items = V.items.filter(x => x.id !== it.id); delete V.urls[it.id]; vGrid(); vUsage(); toast('حُذف الملف');
-    } catch (e2) { toast('تعذر الحذف: ' + vErr(e2)); }
-  }
+  else if (a === 'nav') { V.path = t.dataset.p; vGrid(); }
+  else if (a === 'openf') { V.path = card.dataset.fp; V.q = ''; const qi = $('#v-q'); if (qi) qi.value = ''; vGrid(); }
+  else if (a === 'menu') { e.stopPropagation(); const open = document.getElementById('v-menu'); if (open && open._btn === t) { vMenuClose(); return; } vMenu(t); const mm = document.getElementById('v-menu'); if (mm) mm._btn = t; }
+  else if (a === 'open' && it) vOpen(it);
 });
-document.addEventListener('change', async e => {
-  const t = e.target;
-  if (t.id === 'v-in') { const l = [...t.files]; t.value = ''; if (l.length) vUpload(l); }
-  else if (t.dataset && t.dataset.vmove) { const f = t.value; t.value = ''; if (f) vMove(t.dataset.vmove, f); }
-  else if (t.dataset && t.dataset.vname) {
-    const it = V.items.find(x => x.id === t.dataset.vname), n = t.value.trim(); if (!it) return; if (!n) { t.value = it.name; return; } if (n === it.name) return;
-    try { await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(it.id), { method: 'PATCH', body: JSON.stringify({ name: n }) }); it.name = n; toast('تم تغيير الاسم'); } catch (e2) { t.value = it.name; toast('تعذر تغيير الاسم: ' + vErr(e2)); }
-  }
-});
-document.addEventListener('keydown', e => { if (e.target.id === 'v-nf') { if (e.key === 'Enter') { e.preventDefault(); document.querySelector('[data-vact=addfold]').click(); } else if (e.key === 'Escape') document.querySelector('[data-vact=cancelfold]').click(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') vMenuClose(); });
+window.addEventListener('scroll', vMenuClose, { passive: true }); window.addEventListener('resize', vMenuClose);
+document.addEventListener('change', e => { const t = e.target; if (t.id === 'v-in') { const l = [...t.files]; t.value = ''; if (l.length) vUpload(l); } });
 document.addEventListener('input', e => { if (e.target.id === 'v-q') { V.q = e.target.value; vGrid(); } });
 /* تعطيل التكبير بالقرص ليبدو كتطبيق (آيفون) */
 ['gesturestart', 'gesturechange', 'gestureend'].forEach(n => document.addEventListener(n, e => e.preventDefault(), { passive: false }));
