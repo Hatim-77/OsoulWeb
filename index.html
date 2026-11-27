@@ -469,7 +469,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
     <button type="button" class="gearb" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button>
-    <div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 27-11-2026 / 19:20</div>
+    <div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 27-11-2026 / 19:40</div>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -740,7 +740,7 @@ const sync = () => {
   files = ctxPage === 'mine' ? filesM : ctxPage === 'toyota' ? filesT : filesN;
   /* بصمة العروض الفعّالة: تُقارَن بين الجهازين لمعرفة سبب اختلاف الأعداد */
   try { const ev = document.getElementById('appver'); if (ev) { const act2 = saved.filter(f => f.active !== false && !f.mine), h = str => { let x = 5381; for (let i = 0; i < str.length; i++) x = ((x << 5) + x + str.charCodeAt(i)) | 0; return (x >>> 0).toString(36); };
-    ev.textContent = 'الإصدار 27-11-2026 / 19:20 · عروض ' + act2.length + ' · بصمة ' + h(act2.map(f => f.id + ':' + (f.rows ? f.rows.length : 0) + ':' + h(JSON.stringify(f.rows || []).slice(0, 4000) + JSON.stringify(f.map || {}))).sort().join('|')); } } catch (e) { }
+    ev.textContent = 'الإصدار 27-11-2026 / 19:40 · عروض ' + act2.length + ' · بصمة ' + h(act2.map(f => f.id + ':' + (f.rows ? f.rows.length : 0) + ':' + h(JSON.stringify(f.rows || []).slice(0, 4000) + JSON.stringify(f.map || {}))).sort().join('|')); } } catch (e) { }
   if (ch) { try { store.set(JSON.stringify(saved)); } catch (e) { } }
 };
 sync();
@@ -845,11 +845,14 @@ function build() {
     if (ok) g.keys.add(ok);
     if (hasNum(it.no) && !g.nums.some(m => numSame(m, it.no))) g.nums.push(it.no);
     if (it.no) { (g.nos = g.nos || new Set()).add(it.no); if (!g.oem) g.oem = oemNo(it.no); }
+    (g.dl = g.dl || []).push(it.desc);
     const c = g.cells[f.id]; if (!c || it.price < c.price) g.cells[f.id] = { price: it.price, brand: it.brand, i: it.i, no: it.no, og: og.replace(/\s*#.*$/, '') };
   }));
   return groups.map(g => {
     const list = Object.entries(g.cells), prices = list.map(([, c]) => c.price);
     if (g.oem) g.no = g.oem;
+    /* القسم يُحدَّد بأغلبية أسماء الصنف في كل العروض، لا باسم أول عرض فقط، فلا يختلف باختلاف ترتيب العروض */
+    { const vote = {}; (g.dl || [g.desc]).forEach(d => { const k = catOf(d); if (k !== 'أخرى') vote[k] = (vote[k] || 0) + 1; }); const ks2 = Object.keys(vote).sort((a, b) => vote[b] - vote[a] || (!!CAT_NAME[b] - !!CAT_NAME[a]) || a.localeCompare(b)); g.cat = ks2[0] || catOf(g.desc); }
     { const ogt = g.og.replace(/\s*#.*$/, ''); if (ogt && !normAr(g.desc).includes(normAr(ogt).slice(0, 4))) g.desc += ' ' + ogt; }
     g.count = list.length; g.min = Math.min(...prices); g.max = Math.max(...prices);
     g.diff = g.max - g.min; g.pct = g.min ? g.diff / g.min * 100 : 0;
@@ -881,8 +884,8 @@ function resultsData() {
   return { all, rows, multi };
 }
 function groupCats(rows) {
-  const cnt = {}; rows.forEach(g => { const k = catOf(g.desc); cnt[k] = (cnt[k] || 0) + 1; });
-  const cats = new Map(); rows.forEach(g => { let k = catOf(g.desc); if (cnt[k] < 3 && !CAT_NAME[k]) k = 'أخرى'; if (!cats.has(k)) cats.set(k, []); cats.get(k).push(g); });
+  const cnt = {}; rows.forEach(g => { const k = g.cat || catOf(g.desc); cnt[k] = (cnt[k] || 0) + 1; });
+  const cats = new Map(); rows.forEach(g => { let k = g.cat || catOf(g.desc); if (cnt[k] < 3 && !CAT_NAME[k]) k = 'أخرى'; if (!cats.has(k)) cats.set(k, []); cats.get(k).push(g); });
   return [...cats.entries()].sort((a, b) => (a[0] === 'أخرى') - (b[0] === 'أخرى') || b[1].length - a[1].length);
 }
 function viewResults() {
