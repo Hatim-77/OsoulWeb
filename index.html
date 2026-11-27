@@ -398,7 +398,7 @@ dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:a
 
 .gearb{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;height:32px;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--ink2);font:inherit;font-size:13px;cursor:pointer}
 .appver{margin-top:8px;text-align:center;font-size:11px;color:var(--ink3,#7d8590);opacity:.8}.gearb[hidden]{display:none}.gearb:hover{color:var(--ink);background:var(--panel2)}.gearb svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-#set-d .b{padding:14px 18px;max-height:70vh;overflow:auto}.sup{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;background:var(--panel2)}
+#set-d .sf{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink2)}#set-d .b{padding:14px 18px;max-height:70vh;overflow:auto}.sup{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;background:var(--panel2)}
 .sup .un{font-weight:700}.sup .ue{color:var(--ink2);font-size:12.5px;direction:ltr;text-align:right}
 .sup .pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px;margin-top:8px}
 .sup label{display:flex;align-items:center;gap:7px;font-size:13.5px;cursor:pointer}.sup input{width:auto}.sup.adm{opacity:.7}
@@ -469,7 +469,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
     <button type="button" class="gearb" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button>
-    <div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 27-11-2026 / 18:35</div>
+    <div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 27-11-2026 / 19:20</div>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -519,6 +519,7 @@ const headOf = d => (normAr(d).split(/\s+/)[0] || '').replace(/^ال/, '');
 const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'روماني': 'رمان', 'رومانه': 'رمان', 'رومانات': 'رمان', 'رماني': 'رمان', 'رمانه': 'رمان', 'رمانات': 'رمان', 'باكم': 'باكم', 'باكمات': 'باكم', 'باكما': 'باكم', 'مساعدات': 'مساعد' };
 const CAT_NAME = { 'مجموعه': 'مجموعة قزاز', 'باكم': 'الباكمات', 'رمان': 'الرمانات', 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك', 'شيال': 'الشيالات' };
 const EN_CAT = { arm: 'مقص', arms: 'مقص', shock: 'مساعد', absorber: 'مساعد', strut: 'مساعد', filter: 'فلتر', pump: 'طرمبه', pad: 'فحمات', pads: 'فحمات', disc: 'دسك', rotor: 'دسك', belt: 'سير', radiator: 'لديتر', starter: 'سلف', alternator: 'دينمو', coil: 'كويل', sensor: 'حساس', fan: 'مروحه', compressor: 'كمبروسر', tensioner: 'شداد', pulley: 'بكره', bush: 'جلبه', bushing: 'جلبه', cylinder: 'سلندر', clutch: 'دسك', screw: 'مسمار', bolt: 'مسمار', gasket: 'جلده', seal: 'جلده' };
+const ORIG_W = /^(ساكا|ساكه|sacaa|saka|ياباني|يابانى|ياباني|يابان|ماليزي|ماليزيا|تايواني|تايوان|صيني|صين|كوري|كوريا|تايلندي|اصلي|اصليه|تجاري|تجاريه|وكاله|اورجنال|اورجينال|جنيون|نوعيه|درجه|اولي|ثاني|ترو|حديث|جديد|اصل|اقتصادي|ممتاز|وارد|اوروبي|المانيا|المانى|الماني|امريكي|هندي|ترکي|تركي)$/;
 const catOf = d => {
   const toks = String(d ?? '').split(/[^\w\u0600-\u06FF]+/).filter(Boolean), h = headOf(d);
   if (CAT_MAP[h] || CAT_NAME[h]) return CAT_MAP[h] || h;
@@ -531,7 +532,8 @@ const catOf = d => {
   for (const w of nt) if (w.length >= 4) { const k = Object.keys(CAT_NAME).find(c => c.length >= 4 && ed1(w, c)); if (k) return k; }
   if (nt.some(w => /^(كلتش|كلتج|كلج|كلتس|كلاتش|كليتش|كلتشات|clutch)$/.test(w))) return 'علبه';
   /* وإلا فأول كلمة حروف فقط (ليست رقماً ولا كوداً) هي اسم القسم كما في العرض */
-  const w = toks.map(x => normAr(x).replace(/^ال/, '')).find(x => x.length >= 3 && !/\d/.test(x));
+  /* كلمات المنشأ والجودة والماركة ليست أقسامًا (ساكا، ياباني، ماليزي...) */
+  const w = toks.map(x => normAr(x).replace(/^ال/, '')).find(x => x.length >= 3 && !/\d/.test(x) && !ORIG_W.test(x));
   return w || 'أخرى';
 };
 /* رقم الوكالة (تويوتا/نيسان): 5 خانات - 5 خانات، ويُهمل ما بعده من رموز الشركة مثل SSS أو YMC */
@@ -732,7 +734,13 @@ const sync = () => {
     list.forEach(f => { if (f.ci !== undefined && !used.has(f.ci)) used.add(f.ci); else f.ci = -1; });
     list.forEach(f => { if (f.ci === -1) { let i = 0; while (used.has(i) && i < PAL.length - 1) i++; f.ci = i; used.add(i); ch = true; } });
   });
+  /* ترتيب ثابت للعروض على كل الأجهزة: دمج الأصناف يتأثر بترتيب العروض، فاختلاف الترتيب بين جهازين كان يعطي أعدادًا مختلفة */
+  const ord = (a, b) => (a.date || 0) - (b.date || 0) || String(a.id).localeCompare(String(b.id));
+  filesN.sort(ord); filesT.sort(ord); filesM.sort(ord);
   files = ctxPage === 'mine' ? filesM : ctxPage === 'toyota' ? filesT : filesN;
+  /* بصمة العروض الفعّالة: تُقارَن بين الجهازين لمعرفة سبب اختلاف الأعداد */
+  try { const ev = document.getElementById('appver'); if (ev) { const act2 = saved.filter(f => f.active !== false && !f.mine), h = str => { let x = 5381; for (let i = 0; i < str.length; i++) x = ((x << 5) + x + str.charCodeAt(i)) | 0; return (x >>> 0).toString(36); };
+    ev.textContent = 'الإصدار 27-11-2026 / 19:20 · عروض ' + act2.length + ' · بصمة ' + h(act2.map(f => f.id + ':' + (f.rows ? f.rows.length : 0) + ':' + h(JSON.stringify(f.rows || []).slice(0, 4000) + JSON.stringify(f.map || {}))).sort().join('|')); } } catch (e) { }
   if (ch) { try { store.set(JSON.stringify(saved)); } catch (e) { } }
 };
 sync();
@@ -1120,6 +1128,7 @@ function renderAcct() {
   gate();
   const el = $('#acct'); if (!el) return; el.hidden = !cloud.on; if (!cloud.on) return;
   if (!cloud.sess) { el.innerHTML = `<span>${cloud.state === 'expired' ? 'انتهت الجلسة، سجّل الدخول من جديد.' : 'لتظهر عروضك على كل أجهزتك'}</span><button class="btn primary" id="acct-in">تسجيل الدخول للمزامنة</button>`; return; }
+  el.hidden = true; /* الحساب وحالة المزامنة وتسجيل الخروج داخل نافذة الإعدادات */
   const t = { ok: ['', 'متزامن'], wait: ['wait', 'جارٍ المزامنة…'], bad: ['bad', 'تعذرت المزامنة، سأعيد المحاولة'], idle: ['wait', 'جارٍ المزامنة…'] }[cloud.state] || ['', 'متزامن'];
   el.innerHTML = `${cloud.sess.name ? `<div class="nm">${esc(cloud.sess.name)}</div>` : ''}<div class="em">${HIDE_ACC.includes(String(cloud.sess.email || '').toLowerCase()) ? 'الحساب الرئيسي' : esc(cloud.sess.email || '')}</div><div class="st ${t[0]}"><i></i>${t[1]}</div>${cloud.state === 'bad' && cloud.err ? `<div class="er">${esc(cloud.err)}</div>` : ''}<button class="btn sm link" id="acct-out">تسجيل الخروج</button>`;
 }
@@ -1205,7 +1214,7 @@ window.addEventListener('scroll', closePop, true);
 document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'acct-in') { lgMode(false); $('#login').showModal(); $('#lg-e').focus(); }
-  else if (t.id === 'acct-out') { $('#lo-t').textContent = 'هل تريد تسجيل الخروج من حسابك؟ ' + (GATED ? 'ستعود إلى شاشة الدخول، وتبقى عروضك محفوظة في حسابك.' : 'ستتوقف مزامنة عروضك حتى تسجّل الدخول من جديد.'); $('#lo').showModal(); }
+  else if (t.id === 'acct-out') { const sd = document.getElementById('set-d'); if (sd && sd.open) sd.close(); $('#lo-t').textContent = 'هل تريد تسجيل الخروج من حسابك؟ ' + (GATED ? 'ستعود إلى شاشة الدخول، وتبقى عروضك محفوظة في حسابك.' : 'ستتوقف مزامنة عروضك حتى تسجّل الدخول من جديد.'); $('#lo').showModal(); }
   else if (t.dataset.open) openOffer(t.dataset.open);
   else if (t.dataset.page) { page = t.dataset.page; try { location.hash = page; } catch (x) { } render(); window.scrollTo(0, 0); }
   else if (t.id === 'pick') $('#file-in').click();
@@ -9660,11 +9669,12 @@ applyPerms(); meLoad();
         + mains.map(u => `<div class="sup adm"><div class="un">الحساب الرئيسي</div><div class="ue">${esc(u.email || '')}</div></div>`).join('')
         + (others.length ? others.map(u => `<div class="sup" data-u="${esc(u.user_id)}"><div class="un">${esc(u.name || u.email || '')}</div><div class="ue">${esc(u.email || '')}</div><div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div></div>`).join('') : '<p class="note">لا توجد حسابات أخرى بعد. تظهر هنا الحسابات التي تسجّل دخولها للتطبيق.</p>');
     } catch (e) { b.innerHTML = '<p class="note" style="color:var(--bad)">تعذر تحميل الحسابات. تأكد من تنفيذ ملف perms.sql في Supabase. (' + esc(String((e && e.message) || e).slice(0, 120)) + ')</p>'; } };
-  document.addEventListener('click', e => { if (e.target.closest('[data-gear]')) { if (!d) { d = document.createElement('dialog'); d.id = 'set-d'; d.innerHTML = '<div class="h"><b>الإعدادات · صلاحيات الحسابات</b><button class="btn sm" type="button" data-sx="1">إغلاق</button></div><div class="b"></div>'; document.body.appendChild(d);
+  document.addEventListener('click', e => { if (e.target.closest('[data-gear]')) { if (!d) { d = document.createElement('dialog'); d.id = 'set-d'; d.innerHTML = '<div class="h"><b>الإعدادات · صلاحيات الحسابات</b><button class="btn sm" type="button" data-sx="1">إغلاق</button></div><div class="b"></div><div class="sf"><span class="st" id="set-st"></span><button class="btn sm link" type="button" id="acct-out">تسجيل الخروج</button></div>'; document.body.appendChild(d);
       d.addEventListener('click', ev => { if (ev.target === d || ev.target.closest('[data-sx]')) d.close(); });
       d.addEventListener('change', async ev => { const cb = ev.target.closest('input[data-k]'); if (!cb) return; const card = cb.closest('.sup'), perms = {}; card.querySelectorAll('input[data-k]').forEach(x => { if (!x.checked) perms[x.dataset.k] = false; });
         try { await cloud.http('/rest/v1/app_users?user_id=eq.' + card.dataset.u, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ perms }) }); toast('حُفظت الصلاحيات'); }
         catch (x) { cb.checked = !cb.checked; toast('تعذر حفظ الصلاحيات'); } }); }
+    { const st = d.querySelector('#set-st'); if (st) st.textContent = { ok: 'متزامن', bad: 'تعذرت المزامنة، سأعيد المحاولة' }[cloud.state] || 'جارٍ المزامنة…'; }
     if (!d.open) d.showModal(); load(); } });
 }
 
