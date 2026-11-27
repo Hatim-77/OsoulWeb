@@ -810,12 +810,23 @@ function viewHistory() {
     return `<div class="h-it ${on ? 'on' : ''}"><div class="h-n">${esc(f.name)}</div><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div>${on ? '<span class="chip lo">في المقارنة</span>' : ''} <span class="chip">${KIND_AR[f.kind === 'toyota' ? 'toyota' : 'nissan']}</span><div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm" data-toggle="${f.id}">${on ? 'إزالة من المقارنة' : 'إضافة للمقارنة'}</button><button class="btn sm" data-kind="${f.id}">نقل إلى ${f.kind === 'toyota' ? 'نيسان' : 'تويوتا'}</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`;
   }).join('') + '</div>' : '<p class="note">لا توجد عروض محفوظة بعد. كل ملف ترفعه يُحفظ هنا تلقائياً لتعود إليه لاحقاً.</p>'}`;
 }
+let mineF = 'all'; const mkCache = new Map();
+/* شركة العرض: من اختيار صفحة «عرض سعر» إن وُجد، وإلا تُقدَّر من كلمات الأصناف (لا تُحفظ في العرض) */
+function mineK(f) {
+  if (QKIND[f.qk]) return f.qk;
+  const key = f.id + ':' + (f.rows ? f.rows.length : 0); if (mkCache.has(key)) return mkCache.get(key);
+  let t = 0, n = 0; (f.rows || []).slice(0, 4000).forEach(r => { const x = normAr((r || []).join(' ')); if (TOY_W.test(x)) t++; if (NIS_W.test(x)) n++; });
+  const k = t && n && Math.min(t, n) / Math.max(t, n) > 0.2 ? 'mixed' : t > n ? 'toyota' : 'nissan'; mkCache.set(key, k); return k;
+}
 function viewMine() {
-  const list = saved.filter(f => f.mine).sort((a, b) => (b.date || 0) - (a.date || 0));
+  const all = saved.filter(f => f.mine).sort((a, b) => (b.date || 0) - (a.date || 0)), cnt = { nissan: 0, toyota: 0, mixed: 0 }; all.forEach(f => cnt[mineK(f)]++);
+  if (mineF !== 'all' && !cnt[mineF]) mineF = 'all';
+  const list = mineF === 'all' ? all : all.filter(f => mineK(f) === mineF);
+  const fil = all.length ? `<div class="vfold" id="mine-fil">` + [['all', 'الكل', all.length], ['nissan', 'نيسان', cnt.nissan], ['toyota', 'تويوتا', cnt.toyota], ['mixed', 'نيسان وتويوتا معًا', cnt.mixed]].map(([k, l, n]) => `<button type="button" class="vf${mineF === k ? ' on' : ''}" data-mf="${k}">${l}<span class="n">${n}</span></button>`).join('') + '</div>' : '';
   return `<h2>عروضي</h2><p class="sub">هذا القسم لعروضنا نحن فقط، وهي عروض الأسعار التي تنشئها شركة أصول من صفحة «عرض سعر». ليس فيه عروض الشركات الموردة، ولا يدخل في أي مقارنة. وتظهر على أجهزتك عند تسجيل الدخول بحسابكم.</p>
   <div class="drop mini"><p>أضف عرضاً بصيغة PDF أو Excel أو CSV. يمكنك أيضاً سحب الملفات وإفلاتها في هذه الصفحة.</p><div><button class="btn primary" id="pick-mine">إضافة عرض</button></div></div>
-  ${delAllBtn('mine', list.length)}
-  ${list.length ? '<div class="hgrid">' + list.map(f => `<div class="h-it"><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم العرض"><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div>${f.qk && QKIND[f.qk] ? `<span class="chip">${QKIND[f.qk]}</span> ` : ''}${f.na ? '<span class="chip">وصل حديثًا</span> ' : ''}<div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`).join('') + '</div>' : '<p class="note">لا توجد عروض بعد. أضف أول عرض لشركتك.</p>'}`;
+  ${delAllBtn('mine', all.length)}${fil}
+  ${list.length ? '<div class="hgrid">' + list.map(f => `<div class="h-it"><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم العرض"><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div><span class="chip">${QKIND[mineK(f)]}</span> ${f.na ? '<span class="chip">وصل حديثًا</span> ' : ''}<div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`).join('') + '</div>' : '<p class="note">لا توجد عروض بعد. أضف أول عرض لشركتك.</p>'}`;
 }
 let toastT; const toast = m => { const t = $('#toast'); t.innerHTML = `<span>${esc(m)}</span>`; try { if (t.hidePopover) { try { t.hidePopover(); } catch (x) { } t.showPopover(); } } catch (x) { } clearTimeout(toastT); toastT = setTimeout(() => { t.innerHTML = ''; try { t.hidePopover && t.hidePopover(); } catch (x) { } }, Math.min(9000, 2600 + String(m).length * 45)); };
 
@@ -1276,6 +1287,7 @@ document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'acct-in') { lgMode(false); $('#login').showModal(); $('#lg-e').focus(); }
   else if (t.id === 'acct-out') { const sd = document.getElementById('set-d'); if (sd && sd.open) sd.close(); $('#lo-t').textContent = 'هل تريد تسجيل الخروج من حسابك؟ ' + (GATED ? 'ستعود إلى شاشة الدخول، وتبقى عروضك محفوظة في حسابك.' : 'ستتوقف مزامنة عروضك حتى تسجّل الدخول من جديد.'); $('#lo').showModal(); }
+  else if (t.dataset.mf) { mineF = t.dataset.mf; render(); }
   else if (t.dataset.open) openOffer(t.dataset.open);
   else if (t.dataset.page) { page = t.dataset.page; try { location.hash = page; } catch (x) { } render(); window.scrollTo(0, 0); }
   else if (t.id === 'pick') $('#file-in').click();
