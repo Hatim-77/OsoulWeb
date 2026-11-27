@@ -401,7 +401,7 @@ dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:a
 
 .gearb{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;height:32px;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--ink2);font:inherit;font-size:13px;cursor:pointer}
 .appver{margin-top:8px;text-align:center;font-size:11px;color:var(--ink3,#7d8590);opacity:.8}.gearb[hidden]{display:none}.gearb:hover{color:var(--ink);background:var(--panel2)}.gearb svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-#set-d .ua{display:flex;gap:8px;margin-top:8px}.addemp{border:1px dashed var(--line);border-radius:10px;padding:8px 12px;margin-bottom:10px}.addemp summary{cursor:pointer;font-weight:700;color:var(--ink)}.aef label{display:block;margin:10px 0 4px;font-size:13px;color:var(--ink2)}.aef input{width:100%;box-sizing:border-box}.aef .row{display:flex;gap:6px}.cred{border-color:#3fb27f;background:#14231d}.cred .cp{letter-spacing:.5px;user-select:all}#pw-d{max-width:420px;width:calc(100% - 24px)}#pw-d label{display:block;margin:12px 0 4px;font-size:13px;color:var(--ink2)}#pw-d input{width:100%;box-sizing:border-box}#pw-d .err{color:#ff8a80;font-size:13px;min-height:18px;margin-top:8px}#pw-d .f{padding:12px 16px;display:flex;justify-content:flex-end;border-top:1px solid var(--line)}
+#set-d .ua{display:flex;gap:8px;margin-top:8px}.addemp{border:1px dashed var(--line);border-radius:10px;padding:8px 12px;margin-bottom:10px}.addemp summary{cursor:pointer;font-weight:700;color:var(--ink)}.aef label{display:block;margin:10px 0 4px;font-size:13px;color:var(--ink2)}.aef input{width:100%;box-sizing:border-box}.aef .row{display:flex;gap:6px}.aef .pfx{display:flex;align-items:center;padding:0 12px;border:1px solid var(--line);border-radius:10px;color:var(--ink2);font-weight:700;direction:ltr}.cred{border-color:#3fb27f;background:#14231d}.cred .cp{letter-spacing:.5px;user-select:all}#pw-d{max-width:420px;width:calc(100% - 24px)}#pw-d label{display:block;margin:12px 0 4px;font-size:13px;color:var(--ink2)}#pw-d input{width:100%;box-sizing:border-box}#pw-d .err{color:#ff8a80;font-size:13px;min-height:18px;margin-top:8px}#pw-d .f{padding:12px 16px;display:flex;justify-content:flex-end;border-top:1px solid var(--line)}
 #set-d .sf{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink2)}#set-d .b{padding:14px 18px;max-height:70vh;overflow:auto}.sup{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;background:var(--panel2)}
 .sup .un{font-weight:700}.sup .ue{color:var(--ink2);font-size:12.5px;direction:ltr;text-align:right}
 .sup .pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px;margin-top:8px}
@@ -473,7 +473,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
     <button type="button" class="gearb" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button>
-    <div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 1.7</div>
+    <div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 1.9</div>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -481,7 +481,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
   </main>
 </div>
 <dialog id="offer"><div class="h"><b id="of-t"></b><button class="btn sm" id="of-x">إغلاق</button></div><div class="b"><div class="tool"><div class="grow"><input id="of-q" type="search" placeholder="ابحث في هذا العرض باسم الصنف أو رقمه" aria-label="بحث في العرض"></div><span class="note" id="of-c" style="margin:0"></span></div><div class="tw"><table><thead><tr><th>رقم الصنف</th><th>الصنف</th><th>الماركة</th><th>السعر</th></tr></thead><tbody id="of-b"></tbody></table></div></div></dialog>
-<dialog id="login"><div class="h"><b id="lg-t">تسجيل الدخول</b><button class="btn sm" id="lg-x">إغلاق</button></div><div class="b"><div class="seg" role="tablist"><button type="button" id="lg-m-in" class="on">لدي حساب</button><button type="button" id="lg-m-new">حساب جديد</button></div><p class="note" id="lg-h" style="margin:12px 0 0"></p><div id="lg-nm-w"><label for="lg-n">الاسم</label><input id="lg-n" type="text" autocomplete="name" style="direction:rtl"></div><label for="lg-e">البريد الإلكتروني</label><input id="lg-e" type="email" autocomplete="email" inputmode="email"><label for="lg-p">كلمة المرور</label><input id="lg-p" type="password" autocomplete="current-password"><div id="lg-c-w"><label for="lg-c">تأكيد كلمة المرور</label><input id="lg-c" type="password" autocomplete="new-password"></div><button type="button" id="lg-fg">نسيت كلمة المرور؟</button><div class="err" id="lg-err" role="alert"></div></div><div class="f"><button class="btn primary" id="lg-go">دخول</button></div></dialog>
+<dialog id="login"><div class="h"><b id="lg-t">تسجيل الدخول</b><button class="btn sm" id="lg-x">إغلاق</button></div><div class="b"><div class="seg" role="tablist"><button type="button" id="lg-m-in" class="on">لدي حساب</button><button type="button" id="lg-m-new">حساب جديد</button></div><p class="note" id="lg-h" style="margin:12px 0 0"></p><div id="lg-nm-w"><label for="lg-n">الاسم</label><input id="lg-n" type="text" autocomplete="name" style="direction:rtl"></div><label for="lg-e">رقم الجوال أو البريد الإلكتروني</label><input id="lg-e" type="text" autocomplete="username" dir="ltr" style="text-align:right"><label for="lg-p">كلمة المرور</label><input id="lg-p" type="password" autocomplete="current-password"><div id="lg-c-w"><label for="lg-c">تأكيد كلمة المرور</label><input id="lg-c" type="password" autocomplete="new-password"></div><button type="button" id="lg-fg">نسيت كلمة المرور؟</button><div class="err" id="lg-err" role="alert"></div></div><div class="f"><button class="btn primary" id="lg-go">دخول</button></div></dialog>
 <dialog id="lo"><div class="h"><b>تسجيل الخروج</b></div><div class="b"><p id="lo-t">هل تريد تسجيل الخروج من حسابك؟</p></div><div class="f"><button class="btn primary" id="lo-go" type="button">تسجيل الخروج</button><button class="btn" id="lo-no" type="button">إلغاء</button></div></dialog>
 <dialog id="kw"><div class="h"><b>تنبيه: نوع العرض</b><button class="btn sm" id="kw-x" type="button" aria-label="إلغاء رفع العرض">✕ إلغاء الرفع</button></div><div class="b"><p id="kw-t"></p></div><div class="f"><button class="btn primary" id="kw-mv" type="button">نقله إلى المقارنة الصحيحة</button><button class="btn" id="kw-ok" type="button">إبقاؤه هنا</button></div></dialog>
 <dialog id="reset"><div class="h"><b>تعيين كلمة مرور جديدة</b></div><div class="b"><p class="note" style="margin:0">اكتب كلمة المرور الجديدة مرتين، وبعدها يُسجَّل دخولك تلقائيًا.</p><label for="rs-p">كلمة المرور الجديدة</label><input id="rs-p" type="password" autocomplete="new-password"><label for="rs-c">تأكيد كلمة المرور</label><input id="rs-c" type="password" autocomplete="new-password"><div class="err" id="rs-err" role="alert"></div></div><div class="f"><button class="btn primary" id="rs-go">حفظ كلمة المرور</button></div></dialog>
@@ -1045,6 +1045,10 @@ const CLOUD = Object.assign({ url: 'https://vfolxamiflablfoekbhd.supabase.co', k
 const SESS_KEY = 'usool-sess-v1', SYNCED_KEY = 'usool-synced-v1';
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+/* الجوال كاسم دخول: يُحوَّل داخليًا إلى بريد غير ظاهر للمستخدم */
+const PH_DOM = '@osoul.app';
+const idToEmail = v => { v = String(v || '').trim(); if (v.includes('@')) return v.toLowerCase(); let d = v.replace(/[^0-9]/g, ''); if (d.startsWith('00')) d = d.slice(2); if (/^05\d{8}$/.test(d)) d = '966' + d.slice(1); else if (/^5\d{8}$/.test(d)) d = '966' + d; return d ? d + PH_DOM : ''; };
+const idShow = e => { e = String(e || ''); if (e.toLowerCase().endsWith(PH_DOM)) { const d = e.slice(0, -PH_DOM.length); return /^9665\d{8}$/.test(d) ? '0' + d.slice(3) : d; } return e; };
 const cloud = {
   on: !!(CLOUD.url && CLOUD.key), sess: null, state: 'idle', last: new Map(), timer: null, busy: false, again: false, namesStr: '',
   init() { try { this.sess = JSON.parse(lsGet(SESS_KEY) || 'null'); } catch (e) { this.sess = null; }
@@ -1065,6 +1069,7 @@ const cloud = {
     catch (e) { if (e.status === 400 || e.status === 401) { this.sess = null; lsSet(SESS_KEY, 'null'); this.state = 'expired'; renderAcct(); } throw e; }
   },
   async login(email, pw, create, name) {
+    email = idToEmail(email);
     const j = await this.http(create ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password', { method: 'POST', body: JSON.stringify(create ? { email, password: pw, data: { name: name || '' } } : { email, password: pw }) }, false);
     if (!j || !j.access_token) return 'confirm';
     this.setSess(j); this.last = new Map(); this.persist(); return 'ok';
@@ -1135,9 +1140,9 @@ function renderAcct() {
   if (!cloud.sess) { el.innerHTML = `<span>${cloud.state === 'expired' ? 'انتهت الجلسة، سجّل الدخول من جديد.' : 'لتظهر عروضك على كل أجهزتك'}</span><button class="btn primary" id="acct-in">تسجيل الدخول للمزامنة</button>`; return; }
   el.hidden = true; /* الحساب وحالة المزامنة وتسجيل الخروج داخل نافذة الإعدادات */
   const t = { ok: ['', 'متزامن'], wait: ['wait', 'جارٍ المزامنة…'], bad: ['bad', 'تعذرت المزامنة، سأعيد المحاولة'], idle: ['wait', 'جارٍ المزامنة…'] }[cloud.state] || ['', 'متزامن'];
-  el.innerHTML = `${cloud.sess.name ? `<div class="nm">${esc(cloud.sess.name)}</div>` : ''}<div class="em">${HIDE_ACC.includes(String(cloud.sess.email || '').toLowerCase()) ? 'الحساب الرئيسي' : esc(cloud.sess.email || '')}</div><div class="st ${t[0]}"><i></i>${t[1]}</div>${cloud.state === 'bad' && cloud.err ? `<div class="er">${esc(cloud.err)}</div>` : ''}<button class="btn sm link" id="acct-out">تسجيل الخروج</button>`;
+  el.innerHTML = `${cloud.sess.name ? `<div class="nm">${esc(cloud.sess.name)}</div>` : ''}<div class="em">${HIDE_ACC.includes(String(cloud.sess.email || '').toLowerCase()) ? 'الحساب الرئيسي' : esc(idShow(cloud.sess.email))}</div><div class="st ${t[0]}"><i></i>${t[1]}</div>${cloud.state === 'bad' && cloud.err ? `<div class="er">${esc(cloud.err)}</div>` : ''}<button class="btn sm link" id="acct-out">تسجيل الخروج</button>`;
 }
-const lgMsg = m => (/invalid login|invalid_credentials/i.test(m) ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة.' : /already|registered/i.test(m) ? 'هذا البريد مسجّل من قبل، اضغط «دخول».' : /password.*(least|short|weak)|weak/i.test(m) ? 'كلمة المرور ضعيفة، استخدم 6 أحرف على الأقل.' : /valid email|invalid.*email/i.test(m) ? 'البريد الإلكتروني غير صحيح.' : /failed to fetch|network/i.test(m) ? 'تعذر الاتصال بالخادم. تأكد من الإنترنت.' : /confirm/i.test(m) ? 'أكّد بريدك الإلكتروني من الرسالة المرسلة إليك ثم سجّل الدخول.' : 'تعذر تسجيل الدخول: ' + m);
+const lgMsg = m => (/invalid login|invalid_credentials/i.test(m) ? 'رقم الجوال أو البريد أو كلمة المرور غير صحيحة.' : /already|registered/i.test(m) ? 'هذا البريد مسجّل من قبل، اضغط «دخول».' : /password.*(least|short|weak)|weak/i.test(m) ? 'كلمة المرور ضعيفة، استخدم 6 أحرف على الأقل.' : /valid email|invalid.*email/i.test(m) ? 'البريد الإلكتروني غير صحيح.' : /failed to fetch|network/i.test(m) ? 'تعذر الاتصال بالخادم. تأكد من الإنترنت.' : /confirm/i.test(m) ? 'أكّد بريدك الإلكتروني من الرسالة المرسلة إليك ثم سجّل الدخول.' : 'تعذر تسجيل الدخول: ' + m);
 let lgNew = false;
 function lgMode(n) {
   lgNew = n; $('#lg-m-in').classList.toggle('on', !n); $('#lg-m-new').classList.toggle('on', n);
@@ -1147,7 +1152,7 @@ function lgMode(n) {
 }
 async function doLogin() {
   const e = $('#lg-e').value.trim(), p = $('#lg-p').value, er = $('#lg-err'); er.textContent = '';
-  if (!e || !p) { er.textContent = 'أدخل البريد الإلكتروني وكلمة المرور.'; return; }
+  if (!e || !p) { er.textContent = 'أدخل رقم الجوال أو البريد الإلكتروني وكلمة المرور.'; return; }
   if (lgNew) {
     if (p.length < 6) { er.textContent = 'كلمة المرور ضعيفة، استخدم 6 أحرف على الأقل.'; return; }
     if (p !== $('#lg-c').value) { er.textContent = 'كلمتا المرور غير متطابقتين.'; return; }
@@ -1166,7 +1171,8 @@ $('#lg-m-new').addEventListener('click', () => lgMode(true));
 $('#lg-go').addEventListener('click', doLogin);
 $('#lg-fg').addEventListener('click', async () => {
   const e = $('#lg-e').value.trim(), er = $('#lg-err'); er.textContent = '';
-  if (!e) { er.textContent = 'اكتب بريدك الإلكتروني أولًا ثم اضغط «نسيت كلمة المرور».'; $('#lg-e').focus(); return; }
+  if (!e) { er.textContent = 'اكتب رقم الجوال أو بريدك أولًا ثم اضغط «نسيت كلمة المرور».'; $('#lg-e').focus(); return; }
+  if (!e.includes('@')) { er.textContent = 'لحسابات الجوال: اطلب من مسؤول الحساب تعيين كلمة مرور جديدة لك.'; return; }
   $('#lg-fg').disabled = true;
   try { await cloud.http('/auth/v1/recover?redirect_to=' + encodeURIComponent(location.origin + location.pathname), { method: 'POST', body: JSON.stringify({ email: e }) }, false);
     $('#lg-h').textContent = 'إن كان هذا البريد مسجّلًا فقد أُرسل إليه رابط لتعيين كلمة مرور جديدة. افتح الرسالة واضغط الرابط (وتحقق من البريد غير الهام).'; }
@@ -9672,7 +9678,7 @@ applyPerms(); meLoad();
       const vis = (rows || []).filter(u => !HIDE_ACC.includes(String(u.email || '').toLowerCase())), mains = vis.filter(u => u.role === 'admin'), others = vis.filter(u => u.role !== 'admin');
       b.innerHTML = addForm + credCard() + '<p class="note" style="margin-top:0">الحساب الرئيسي يتحكم في صلاحيات بقية الحسابات: فعّل الأقسام المسموح بها لكل حساب، وألغِ التفعيل لسحب الصلاحية. يسري التغيير عند فتح الحساب الآخر للتطبيق من جديد.</p>'
         + mains.map(u => `<div class="sup adm"><div class="un">الحساب الرئيسي</div><div class="ue">${esc(u.email || '')}</div></div>`).join('')
-        + (others.length ? others.map(u => `<div class="sup" data-u="${esc(u.user_id)}"><div class="un">${esc(u.name || u.email || '')}</div><div class="ue">${esc(u.email || '')}</div><div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div><div class="ua"><button type="button" class="btn sm" data-adm="pw">كلمة مرور جديدة</button><button type="button" class="btn sm link" data-adm="del">حذف الحساب</button></div></div>`).join('') : '<p class="note">لا يوجد موظفون بعد. أضف موظفًا من النموذج أعلاه.</p>');
+        + (others.length ? others.map(u => `<div class="sup" data-u="${esc(u.user_id)}"><div class="un">${esc(u.name || idShow(u.email))}</div><div class="ue" dir="ltr" style="text-align:right">${esc(idShow(u.email))}</div><div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div><div class="ua"><button type="button" class="btn sm" data-adm="pw">كلمة مرور جديدة</button><button type="button" class="btn sm link" data-adm="del">حذف الحساب</button></div></div>`).join('') : '<p class="note">لا يوجد موظفون بعد. أضف موظفًا من النموذج أعلاه.</p>');
     } catch (e) { b.innerHTML = '<p class="note" style="color:var(--bad)">تعذر تحميل الحسابات. تأكد من تنفيذ ملف perms.sql في Supabase. (' + esc(String((e && e.message) || e).slice(0, 120)) + ')</p>'; } };
   document.addEventListener('click', e => { if (e.target.closest('[data-gear]')) { if (!d) { d = document.createElement('dialog'); d.id = 'set-d'; d.innerHTML = '<div class="h"><b>الإعدادات</b><button class="btn sm" type="button" data-sx="1">إغلاق</button></div><div class="b"></div><div class="sf"><span class="st" id="set-st"></span><span><button class="btn sm" type="button" id="pw-open">تغيير كلمة المرور</button> <button class="btn sm link" type="button" id="acct-out">تسجيل الخروج</button></span></div>'; document.body.appendChild(d); d.addEventListener('reloadlist', () => load());
       d.addEventListener('click', ev => { if (ev.target === d || ev.target.closest('[data-sx]')) d.close(); });
@@ -9686,24 +9692,24 @@ applyPerms(); meLoad();
 /* ---------- إدارة الموظفين (للحساب الرئيسي) وتغيير كلمة المرور ---------- */
 const genPw = () => { const c = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789', a = new Uint32Array(10); crypto.getRandomValues(a); return [...a].map(x => c[x % c.length]).join(''); };
 let lastCred = null;
-const credCard = () => lastCred ? `<div class="sup cred"><div class="un">${esc(lastCred.title)}</div><div class="ue">البريد: <b dir="ltr">${esc(lastCred.email)}</b></div><div class="ue">كلمة المرور المؤقتة: <b dir="ltr" class="cp">${esc(lastCred.pw)}</b></div><p class="note" style="margin:6px 0">سلّمها للموظف. يُطلب منه تغييرها عند أول دخول، ولا تظهر هنا مرة أخرى.</p><button type="button" class="btn sm" data-adm="copy">نسخ البيانات</button></div>` : '';
-const addForm = `<details class="addemp"><summary>+ إضافة موظف</summary><div class="aef"><label for="ae-n">الاسم</label><input id="ae-n" type="text" style="direction:rtl"><label for="ae-e">البريد الإلكتروني</label><input id="ae-e" type="email" inputmode="email" dir="ltr"><label for="ae-p">كلمة المرور المؤقتة (8 أحرف على الأقل)</label><div class="row"><input id="ae-p" type="text" dir="ltr" autocomplete="off"><button type="button" class="btn sm" data-adm="gen">توليد</button></div><button type="button" class="btn primary" data-adm="add" style="margin-top:10px">إنشاء الحساب</button></div></details>`;
+const credCard = () => lastCred ? `<div class="sup cred"><div class="un">${esc(lastCred.title)}</div><div class="ue">اسم الدخول: <b dir="ltr">${esc(idShow(lastCred.email))}</b></div><div class="ue">كلمة المرور المؤقتة: <b dir="ltr" class="cp">${esc(lastCred.pw)}</b></div><p class="note" style="margin:6px 0">سلّمها للموظف. يُطلب منه تغييرها عند أول دخول، ولا تظهر هنا مرة أخرى.</p><button type="button" class="btn sm" data-adm="copy">نسخ البيانات</button></div>` : '';
+const addForm = `<details class="addemp"><summary>+ إضافة موظف</summary><div class="aef"><label for="ae-n">الاسم</label><input id="ae-n" type="text" style="direction:rtl"><label for="ae-e">رقم الجوال (أكمل بعد 966: مثال 05xxxxxxxx أو 5xxxxxxxx)</label><div class="row" dir="ltr"><span class="pfx">+966</span><input id="ae-e" type="tel" inputmode="numeric" dir="ltr" placeholder="5xxxxxxxx" maxlength="11"></div><label for="ae-p">كلمة المرور المؤقتة (8 أحرف على الأقل)</label><div class="row"><input id="ae-p" type="text" dir="ltr" autocomplete="off"><button type="button" class="btn sm" data-adm="gen">توليد</button></div><button type="button" class="btn primary" data-adm="add" style="margin-top:10px">إنشاء الحساب</button></div></details>`;
 const adm = body => cloud.http('/functions/v1/admin-users', { method: 'POST', body: JSON.stringify(body) });
 const admErr = e => { const m = String((e && e.message) || e); return /404|not found|Failed to fetch|NetworkError/i.test(m) ? 'الدالة غير منشورة في Supabase بعد. راجع ملف admin-users.ts.' : m.slice(0, 160); };
 document.addEventListener('click', async ev => {
   const t = ev.target.closest('[data-adm]'); if (!t) return; const act = t.dataset.adm, dlg = document.getElementById('set-d'); if (!dlg) return;
   const reload = () => dlg.querySelector('.b') && (dlg.querySelector('.b').dispatchEvent(new CustomEvent('reload')));
   if (act === 'gen') { dlg.querySelector('#ae-p').value = genPw(); return; }
-  if (act === 'copy') { try { await navigator.clipboard.writeText('البريد: ' + lastCred.email + '\nكلمة المرور المؤقتة: ' + lastCred.pw); toast('نُسخت بيانات الدخول'); } catch (e) { toast('تعذر النسخ، انسخها يدويًا'); } return; }
+  if (act === 'copy') { try { await navigator.clipboard.writeText('اسم الدخول: ' + idShow(lastCred.email) + '\nكلمة المرور المؤقتة: ' + lastCred.pw); toast('نُسخت بيانات الدخول'); } catch (e) { toast('تعذر النسخ، انسخها يدويًا'); } return; }
   t.disabled = true;
   try {
     if (act === 'add') {
-      const name = dlg.querySelector('#ae-n').value.trim(), email = dlg.querySelector('#ae-e').value.trim(), pw = dlg.querySelector('#ae-p').value;
-      if (!email || pw.length < 8) { toast('اكتب البريد وكلمة مرور من 8 أحرف على الأقل'); t.disabled = false; return; }
-      await adm({ action: 'create', name, email, password: pw }); lastCred = { title: 'تم إنشاء حساب ' + (name || email), email, pw }; toast('أُنشئ الحساب');
+      const name = dlg.querySelector('#ae-n').value.trim(), email = (() => { const d = dlg.querySelector('#ae-e').value.replace(/[^0-9]/g, '').replace(/^(966|00966|0)+/, ''); return /^5\d{8}$/.test(d) ? '966' + d + PH_DOM : ''; })(), pw = dlg.querySelector('#ae-p').value;
+      if (!email || pw.length < 8) { toast(!email ? 'رقم الجوال غير صحيح. اكتب 9 أرقام تبدأ بـ 5، مثل 05xxxxxxxx' : 'كلمة المرور 8 أحرف على الأقل'); t.disabled = false; return; }
+      await adm({ action: 'create', name, email, password: pw }); lastCred = { title: 'تم إنشاء حساب ' + (name || idShow(email)), email, pw }; toast('أُنشئ الحساب');
     } else if (act === 'pw') {
       const card = t.closest('.sup'), pw = genPw(); if (!confirm('تعيين كلمة مرور جديدة لهذا الموظف؟ ستتوقف كلمته الحالية.')) { t.disabled = false; return; }
-      await adm({ action: 'setpw', id: card.dataset.u, password: pw }); lastCred = { title: 'كلمة مرور جديدة لـ ' + card.querySelector('.un').textContent, email: card.querySelector('.ue').textContent, pw };
+      await adm({ action: 'setpw', id: card.dataset.u, password: pw }); lastCred = { title: 'كلمة مرور جديدة لـ ' + card.querySelector('.un').textContent, email: idToEmail(card.querySelector('.ue').textContent), pw };
     } else if (act === 'del') {
       const card = t.closest('.sup'); if (!confirm('حذف حساب «' + card.querySelector('.un').textContent + '» نهائيًا؟ لا يمكن التراجع، وتبقى بيانات الشركة كما هي.')) { t.disabled = false; return; }
       await adm({ action: 'delete', id: card.dataset.u }); lastCred = null; toast('حُذف الحساب');
