@@ -217,8 +217,8 @@ dialog .h b{font-family:var(--font-display);font-size:18px;font-weight:600}
 dialog textarea{min-height:260px;direction:ltr;text-align:left;font-family:ui-monospace,Consolas,monospace;font-size:13px}
 dialog .b{padding:16px 18px}
 dialog .f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px}
-.toast{position:fixed;inset-inline:0;bottom:22px;display:flex;justify-content:center;pointer-events:none}
-.toast span{background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:99px;font-size:14px}
+.toast{position:fixed;inset-inline:0;bottom:22px;display:flex;justify-content:center;pointer-events:none;z-index:2147483000;padding:0 12px}
+.toast span{background:#f3f1ea;color:#15181c;padding:10px 18px;border-radius:16px;font-size:14px;font-weight:700;line-height:1.6;max-width:min(560px,100%);text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.55);border:1px solid #d8d4c8}
 
 .tabs{display:flex;flex-direction:column;gap:2px}
 .tabs button{display:flex;align-items:center;gap:9px;width:100%;background:transparent;border:0;border-radius:9px;padding:7px 11px;color:var(--ink2);cursor:pointer;font-weight:600;font-size:14.5px;text-align:start}
@@ -450,6 +450,7 @@ dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:a
 @media screen{.qfold.pv{margin-bottom:16px}}
 #dl-d[open]{display:flex;flex-direction:column;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}#dl-d .h,#dl-d .f{flex:none}#dl-d .b{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto}#dl-d .f.dla{flex-wrap:wrap}
 .vfold{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.vf{background:var(--panel);border:1px solid var(--line);color:inherit;font:inherit;font-size:13px;padding:6px 12px;border-radius:18px;cursor:pointer}.vf.on{border-color:#e03b3b;color:#fff;background:#2a1a1a}.vf .n{margin-inline-start:6px;color:#8a8f96;font-size:12px}.vfnew{display:inline-flex;gap:6px;align-items:center}.vfnew input{width:160px;padding:6px 10px;font-size:13px}.vf.del{border-color:#6b2a2a;color:#ff8a8a;margin-inline-start:auto}.vf.add{border-style:dashed;color:#9aa0a8}
+.vmv{width:100%;margin-top:2px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;font-size:12.5px}.vf.drop{border-color:#3fb27f;background:#1d2e26}.vc[draggable=true]{cursor:grab}
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.vc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}.vt{display:flex;align-items:center;justify-content:center;height:110px;background:#0f1113;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0}.vt img{width:100%;height:100%;object-fit:cover}.vx{font-weight:800;font-size:20px;color:#9aa0a8;letter-spacing:1px}.vn{font-size:13px;padding:6px 8px}.vm{font-size:11.5px;color:#8a8f96}.vb{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 #v-view{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(960px,calc(100vw - 20px));max-width:none}#v-view[open]{display:flex;flex-direction:column;height:calc(100dvh - 24px)}#v-view .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}#v-view .h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#v-view .b{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}#v-view::backdrop{background:rgba(0,0,0,.65)}.vpdf{width:100%;height:100%;border:0;background:#fff}.vimg{max-width:100%;max-height:100%;object-fit:contain}
 .file .fh{flex-wrap:wrap;row-gap:8px}.file .fh input.nm{flex:1 1 calc(100% - 46px);min-width:120px}.file .btn.rm{flex:none}
@@ -602,13 +603,14 @@ function repaired(f) {
   const out = bad ? f.rows.map((r, i) => { if (i <= f.hdr) return r; const m = String(r[1]).trim().match(CODE); return m ? [m[1], m[2], r[2], r[0]] : r; }) : f.rows;
   fixCache.set(f.rows, out); return out;
 }
-function itemsOf(f) {
+function itemsOf(f, np) {
   const m = f.map, out = [], rows = repaired(f);
   for (let i = f.hdr + 1; i < rows.length; i++) {
     const r = rows[i], g = k => m[k] >= 0 ? (r[m[k]] ?? '') : '';
     const price = toNum(g('price')), no = cleanTxt(g('no')), desc = cleanTxt(g('desc'));
-    if (!(no || desc) || !(price > 0)) continue;
-    out.push({ no, desc: desc || no, brand: cleanTxt(g('brand')), price, i });
+    if (!(no || desc) || (!(price > 0) && !np)) continue;
+    if (np && !(price > 0)) { const hw = /^(رقم|رقم القطع[ةه]|رقم الصنف|الصنف|الاصناف|الوصف|البيان|اسم الصنف|الاسم|part\s*no\.?|description|item)$/i, a1 = normAr(no), b1 = normAr(desc); if ((!a1 || hw.test(a1)) && (!b1 || hw.test(b1))) continue; }
+    out.push({ no, desc: desc || no, brand: cleanTxt(g('brand')), price: price > 0 ? price : 0, i });
   }
   return out;
 }
@@ -674,8 +676,22 @@ function rowsFromCells(lines) {
     const desc = rc.map(c => c.t).join(' ') || no;
     out.push([no, desc, brand, price]);
   });
-  if (out.length < 2) return [];
+  if (out.length < 2) return rowsNoPrice(lines);
   out.sig = hsig; return out;
+}
+/* ملف بلا أسعار: تُقرأ الأرقام والأسماء فقط ويُترك السعر فارغًا */
+function rowsNoPrice(lines) {
+  const out = [['رقم القطعة', 'الوصف', 'الماركة', 'السعر']];
+  lines.forEach(line => {
+    let rc = line.map(c => ({ t: String(c.t || '').trim(), c: c.c })).filter(c => c.t); if (!rc.length) return;
+    let no = ''; const ni = rc.findIndex(c => CODECELL.test(c.t) && /\d/.test(c.t) && /[-\/]|^[A-Za-z]/.test(c.t)); if (ni >= 0) { no = rc[ni].t; rc.splice(ni, 1); }
+    rc = rc.filter(c => !/^\d{1,3}$/.test(c.t)); if (rc.length > 1) rc.sort((a, b) => b.c - a.c);
+    const desc = rc.map(c => c.t).join(' ').trim();
+    if (!no && (line.length < 2 || desc.length < 8 || !/[؀-ۿ]{3,}/.test(desc))) return;
+    out.push([no, desc || no, '', '']);
+  });
+  if (out.length < 2) return [];
+  out.sig = ''; out.noprice = true; return out;
 }
 async function pdfToRows(buf) {
   if (typeof pdfjsLib === 'undefined') throw new Error('nopdf');
@@ -749,7 +765,7 @@ function viewMine() {
   ${delAllBtn('mine', list.length)}
   ${list.length ? '<div class="hgrid">' + list.map(f => `<div class="h-it"><input class="nm" type="text" value="${esc(f.name)}" data-name="${f.id}" aria-label="اسم العرض"><div class="h-m">${fmtWhen(f.date)} · ${itemsOf(f).length} صنف</div>${f.qk && QKIND[f.qk] ? `<span class="chip">${QKIND[f.qk]}</span> ` : ''}${f.na ? '<span class="chip">وصل حديثًا</span> ' : ''}<div class="h-a"><button class="btn sm" data-open="${f.id}">فتح العرض</button><button class="btn sm link" data-purge="${f.id}">${armed === f.id ? 'تأكيد الحذف' : 'حذف'}</button></div></div>`).join('') + '</div>' : '<p class="note">لا توجد عروض بعد. أضف أول عرض لشركتك.</p>'}`;
 }
-let toastT; const toast = m => { const t = $('#toast'); t.innerHTML = `<span>${esc(m)}</span>`; clearTimeout(toastT); toastT = setTimeout(() => t.innerHTML = '', 2600); };
+let toastT; const toast = m => { const t = $('#toast'); t.innerHTML = `<span>${esc(m)}</span>`; clearTimeout(toastT); toastT = setTimeout(() => t.innerHTML = '', Math.min(9000, 2600 + String(m).length * 45)); };
 
 /* ---------- جمع الأصناف المتطابقة من كل الملفات ---------- */
 /* بلد الصنع: ياباني/ماليزي/صيني... يُقرأ من الوصف أو عمود الماركة. القطعة اليابانية غير الماليزية فلا تُدمجان */
@@ -1370,11 +1386,11 @@ async function qImport(list) {
   for (const f of list) {
     const r = await fileToRows(f); if (!r) continue;
     const rows = r.rows.filter(x => x.some(c => String(c ?? '').trim() !== '')), g = guessMap(rows);
-    itemsOf({ rows, hdr: g.hdr, map: g.map }).forEach(it => { Q.items.push({ id: uid(), on: true, no: it.no, desc: it.desc, brand: it.brand || '', qty: 1, price: it.price }); n++; });
+    itemsOf({ rows, hdr: g.hdr, map: g.map }, true).forEach(it => { Q.items.push({ id: uid(), on: true, no: it.no, desc: it.desc, brand: it.brand || '', qty: 1, price: it.price }); n++; });
   }
   if (!n) qUndo.pop();
   if (!Q.no) Q.no = qNewNo();
-  toast(n ? 'أُضيف ' + n + ' صنف إلى العرض. للتراجع اضغط «تراجع»' + (qWarn() ? '. ' + qWarn() : '') : 'لم أجد أصنافاً بأسعار في الملف');
+  toast(n ? 'أُضيف ' + n + ' صنف إلى العرض. للتراجع اضغط «تراجع»' + (qWarn() ? '. ' + qWarn() : '') : 'لم أجد أصنافاً في الملف');
   if (page === 'quote') render();
 }
 /* قاعدة بيانات القطع (نيسان وتويوتا) للإكمال التلقائي عند إضافة الأصناف يدوياً: رقم القطعة ⇥ الاسم ⇥ السعر ⇥ النوع */
@@ -9392,7 +9408,7 @@ function vGrid() {
   if (!list.length) { g.innerHTML = `<p class="note">${V.items.length ? 'لا توجد ملفات مطابقة.' : 'المخزن فارغ. اضغط «رفع ملفات» لإضافة أول ملف.'}</p>`; return; }
   g.innerHTML = '<div class="vgrid">' + list.map(i => {
     const u = V.urls[i.id], img = vIsImg(i) && u ? `<img src="${esc(u.u)}" alt="" loading="lazy">` : `<span class="vx">${esc((String(i.name).split('.').pop() || '').slice(0, 4).toUpperCase())}</span>`;
-    return `<div class="vc" data-id="${i.id}"><button type="button" class="vt" data-vact="open" aria-label="فتح الملف">${img}</button><input class="nm vn" value="${esc(i.name)}" data-vname="${i.id}" aria-label="اسم الملف"><div class="vm">${esc(i.folder || 'عام')} · ${vSize(+i.size || 0)} · ${fmtWhen(Date.parse(i.created_at))}</div><div class="vb">${vIsImg(i) ? '<button type="button" class="btn sm" data-vact="open">عرض</button>' : ''}<button type="button" class="btn sm" data-vact="dl">تنزيل</button><button type="button" class="btn sm link" data-vact="del">حذف</button></div></div>`;
+    return `<div class="vc" data-id="${i.id}" draggable="true"><button type="button" class="vt" data-vact="open" aria-label="فتح الملف">${img}</button><input class="nm vn" value="${esc(i.name)}" data-vname="${i.id}" aria-label="اسم الملف"><div class="vm">${esc(i.folder || 'عام')} · ${vSize(+i.size || 0)} · ${fmtWhen(Date.parse(i.created_at))}</div><div class="vb">${vIsImg(i) ? '<button type="button" class="btn sm" data-vact="open">عرض</button>' : ''}<button type="button" class="btn sm" data-vact="dl">تنزيل</button><button type="button" class="btn sm link" data-vact="del">حذف</button></div><select class="vmv" data-vmove="${i.id}" aria-label="نقل إلى مجلد"><option value="">نقل إلى مجلد...</option>${vFolders().filter(k => k !== (i.folder || 'عام')).map(k => `<option value="${esc(k)}">${esc(k)}</option>`).join('')}</select></div>`;
   }).join('') + '</div>';
   /* صور لم تُوقَّع بعد */
   const miss = list.filter(i => vIsImg(i) && !V.urls[i.id]); if (miss.length) vSign(miss).then(() => { if (page === 'vault') vGridSoft(); });
@@ -9443,6 +9459,16 @@ async function vView(it, url) {
     else { d.close(); toast('لا تتوفر معاينة لهذا النوع، استخدم «تنزيل»'); }
   } catch (e) { d.close(); toast('تعذر فتح الملف'); }
 }
+/* نقل ملف إلى مجلد آخر (من القائمة أو بسحبه على اسم المجلد) */
+async function vMove(id, folder) {
+  const it = V.items.find(x => x.id === id); if (!it || (it.folder || 'عام') === folder) return;
+  try { await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: JSON.stringify({ folder }) }); it.folder = folder; V.extra.add(folder); vSaveF(); vGrid(); toast('نُقل الملف إلى «' + folder + '»'); }
+  catch (e) { toast('تعذر النقل: ' + vErr(e)); }
+}
+document.addEventListener('dragstart', e => { const c = e.target.closest && e.target.closest('.vc'); if (c) { e.dataTransfer.setData('text/plain', c.dataset.id); e.dataTransfer.effectAllowed = 'move'; } });
+document.addEventListener('dragover', e => { const f = e.target.closest && e.target.closest('.vf[data-f]'); if (f && f.dataset.f && V.items.length) { e.preventDefault(); f.classList.add('drop'); } });
+document.addEventListener('dragleave', e => { const f = e.target.closest && e.target.closest('.vf'); if (f) f.classList.remove('drop'); });
+document.addEventListener('drop', e => { const f = e.target.closest && e.target.closest('.vf[data-f]'); if (!f || !f.dataset.f) return; e.preventDefault(); f.classList.remove('drop'); const id = e.dataTransfer.getData('text/plain'); if (id) vMove(id, f.dataset.f); });
 document.addEventListener('click', async e => {
   const t = e.target.closest('[data-vact]'); if (!t) return; const a = t.dataset.vact, card = t.closest('.vc'), it = card && V.items.find(x => x.id === card.dataset.id);
   if (a === 'pick') $('#v-in').click();
@@ -9480,6 +9506,7 @@ document.addEventListener('click', async e => {
 document.addEventListener('change', async e => {
   const t = e.target;
   if (t.id === 'v-in') { const l = [...t.files]; t.value = ''; if (l.length) vUpload(l); }
+  else if (t.dataset && t.dataset.vmove) { const f = t.value; t.value = ''; if (f) vMove(t.dataset.vmove, f); }
   else if (t.dataset && t.dataset.vname) {
     const it = V.items.find(x => x.id === t.dataset.vname), n = t.value.trim(); if (!it) return; if (!n) { t.value = it.name; return; } if (n === it.name) return;
     try { await cloud.http('/rest/v1/vault_files?id=eq.' + encodeURIComponent(it.id), { method: 'PATCH', body: JSON.stringify({ name: n }) }); it.name = n; toast('تم تغيير الاسم'); } catch (e2) { t.value = it.name; toast('تعذر تغيير الاسم: ' + vErr(e2)); }
