@@ -275,7 +275,7 @@ html[data-theme="light"] .qmenu{background:#fff;border-color:#d9dce0;box-shadow:
 html[data-theme="light"] .qmenu button{color:#15181c}
 html[data-theme="light"] .qmenu button:hover,html[data-theme="light"] .qmenu button:focus-visible{background:#f1f3f5}
 html[data-theme="light"] tbody tr:hover td,html[data-theme="light"] tbody tr:hover td:first-child{background:#eef2f6}
-html[data-theme="light"] .cred{background:#e8f6ef;border-color:#3fb27f}
+html[data-theme="light"] #intro .i1{color:#0b0b0b}html[data-theme="light"] .cred{background:#e8f6ef;border-color:#3fb27f}
 html[data-theme="light"] .vf.on{background:#fdecea;color:var(--ink)}
 html[data-theme="light"] .vf.drop{background:#e6f5ec}
 html[data-theme="light"] .vt{background:#eceff2}
@@ -362,7 +362,7 @@ body{max-width:100%}
 .cat .tw th:first-child,.cat .tw td:first-child{touch-action:pan-y}
 /* منع سحب الصفحة كلها (الارتداد) وإبقاء القوائم المنبثقة داخل شاشة الجوال */
 html,body{overscroll-behavior:none}
-dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;max-width:calc(100vw - 12px)}
+dialog:modal{inset-block:env(safe-area-inset-top) env(safe-area-inset-bottom)}dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;max-width:calc(100vw - 12px)}
 .qmenu{max-height:min(60vh,420px);max-height:min(60dvh,420px);overflow-y:auto;overscroll-behavior:contain;max-width:calc(100vw - 24px)}
 
 @media (min-width:1500px){.main{max-width:1500px}}
@@ -487,10 +487,13 @@ dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:a
 .vfold{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}.vf{background:var(--panel);border:1px solid var(--line);color:inherit;font:inherit;font-size:13px;padding:6px 12px;border-radius:18px;cursor:pointer}.vf.on{border-color:#e03b3b;color:#fff;background:#2a1a1a}.vf .n{margin-inline-start:6px;color:#8a8f96;font-size:12px}.vfnew{display:inline-flex;gap:6px;align-items:center}.vfnew input{width:160px;padding:6px 10px;font-size:13px}.vf.del{border-color:#6b2a2a;color:#ff8a8a;margin-inline-start:auto}.vf.add{border-style:dashed;color:#9aa0a8}
 .vmv{width:100%;margin-top:2px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;font-size:12.5px}.vf.drop{border-color:#3fb27f;background:#1d2e26}.vc[draggable=true]{cursor:grab}
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.vc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}.vt{display:flex;align-items:center;justify-content:center;height:110px;background:#0f1113;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0}.vt img{width:100%;height:100%;object-fit:cover}.vx{font-weight:800;font-size:20px;color:#9aa0a8;letter-spacing:1px}.vn{font-size:13px;padding:6px 8px}.vm{font-size:11.5px;color:#8a8f96}.vb{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-#v-view{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(960px,calc(100vw - 20px));max-width:none}#v-view[open]{display:flex;flex-direction:column;height:calc(100dvh - 24px)}#v-view .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}#v-view .h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#v-view .b{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}#v-view::backdrop{background:rgba(0,0,0,.65)}.vpdf{width:100%;height:100%;border:0;background:#fff}.vimg{max-width:100%;max-height:100%;object-fit:contain}
+#v-view{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(960px,calc(100vw - 20px));max-width:none}#v-view[open]{display:flex;flex-direction:column;height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}#v-view .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}#v-view .h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#v-view .b{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}#v-view::backdrop{background:rgba(0,0,0,.65)}.vpdf{width:100%;height:100%;border:0;background:#fff}.vimg{max-width:100%;max-height:100%;object-fit:contain}
+.impon{padding-top:38px}#imp-bar{position:fixed;top:0;inset-inline:0;z-index:100000;height:38px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 12px;padding-top:env(safe-area-inset-top);box-sizing:content-box;background:#d8332a;color:#fff;font-size:13.5px;font-weight:700}#imp-bar button{background:#fff;color:#b3261e;border:0;border-radius:8px;font:inherit;font-weight:800;font-size:13px;padding:6px 12px;cursor:pointer}.impon .brand{top:calc(38px + env(safe-area-inset-top))!important}
 .vtip{margin:8px 0 0;font-size:12.5px;color:var(--ink3,#7d8590);line-height:1.7}.vcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:10px 0 0}.vcr{background:none;border:0;color:var(--ink2);font:inherit;font-size:14px;padding:6px 8px;border-radius:8px;cursor:pointer}.vcr:hover{background:var(--panel2)}.vcr.on{color:var(--ink);font-weight:700}.vcr.drop{background:rgba(63,178,127,.2)}.vcrumb .sep{color:var(--ink3,#7d8590)}
 .vr{display:flex;align-items:center;gap:4px;min-width:0}.vn2{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vdots{flex:none;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:none;border:0;border-radius:8px;color:var(--ink2);cursor:pointer;padding:0}.vdots:hover{background:var(--panel2);color:var(--ink)}.vdots svg{width:18px;height:18px;fill:currentColor}.vdots.tb{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:10px}
 .vt.fd{color:#e0a73b}.vt.fd svg{width:54px;height:54px;fill:rgba(224,167,59,.18);stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}.vfc.drop{border-color:#3fb27f;background:rgba(63,178,127,.12)}
+@media (hover:hover){.vc:hover{border-color:#d8332a!important;box-shadow:0 0 0 2px rgba(216,51,42,.55)}.vcr:hover,.vpi:hover,.vdots:hover{box-shadow:0 0 0 2px #d8332a}#v-menu button:hover{box-shadow:inset 0 0 0 2px #d8332a}}
+.vc:active,.vpi:active,#v-menu button:active,.vdots:active{box-shadow:0 0 0 2px #d8332a}
 #v-menu{position:fixed;z-index:200;min-width:190px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.45);padding:5px;display:flex;flex-direction:column}#v-menu button{background:none;border:0;color:var(--ink);font:inherit;font-size:14.5px;text-align:start;padding:10px 12px;border-radius:8px;cursor:pointer}#v-menu button:hover{background:var(--panel2)}#v-menu button.bad{color:#ff6b6b}
 #v-dlg{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:16px;width:min(420px,calc(100vw - 24px))}#v-dlg::backdrop{background:rgba(0,0,0,.6)}.vq{display:flex;flex-direction:column;gap:12px}.vq p{margin:0;color:var(--ink2);line-height:1.8}.vq .r{display:flex;gap:8px;justify-content:flex-start}.vq .danger{background:#c52b22;border-color:#c52b22}
 .vpick{max-height:50vh;overflow:auto;display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:10px;padding:4px}.vpi{display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--ink);font:inherit;padding:10px 12px;border-radius:8px;cursor:pointer;text-align:start}.vpi:hover{background:var(--panel2)}.vpi svg{width:18px;height:18px;fill:none;stroke:#e0a73b;stroke-width:1.8;flex:none}
@@ -1092,7 +1095,8 @@ $('#of-q').addEventListener('input', () => { focusI = null; fillOffer(); });
 /* ---------- المزامنة بين الأجهزة (Supabase) ---------- */
 /* بعد إنشاء مشروع Supabase ضع هنا عنوانه والمفتاح العام (anon). اتركهما فارغين ليعمل الموقع على هذا الجهاز فقط. */
 const CLOUD = Object.assign({ url: 'https://vfolxamiflablfoekbhd.supabase.co', key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmb2x4YW1pZmxhYmxmb2VrYmhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0MjY3NjEsImV4cCI6MjExMTAwMjc2MX0.ffmy79luRsRHI32HqvNEtDWKG0WMv4YJoa9f8yPBG5s' }, window.USOOL_CLOUD || {});
-const SESS_KEY = 'usool-sess-v1', SYNCED_KEY = 'usool-synced-v1';
+const HIDE_ACC = ['hatimwork4@gmail.com'];
+const IMP_KEY = 'usool-imp-v1', SESS_KEY = 'usool-sess-v1', SYNCED_KEY = 'usool-synced-v1';
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
 /* الجوال كاسم دخول: يُحوَّل داخليًا إلى بريد غير ظاهر للمستخدم */
@@ -9473,8 +9477,23 @@ async function vLoad(force) {
   catch (e) { V.err = vErr(e); }
   V.loading = false; vGrid(); vUsage();
 }
+let vSyncBusy = 0;
+/* تحديث هادئ للمخزن كل بضع ثوانٍ: يظهر حذف ورفع ونقل الملفات من الأجهزة الأخرى دون وميض */
+async function vSyncQuiet() {
+  if (vSyncBusy || V.loading || V.up || !V.loaded || !cloud.on || !cloud.sess || page !== 'vault' || document.hidden) return;
+  const dlg = document.querySelector('dialog[open]'); if (dlg) return;
+  vSyncBusy = 1;
+  try {
+    const r = (await cloud.http('/rest/v1/vault_files?select=id,name,folder&order=created_at.desc')) || [], k = x => x.id + '|' + x.name + '|' + (x.folder || '');
+    if (r.map(k).join('~') !== V.items.map(k).join('~')) {
+      const full = (await cloud.http('/rest/v1/vault_files?select=*&order=created_at.desc')) || []; await vSign(full.filter(vIsImg)); V.items = full; vMenuClose(); vGrid();
+    }
+  } catch (e) { }
+  vSyncBusy = 0;
+}
+setInterval(vSyncQuiet, 6000); document.addEventListener('visibilitychange', () => { if (!document.hidden) vSyncQuiet(); });
 function vInit() { vGrid(); vUsage(); vLoad(); }
-function vUsage() { const u = $('#v-use'); if (u) u.textContent = V.loaded ? V.items.length + ' ملف · المستخدم ' + vSize(V.items.reduce((a, i) => a + (+i.size || 0), 0)) : ''; }
+function vUsage() { }
 const vFold = i => i.folder || 'عام';
 const vPar = p => { const k = p.lastIndexOf('/'); return k < 0 ? '' : p.slice(0, k); };
 const vLeaf = p => p.slice(p.lastIndexOf('/') + 1);
@@ -9493,7 +9512,7 @@ function viewVault() {
   if (!cloud.sess) return head + '<p class="sub">المخزن لحفظ ملفاتك وصورك وتصفحها من أي جهاز. سجّل الدخول أولًا.</p><button class="btn primary" id="acct-in">تسجيل الدخول</button>';
   return head + `<div class="tool"><div class="grow"><input id="v-q" type="search" placeholder="ابحث باسم ملف أو مجلد" aria-label="بحث في المخزن" value="${esc(V.q)}"></div>
     <button class="btn primary" data-vact="pick">رفع ملفات</button><button type="button" class="vdots tb" data-vact="menu" data-k="g" aria-label="خيارات المخزن" title="خيارات">${ICO.dots}</button><input type="file" id="v-in" multiple hidden></div>
-  <nav class="vcrumb" id="v-crumb" aria-label="مسار المجلد"></nav><p class="vtip">اضغط على أي ملف لفتحه (صور وملفات PDF تُفتح داخل التطبيق). ومن زر ⋮ بجانب كل ملف أو مجلد: إعادة التسمية والنقل والحذف وإنشاء مجلدات فرعية.</p><p class="note" id="v-use" style="margin:4px 0 12px"></p><div id="v-grid"></div>`;
+  <nav class="vcrumb" id="v-crumb" aria-label="مسار المجلد"></nav><p class="vtip">اضغط على أي ملف لفتحه (صور وملفات PDF تُفتح داخل التطبيق). ومن زر ⋮ بجانب كل ملف أو مجلد: إعادة التسمية والنقل والحذف وإنشاء مجلدات فرعية.</p><div id="v-grid"></div>`;
 }
 function vCrumb() {
   const c = $('#v-crumb'); if (!c) return;
@@ -9553,13 +9572,13 @@ async function vView(it, url) {
   let d = document.getElementById('v-view');
   if (!d) { d = document.createElement('dialog'); d.id = 'v-view'; document.body.appendChild(d); d.addEventListener('click', e => { if (e.target === d) d.close(); }); d.addEventListener('close', () => { vTok++; if (vObj) { URL.revokeObjectURL(vObj); vObj = ''; } d.innerHTML = ''; }); }
   const my = ++vTok, isPdf = /pdf/i.test(it.mime || '') || /\.pdf$/i.test(it.name), img = vIsImg(it);
-  d.innerHTML = `<div class="h"><button type="button" class="vback" data-vx="x" aria-label="رجوع" title="رجوع"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>رجوع</span></button><b>${esc(it.name)}</b><span class="vhb"><button type="button" class="btn sm" data-vx="dl">تنزيل</button></span></div><div class="b" id="v-vb"><p class="note">جارٍ التحميل...</p></div>`;
+  d.innerHTML = `<div class="h"><button type="button" class="vback" data-vx="x" aria-label="رجوع" title="رجوع"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>رجوع</span></button><b>${esc(it.name)}</b><span class="vhb">${isPdf ? '<a class="btn sm" data-vx="ext" target="_blank" rel="noopener">فتح بعارض الجهاز</a>' : ''}<button type="button" class="btn sm" data-vx="dl">تنزيل</button></span></div><div class="b" id="v-vb"><p class="note">جارٍ التحميل...</p></div>`;
   d.querySelector('[data-vx=x]').onclick = () => d.close(); d.querySelector('[data-vx=dl]').onclick = () => vDownload(it);
   if (!d.open) d.showModal();
   try {
     const r = await fetch(url); if (!r.ok) throw new Error('http ' + r.status);
     let b = await r.blob(); if (my !== vTok) return; if (isPdf) b = new Blob([b], { type: 'application/pdf' });
-    vObj = URL.createObjectURL(b); const box = d.querySelector('#v-vb');
+    vObj = URL.createObjectURL(b); const box = d.querySelector('#v-vb'), ex = d.querySelector('[data-vx=ext]'); if (ex) ex.href = vObj;
     if (img) { box.innerHTML = `<img src="${vObj}" alt="" class="vimg">`; return; }
     if (isPdf) {
       /* عرض صفحات الـ PDF بمكتبة pdf.js ليعمل على أندرويد وآيفون وسطح المكتب */
@@ -9567,9 +9586,9 @@ async function vView(it, url) {
       if (!native && window.pdfjsLib) {
         try {
           pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-          const doc = await pdfjsLib.getDocument({ data: new Uint8Array(await b.arrayBuffer()) }).promise; if (my !== vTok) return;
+          const doc = await pdfjsLib.getDocument({ data: new Uint8Array(await b.arrayBuffer()), disableFontFace: true, useSystemFonts: false }).promise; if (my !== vTok) return;
           box.classList.add('pg'); box.innerHTML = '';
-          const W = Math.max(280, box.clientWidth - 16), dpr = Math.min(2, window.devicePixelRatio || 1);
+          const W = Math.max(280, box.clientWidth - 16), dpr = Math.min(3, Math.max(2, window.devicePixelRatio || 1));
           for (let n = 1; n <= doc.numPages; n++) {
             const pg = await doc.getPage(n); if (my !== vTok) return;
             const v0 = pg.getViewport({ scale: 1 }), sc = W / v0.width, v = pg.getViewport({ scale: sc * dpr }), c = document.createElement('canvas');
@@ -9710,6 +9729,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') vMenuClose()
 window.addEventListener('scroll', vMenuClose, { passive: true }); window.addEventListener('resize', vMenuClose);
 document.addEventListener('change', e => { const t = e.target; if (t.id === 'v-in') { const l = [...t.files]; t.value = ''; if (l.length) vUpload(l); } });
 document.addEventListener('input', e => { if (e.target.id === 'v-q') { V.q = e.target.value; vGrid(); } });
+/* لا يُنقل التركيز إلى أول زر في النافذة عند فتحها بالفأرة أو اللمس، فلا يظهر إطار التركيز الأحمر */
+{ let kb = false; addEventListener('keydown', () => { kb = true; }, true); addEventListener('pointerdown', () => { kb = false; }, true);
+  const o = HTMLDialogElement.prototype.showModal; HTMLDialogElement.prototype.showModal = function () { o.apply(this, arguments); if (!kb) { const a = document.activeElement; if (a && this.contains(a) && /^(BUTTON|A)$/.test(a.tagName)) a.blur(); } }; }
 /* تعطيل التكبير بالقرص ليبدو كتطبيق (آيفون) */
 ['gesturestart', 'gesturechange', 'gestureend'].forEach(n => document.addEventListener(n, e => e.preventDefault(), { passive: false }));
 window.addEventListener('hashchange', () => { const p = ['history', 'mine', 'toyota', 'quote', 'vault'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'nissan'; if (p !== page) { page = p; render(); } });
@@ -9810,7 +9832,7 @@ function qpvOpen() {
   document.addEventListener('pointerdown', e => { const h = e.target.closest && e.target.closest('#qpv-f .gh'); if (!h || e.target.closest('button')) return; const el = h.parentElement; if (el.classList.contains('max')) return;
     const r = el.getBoundingClientRect(); drag = { el, dx: e.clientX - r.left, dy: e.clientY - r.top, id: e.pointerId }; el.style.inset = 'auto'; el.style.left = r.left + 'px'; el.style.top = r.top + 'px'; el.style.right = 'auto'; el.style.bottom = 'auto'; try { h.setPointerCapture(e.pointerId); } catch (x) { } e.preventDefault(); });
   document.addEventListener('pointermove', e => { if (!drag) return; const el = drag.el, w = el.offsetWidth, h = el.offsetHeight; let x = e.clientX - drag.dx, y = e.clientY - drag.dy;
-    x = Math.max(4 - w + 80, Math.min(innerWidth - 80, x)); y = Math.max(0, Math.min(innerHeight - 40, y)); el.style.left = x + 'px'; el.style.top = y + 'px'; });
+    x = Math.max(4, Math.min(innerWidth - w - 4, x)); y = Math.max(4, Math.min(innerHeight - h - 4, y)); if (innerWidth - w - 4 < 4) x = 4; if (innerHeight - h - 4 < 4) y = 4; el.style.left = x + 'px'; el.style.top = y + 'px'; });
   const end = () => { drag = null; };
   document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end); }
 
@@ -9818,7 +9840,6 @@ function qpvOpen() {
 const SECS = [['cmp', 'المقارنة'], ['history', 'العروض السابقة'], ['mine', 'عروضي'], ['quote', 'عرض سعر'], ['vault', 'المخزن'], ['gov', 'الدوائر الحكومية'], ['acc', 'النظام المحاسبي']];
 const ME_KEY = 'usool.me';
 /* حسابات لا تظهر في واجهة التطبيق (حساب المالك الشخصي) */
-const HIDE_ACC = ['hatimwork4@gmail.com'];
 let ME = (() => { try { return JSON.parse(lsGet(ME_KEY) || 'null') || { role: 'user', perms: {} }; } catch (e) { return { role: 'user', perms: {} }; } })();
 const allowed = k => ME.role === 'admin' || !ME.perms || ME.perms[k] !== false;
 const pageKey = p => (p === 'nissan' || p === 'toyota') ? 'cmp' : p;
@@ -9853,7 +9874,7 @@ applyPerms(); meLoad();
       if (lastCred) { const cu = others.find(u => u.email === lastCred.email); if (cu) empOpen.add(cu.user_id); }
       b.innerHTML = addForm + '<p class="note" style="margin-top:0">الحساب الرئيسي يتحكم في صلاحيات بقية الحسابات: فعّل الأقسام المسموح بها لكل حساب، وألغِ التفعيل لسحب الصلاحية. يسري التغيير عند فتح الحساب الآخر للتطبيق من جديد.</p>'
         + mains.map(u => `<div class="sup adm"><div class="un">الحساب الرئيسي</div><div class="ue">${esc(u.email || '')}</div></div>`).join('')
-        + (others.length ? others.map(u => `<div class="sup${empOpen.has(u.user_id) ? '' : ' shut'}" data-u="${esc(u.user_id)}" data-e="${esc(u.email || '')}"><div class="uh" role="button" tabindex="0" aria-expanded="${empOpen.has(u.user_id)}"><div class="un">${esc(u.name || idShow(u.email))}</div><svg class="ch" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div><div class="ub"><div class="ue" style="margin-top:6px">رقم الجوال: <b dir="ltr">${esc(idShow(u.email))}</b></div>${credCard(u.email)}<div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div><div class="ua"><button type="button" class="btn sm" data-adm="pw">كلمة مرور جديدة</button><button type="button" class="btn sm link" data-adm="del">حذف الحساب</button></div></div></div>`).join('') : '<p class="note">لا يوجد موظفون بعد. أضف موظفًا من النموذج أعلاه.</p>');
+        + (others.length ? others.map(u => `<div class="sup${empOpen.has(u.user_id) ? '' : ' shut'}" data-u="${esc(u.user_id)}" data-e="${esc(u.email || '')}"><div class="uh" role="button" tabindex="0" aria-expanded="${empOpen.has(u.user_id)}"><div class="un">${esc(u.name || idShow(u.email))}</div><svg class="ch" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div><div class="ub"><div class="ue" style="margin-top:6px">رقم الجوال: <b dir="ltr">${esc(idShow(u.email))}</b></div>${credCard(u.email)}<div class="pl">${SECS.map(([k, n]) => `<label><input type="checkbox" data-k="${k}" ${!u.perms || u.perms[k] !== false ? 'checked' : ''}>${n}</label>`).join('')}</div><div class="ua"><button type="button" class="btn sm" data-adm="imp">الدخول بحسابه</button><button type="button" class="btn sm" data-adm="pw">كلمة مرور جديدة</button><button type="button" class="btn sm link" data-adm="del">حذف الحساب</button></div></div></div>`).join('') : '<p class="note">لا يوجد موظفون بعد. أضف موظفًا من النموذج أعلاه.</p>');
     } catch (e) { b.innerHTML = '<p class="note" style="color:var(--bad)">تعذر تحميل الحسابات. تأكد من تنفيذ ملف perms.sql في Supabase. (' + esc(String((e && e.message) || e).slice(0, 120)) + ')</p>'; } };
   document.addEventListener('click', e => { if (e.target.closest('[data-gear]')) { if (!d) { d = document.createElement('dialog'); d.id = 'set-d'; d.innerHTML = '<div class="h"><b>الإعدادات</b><button class="btn sm" type="button" data-sx="1">إغلاق</button></div><div class="b"></div><div class="sf"><span class="st" id="set-st"></span><span><button class="btn sm" type="button" id="pw-open">تغيير كلمة المرور</button> <button class="btn sm link" type="button" id="acct-out">تسجيل الخروج</button></span></div>'; document.body.appendChild(d); d.addEventListener('reloadlist', () => load()); themeSet(themeGet());
       d.addEventListener('click', ev => { if (ev.target === d || ev.target.closest('[data-sx]')) d.close(); });
@@ -9884,6 +9905,14 @@ document.addEventListener('click', async ev => {
       const name = dlg.querySelector('#ae-n').value.trim(), email = (() => { const d = dlg.querySelector('#ae-e').value.replace(/[^0-9]/g, '').replace(/^(966|00966|0)+/, ''); return /^5\d{8}$/.test(d) ? '966' + d + PH_DOM : ''; })(), pw = dlg.querySelector('#ae-p').value;
       if (!email || pw.length < 8) { toast(!email ? 'رقم الجوال غير صحيح. اكتب 9 أرقام تبدأ بـ 5، مثل 05xxxxxxxx' : 'كلمة المرور 8 أحرف على الأقل'); t.disabled = false; return; }
       await adm({ action: 'create', name, email, password: pw }); lastCred = { title: 'تم إنشاء الحساب بنجاح', email, pw }; toast('أُنشئ الحساب');
+    } else if (act === 'imp') {
+      const card = t.closest('.sup'), nm = card.querySelector('.un').textContent;
+      if (!confirm('الدخول بحساب «' + nm + '»؟ ستتصفح التطبيق بصلاحياته، وتستطيع العودة إلى حسابك من الشريط الأحمر أعلى الصفحة.')) { t.disabled = false; return; }
+      const r = await adm({ action: 'impersonate', id: card.dataset.u });
+      const j = await cloud.http('/auth/v1/verify', { method: 'POST', body: JSON.stringify({ type: 'magiclink', token_hash: r.token_hash }) }, false);
+      if (!j || !j.access_token) throw new Error('تعذر الدخول بالحساب');
+      const back = cloud.sess; cloud.setSess(j); cloud.sess.mc = false; lsSet(SESS_KEY, JSON.stringify(cloud.sess));
+      lsSet(IMP_KEY, JSON.stringify({ back, name: nm })); lsSet(ME_KEY, 'null'); cloud.last = new Map(); cloud.persist(); location.reload(); return;
     } else if (act === 'pw') {
       const card = t.closest('.sup'), pw = genPw(); if (!confirm('تعيين كلمة مرور جديدة لهذا الموظف؟ ستتوقف كلمته الحالية.')) { t.disabled = false; return; }
       await adm({ action: 'setpw', id: card.dataset.u, password: pw }); lastCred = { title: 'تم تعيين كلمة مرور جديدة', email: card.dataset.e, pw };
@@ -9916,7 +9945,14 @@ function pwOpen(force) {
   if (!d.open) d.showModal();
 }
 document.addEventListener('click', e => { if (e.target.closest('#pw-open')) pwOpen(false); });
-const mcCheck = () => { if (typeof cloud !== 'undefined' && cloud.sess && cloud.sess.mc) { const d = document.getElementById('pw-d'); if (!d || !d.open) pwOpen(true); } };
+/* الدخول بحساب موظف (للحساب الرئيسي): شريط أحمر ثابت للعودة إلى حساب المالك */
+const IMP = (() => { try { return JSON.parse(lsGet(IMP_KEY) || 'null'); } catch (e) { return null; } })();
+if (IMP && IMP.back) {
+  const bar = document.createElement('div'); bar.id = 'imp-bar'; bar.innerHTML = '<span>تتصفح الآن بحساب «' + esc(IMP.name || 'موظف') + '»</span><button type="button">العودة إلى حسابي</button>';
+  document.body.prepend(bar); document.body.classList.add('impon');
+  bar.querySelector('button').onclick = () => { cloud.sess = IMP.back; lsSet(SESS_KEY, JSON.stringify(IMP.back)); lsSet(IMP_KEY, 'null'); lsSet(ME_KEY, 'null'); cloud.last = new Map(); cloud.persist(); location.reload(); };
+}
+const mcCheck = () => { if (typeof cloud !== 'undefined' && cloud.sess && cloud.sess.mc && !IMP) { const d = document.getElementById('pw-d'); if (!d || !d.open) pwOpen(true); } };
 setInterval(mcCheck, 1500);
 
 /* تفاصيل الحساب: الاسم والبريد أو الجوال والدور */
