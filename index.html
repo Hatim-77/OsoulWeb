@@ -520,7 +520,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
     <div class="sidebot"><button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
-    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 4.5</div></div></div>
+    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 4.6</div></div></div>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -9873,11 +9873,25 @@ try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) &&
 
 /* ---------- الدوائر الحكومية: قائمة مواقع تُفتح داخل التطبيق ---------- */
 { const GOV = [
-  ['وزارة الاستثمار', 'https://misa.gov.sa'], ['وزارة التجارة', 'https://mc.gov.sa'], ['الاستعلام عن متجر إلكتروني موثّق', 'https://eauthenticate.saudibusiness.gov.sa/inquiry'], ['هيئة الزكاة والضريبة والجمارك', 'https://zatca.gov.sa'],
-  ['وزارة الموارد البشرية والتنمية الاجتماعية', 'https://hrsd.gov.sa'], ['منصة قوى', 'https://qiwa.sa'], ['أبشر', 'https://www.absher.sa'], ['مقيم', 'https://muqeem.sa'],
-  ['منصة بلدي', 'https://balady.gov.sa'], ['المؤسسة العامة للتأمينات الاجتماعية', 'https://gosi.gov.sa'],
-  ['منصة مدد', 'https://mudad.com.sa'], ['فسح', 'https://fasah.zatca.gov.sa'], ['غرفة جدة', 'https://www.jcci.org.sa'], ['وزارة النقل والخدمات اللوجستية', 'https://mot.gov.sa'],
-  ['وزارة الصناعة والثروة المعدنية', 'https://mim.gov.sa'], ['الهيئة السعودية للمواصفات والمقاييس والجودة', 'https://saso.gov.sa'], ['وزارة العدل (ناجز)', 'https://najiz.sa'], ['النفاذ الوطني الموحد', 'https://www.iam.gov.sa'], ['منصة معروف', 'https://maroof.sa'], ['وزارة الداخلية', 'https://moi.gov.sa']
+  ['وزارة التجارة', 'https://mc.gov.sa'],
+  ['هيئة الزكاة والضريبة والجمارك', 'https://zatca.gov.sa'],
+  ['فسح', 'https://fasah.zatca.gov.sa'],
+  ['منصة قوى', 'https://qiwa.sa'],
+  ['منصة مدد', 'https://mudad.com.sa'],
+  ['المؤسسة العامة للتأمينات الاجتماعية', 'https://gosi.gov.sa'],
+  ['منصة بلدي', 'https://balady.gov.sa'],
+  ['غرفة جدة', 'https://www.jcci.org.sa'],
+  ['أبشر', 'https://www.absher.sa'],
+  ['مقيم', 'https://muqeem.sa'],
+  ['وزارة الموارد البشرية والتنمية الاجتماعية', 'https://hrsd.gov.sa'],
+  ['وزارة الاستثمار', 'https://misa.gov.sa'],
+  ['الهيئة السعودية للمواصفات والمقاييس والجودة', 'https://saso.gov.sa'],
+  ['وزارة الصناعة والثروة المعدنية', 'https://mim.gov.sa'],
+  ['وزارة النقل والخدمات اللوجستية', 'https://mot.gov.sa'],
+  ['وزارة العدل (ناجز)', 'https://najiz.sa'],
+  ['النفاذ الوطني الموحد', 'https://www.iam.gov.sa'],
+  ['منصة معروف', 'https://maroof.sa'],
+  ['وزارة الداخلية', 'https://moi.gov.sa']
 ];
   let d = document.getElementById('gov-d');
   const mk = () => { d = document.createElement('dialog'); d.id = 'gov-d'; document.body.appendChild(d);
