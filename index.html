@@ -209,7 +209,7 @@ td.p .u{unicode-bidi:isolate;direction:ltr;display:inline-block;font-size:11.5px
 .paste{margin-top:14px;text-align:start}
 .paste textarea{min-height:110px}
 dialog{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(760px,calc(100% - 24px))}
-dialog::backdrop{background:rgba(5,8,10,.65)}html:has(dialog[open]),html:has(dialog[open]) body{overflow:hidden!important;height:100%;overscroll-behavior:none}dialog[open]{overscroll-behavior:contain}
+dialog::backdrop{background:rgba(5,8,10,.65)}dialog[open]{overscroll-behavior:contain}
 #offer{width:min(980px,calc(100% - 20px))}
 #offer .b{padding:12px 16px}
 #offer .tw{max-height:62vh}
@@ -489,7 +489,7 @@ dialog:modal{inset-block:env(safe-area-inset-top) env(safe-area-inset-bottom)}di
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.vc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}.vt{display:flex;align-items:center;justify-content:center;height:110px;background:#0f1113;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0}.vt img{width:100%;height:100%;object-fit:cover}.vx{font-weight:800;font-size:20px;color:#9aa0a8;letter-spacing:1px}.vn{font-size:13px;padding:6px 8px}.vm{font-size:11.5px;color:#8a8f96}.vb{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 #v-view{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(960px,calc(100vw - 20px));max-width:none}#v-view[open]{display:flex;flex-direction:column;height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}#v-view .h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}#v-view .h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#v-view .b{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}#v-view::backdrop{background:rgba(0,0,0,.65)}.vpdf{width:100%;height:100%;border:0;background:#fff}.vimg{max-width:100%;max-height:100%;object-fit:contain}
 .impon{padding-top:38px}#imp-bar{position:fixed;top:0;inset-inline:0;z-index:100000;height:38px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 12px;padding-top:env(safe-area-inset-top);box-sizing:content-box;background:#d8332a;color:#fff;font-size:13.5px;font-weight:700}#imp-bar button{background:#fff;color:#b3261e;border:0;border-radius:8px;font:inherit;font-weight:800;font-size:13px;padding:6px 12px;cursor:pointer}.impon .brand{top:calc(38px + env(safe-area-inset-top))!important}
-.vtip{margin:8px 0 0;font-size:12.5px;color:var(--ink3,#7d8590);line-height:1.7}.vcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:10px 0 0}.vcr{background:none;border:0;color:var(--ink2);font:inherit;font-size:14px;padding:6px 8px;border-radius:8px;cursor:pointer}.vcr:hover{background:var(--panel2)}.vcr.on{color:var(--ink);font-weight:700}.vcr.drop{background:rgba(63,178,127,.2)}.vcrumb .sep{color:var(--ink3,#7d8590)}
+.vtip{margin:10px 0 16px;font-size:12.5px;color:var(--ink3,#7d8590);line-height:1.7}.vcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:10px 0 0}.vcr{background:none;border:0;color:var(--ink2);font:inherit;font-size:14px;padding:6px 8px;border-radius:8px;cursor:pointer}.vcr:hover{background:var(--panel2)}.vcr.on{color:var(--ink);font-weight:700}.vcr.drop{background:rgba(63,178,127,.2)}.vcrumb .sep{color:var(--ink3,#7d8590)}
 .vr{display:flex;align-items:center;gap:4px;min-width:0}.vn2{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vdots{flex:none;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:none;border:0;border-radius:8px;color:var(--ink2);cursor:pointer;padding:0}.vdots:hover{background:var(--panel2);color:var(--ink)}.vdots svg{width:18px;height:18px;fill:currentColor}.vdots.tb{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:10px}
 .vt.fd{color:#e0a73b}.vt.fd svg{width:54px;height:54px;fill:rgba(224,167,59,.18);stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}.vfc.drop{border-color:#3fb27f;background:rgba(63,178,127,.12)}
 /* إطار أحمر حول أي خيار يمرّ عليه المؤشر (أو يُلمس) في كل البرنامج */
@@ -518,7 +518,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
     <div class="sidebot"><button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
-    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 3.6</div></div></div>
+    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="fs-b" hidden title="ملء الشاشة (للخروج اضغط Esc)" aria-label="ملء الشاشة"><svg viewBox="0 0 24 24" aria-hidden="true" id="fs-i"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 4.1</div></div></div>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -565,8 +565,8 @@ const oemRaw = v => {
 };
 const codeKey = s => oemRaw(s) || normNo(s);
 const headOf = d => (normAr(d).split(/\s+/)[0] || '').replace(/^ال/, '');
-const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'روماني': 'رمان', 'رومانه': 'رمان', 'رومانات': 'رمان', 'رماني': 'رمان', 'رمانه': 'رمان', 'رمانات': 'رمان', 'باكم': 'باكم', 'باكمات': 'باكم', 'باكما': 'باكم', 'مساعدات': 'مساعد' };
-const CAT_NAME = { 'مجموعه': 'مجموعة قزاز', 'باكم': 'الباكمات', 'رمان': 'الرمانات', 'قماش': 'الأقمشة', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الفحمات', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك', 'شيال': 'الشيالات' };
+const CAT_MAP = { 'مقصات': 'مقص', 'فلترهواء': 'فلتر', 'فحمه': 'فحمات', 'قماش': 'فحمات', 'قماشه': 'فحمات', 'قماشات': 'فحمات', 'اقمشه': 'فحمات', 'اقمشات': 'فحمات', 'جلدهعكس': 'جلده', 'تماتيك': 'اتماتيك', 'رومان': 'رمان', 'روماني': 'رمان', 'رومانه': 'رمان', 'رومانات': 'رمان', 'رماني': 'رمان', 'رمانه': 'رمان', 'رمانات': 'رمان', 'باكم': 'باكم', 'باكمات': 'باكم', 'باكما': 'باكم', 'مساعدات': 'مساعد' };
+const CAT_NAME = { 'مجموعه': 'مجموعة قزاز', 'باكم': 'الباكمات', 'رمان': 'الرمانات', 'مقص': 'المقصات', 'مساعد': 'المساعدات', 'عكس': 'العكوس', 'علبه': 'العلب', 'فلنجه': 'الفلنجات', 'كرسي': 'الكراسي', 'طرمبه': 'الطرمبات', 'هوب': 'الهوبات', 'ذراع': 'الأذرع', 'دينمو': 'الدينمو', 'فحمات': 'الأقمشة', 'جلبه': 'الجلب', 'سلف': 'السلف', 'فلتر': 'الفلاتر', 'مسمار': 'المسامير', 'حساس': 'الحساسات', 'شريحه': 'الشرائح', 'كويل': 'الكويلات', 'جلده': 'الجلد', 'لديتر': 'الرديترات', 'شداد': 'الشدادات', 'بكره': 'البكرات', 'صحن': 'الصحون', 'كمبروسر': 'الكمبروسرات', 'سلندر': 'السلندرات', 'دسك': 'الدسكات', 'سير': 'السيور', 'مروحه': 'المراوح', 'اتماتيك': 'الاتماتيك', 'شيال': 'الشيالات' };
 const EN_CAT = { arm: 'مقص', arms: 'مقص', shock: 'مساعد', absorber: 'مساعد', strut: 'مساعد', filter: 'فلتر', pump: 'طرمبه', pad: 'فحمات', pads: 'فحمات', disc: 'دسك', rotor: 'دسك', belt: 'سير', radiator: 'لديتر', starter: 'سلف', alternator: 'دينمو', coil: 'كويل', sensor: 'حساس', fan: 'مروحه', compressor: 'كمبروسر', tensioner: 'شداد', pulley: 'بكره', bush: 'جلبه', bushing: 'جلبه', cylinder: 'سلندر', clutch: 'دسك', screw: 'مسمار', bolt: 'مسمار', gasket: 'جلده', seal: 'جلده' };
 const ORIG_W = /^(ساكا|ساكه|sacaa|saka|ياباني|يابانى|ياباني|يابان|ماليزي|ماليزيا|تايواني|تايوان|صيني|صين|كوري|كوريا|تايلندي|اصلي|اصليه|تجاري|تجاريه|وكاله|اورجنال|اورجينال|جنيون|نوعيه|درجه|اولي|ثاني|ترو|حديث|جديد|اصل|اقتصادي|ممتاز|وارد|اوروبي|المانيا|المانى|الماني|امريكي|هندي|ترکي|تركي)$/;
 const catOf = d => {
@@ -1298,6 +1298,23 @@ $('#reset').addEventListener('close', () => { if (recov) setTimeout(gate, 0); })
 $('#login').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
 gate();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) cloud.run(); });
+/* ملء الشاشة للابتوب: يخفي شريط المتصفح بالكامل، وزر Esc يخرج منه */
+(() => {
+  const b = document.getElementById('fs-b'); if (!b) return;
+  const ok = !!(document.fullscreenEnabled && document.documentElement.requestFullscreen) && matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if (!ok) return; b.hidden = false;
+  const icon = () => { const i = document.getElementById('fs-i'); if (i) i.innerHTML = document.fullscreenElement ? '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>' : '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'; b.title = document.fullscreenElement ? 'الخروج من ملء الشاشة' : 'ملء الشاشة (للخروج اضغط Esc)'; };
+  b.addEventListener('click', () => { try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen({ navigationUI: 'hide' }); } catch (_) { } });
+  document.addEventListener('fullscreenchange', icon);
+})();
+/* قفل تمرير الصفحة خلف النوافذ مع حفظ مكانك فيها: عند الإغلاق تعود الصفحة إلى الموضع نفسه */
+(() => {
+  let n = 0, y = 0; const B = document.body;
+  const unlock = () => { if (!n || --n) return; B.style.position = B.style.top = B.style.left = B.style.right = B.style.width = ''; window.scrollTo(0, y); };
+  const lock = () => { if (n++) return; y = window.scrollY; B.style.position = 'fixed'; B.style.top = (-y) + 'px'; B.style.left = '0'; B.style.right = '0'; B.style.width = '100%'; };
+  const o = HTMLDialogElement.prototype.showModal;
+  HTMLDialogElement.prototype.showModal = function () { const was = this.open; o.apply(this, arguments); if (!was && this.open) { lock(); this.addEventListener('close', unlock, { once: true }); } };
+})();
 /* المزامنة تتكيّف مع نشاط المستخدم: سريعة أثناء العمل، وأبطأ عند الخمول، لتقليل استهلاك الإنترنت وحدّ Supabase */
 let lastAct = Date.now();
 const idleMs = () => Date.now() - lastAct;
@@ -9581,7 +9598,7 @@ function viewVault() {
   if (!cloud.sess) return head + '<p class="sub">المخزن لحفظ ملفاتك وصورك وتصفحها من أي جهاز. سجّل الدخول أولًا.</p><button class="btn primary" id="acct-in">تسجيل الدخول</button>';
   return head + `<div class="tool"><div class="grow"><input id="v-q" type="search" placeholder="ابحث باسم ملف أو مجلد" aria-label="بحث في المخزن" value="${esc(V.q)}"></div>
     <button class="btn primary" data-vact="pick">رفع ملفات</button><button type="button" class="vdots tb" data-vact="menu" data-k="g" aria-label="خيارات المخزن" title="خيارات">${ICO.dots}</button><input type="file" id="v-in" multiple hidden></div>
-  <nav class="vcrumb" id="v-crumb" aria-label="مسار المجلد"></nav><p class="vtip">اضغط على أي ملف لفتحه (صور وملفات PDF تُفتح داخل التطبيق). ومن زر ⋮ بجانب كل ملف أو مجلد: إعادة التسمية والنقل والحذف وإنشاء مجلدات فرعية.</p><div id="v-grid"></div>`;
+  <nav class="vcrumb" id="v-crumb" aria-label="مسار المجلد"></nav><p class="vtip">اضغط على الملف لفتحه داخل التطبيق، ومن زر ⋮ تجد: إعادة التسمية والنقل والحذف.</p><div id="v-grid"></div>`;
 }
 function vCrumb() {
   const c = $('#v-crumb'); if (!c) return;
