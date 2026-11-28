@@ -310,7 +310,7 @@ html[data-theme="light"] dialog::backdrop{background:rgba(20,22,25,.45)}
 #login .seg{display:none!important}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#login::backdrop,#reset::backdrop{background:rgba(8,9,10,.92)}#login,#reset{background:var(--panel)}}
 #lg-fg{border:0;background:transparent;color:var(--accent,#ec4a40);padding:6px 0;margin-top:6px;cursor:pointer;font-family:inherit;font-size:13.5px;text-decoration:underline}
-#lg-fg[hidden]{display:none}#lg-fg,#lg-fg:hover,#lg-fg:focus,#lg-fg:focus-visible,#lg-fg:active{outline:0!important;box-shadow:none!important;border:0!important;background:transparent!important}#lg-fg.busy{text-decoration:none;opacity:.8;cursor:default}#lg-fg .sp{display:inline-block;width:13px;height:13px;margin-inline-end:8px;vertical-align:-2px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:lgsp .7s linear infinite}@keyframes lgsp{to{transform:rotate(360deg)}}
+#lg-fg[hidden]{display:none}#lg-fg,#lg-fg:hover,#lg-fg:focus,#lg-fg:focus-visible,#lg-fg:active{outline:0!important;box-shadow:none!important;border:0!important;background:transparent!important}#lg-fg:disabled{opacity:.65;text-decoration:none;cursor:default}#lg-fg.busy{text-decoration:none;opacity:.8;cursor:default}#lg-fg .sp{display:inline-block;width:13px;height:13px;margin-inline-end:8px;vertical-align:-2px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:lgsp .7s linear infinite}@keyframes lgsp{to{transform:rotate(360deg)}}
 #login input:focus,#reset input:focus{outline:2px solid var(--accent);outline-offset:1px}
 #login .err,#reset .err{color:var(--bad);font-size:13.5px;min-height:20px;margin-top:10px}
 #login .f,#reset .f{flex-wrap:wrap}
@@ -518,7 +518,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
     <div class="sidebot"><button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
-    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 2.8</div></div></div>
+    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 2.9</div></div></div>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -1247,19 +1247,30 @@ $('#login').addEventListener('close', () => { if (needLogin()) setTimeout(gate, 
 $('#lg-m-in').addEventListener('click', () => lgMode(false));
 $('#lg-m-new').addEventListener('click', () => lgMode(true));
 $('#lg-go').addEventListener('click', doLogin);
+let fgTimer = null;
+function fgCool(sec) {
+  const fg = $('#lg-fg'); if (!fg) return; clearInterval(fgTimer);
+  const end = Date.now() + sec * 1000; try { localStorage.setItem('usool-fg-end', String(end)); } catch (_) {}
+  const tick = () => { const left = Math.ceil((end - Date.now()) / 1000);
+    if (left <= 0) { clearInterval(fgTimer); fg.disabled = false; fg.textContent = 'نسيت كلمة المرور؟'; try { localStorage.removeItem('usool-fg-end'); } catch (_) {} return; }
+    fg.disabled = true; fg.textContent = 'يمكنك إعادة الإرسال بعد ' + left + ' ثانية'; };
+  tick(); fgTimer = setInterval(tick, 500);
+}
+try { const t = +localStorage.getItem('usool-fg-end'); if (t > Date.now()) fgCool(Math.ceil((t - Date.now()) / 1000)); } catch (_) {}
 $('#lg-fg').addEventListener('click', async () => {
   const e = $('#lg-e').value.trim(), er = $('#lg-err'); er.textContent = '';
   if (!e) { er.textContent = 'اكتب رقم الجوال أو بريدك أولًا ثم اضغط «نسيت كلمة المرور».'; $('#lg-e').focus(); return; }
   const fg = $('#lg-fg'), fgT = fg.textContent; fg.disabled = true; fg.classList.add('busy'); fg.innerHTML = '<span class="sp"></span>جارٍ إرسال الرابط…';
+  let cool = false;
   const fgDone = () => { fg.disabled = false; fg.classList.remove('busy'); fg.textContent = fgT; if (document.activeElement === fg) fg.blur(); };
   try {
     if (!e.includes('@')) {
       try { await cloud.http('/functions/v1/phone-auth', { method: 'POST', headers: { Authorization: 'Bearer ' + CLOUD.key }, body: JSON.stringify({ action: 'recover', phone: e, redirect: location.origin + location.pathname }) }, false); }
       catch (x) { if (x.status === 404 || !x.status) { er.textContent = 'اطلب من مسؤول الحساب تعيين كلمة مرور جديدة لك.'; fgDone(); return; } throw x; }
     } else await cloud.http('/auth/v1/recover?redirect_to=' + encodeURIComponent(location.origin + location.pathname), { method: 'POST', body: JSON.stringify({ email: e }) }, false);
-    $('#lg-h').textContent = e.includes('@') ? 'إن كان هذا البريد مسجّلًا فقد أُرسل إليه رابط لتعيين كلمة مرور جديدة. افتح الرسالة واضغط الرابط (وتحقق من البريد غير الهام).' : 'إن كان لهذا الرقم بريد مسجّل فقد أُرسل إليه رابط لتعيين كلمة مرور جديدة. افتح الرسالة واضغط الرابط (وتحقق من البريد غير الهام). وإن لم يصلك شيء فاطلب من مسؤول الحساب تعيين كلمة مرور جديدة.'; }
-  catch (x) { er.textContent = /rate|seconds|many/i.test(String(x.message)) ? 'طُلب رابط قبل قليل. انتظر دقيقة ثم أعد المحاولة.' : 'تعذر إرسال الرابط. تحقق من البريد والاتصال ثم أعد المحاولة.'; }
-  fgDone();
+    $('#lg-h').textContent = e.includes('@') ? 'إن كان هذا البريد مسجّلًا فقد أُرسل إليه رابط لتعيين كلمة مرور جديدة. افتح الرسالة واضغط الرابط (وتحقق من البريد غير الهام).' : 'إن كان لهذا الرقم بريد مسجّل فقد أُرسل إليه رابط لتعيين كلمة مرور جديدة. افتح الرسالة واضغط الرابط (وتحقق من البريد غير الهام). وإن لم يصلك شيء فاطلب من مسؤول الحساب تعيين كلمة مرور جديدة.'; cool = true; }
+  catch (x) { const rl = /rate|seconds|many/i.test(String(x.message)) || x.status === 429; if (rl) cool = true; er.textContent = rl ? 'طُلب رابط قبل قليل. انتظر دقيقة ثم أعد المحاولة.' : 'تعذر إرسال الرابط. تحقق من البريد والاتصال ثم أعد المحاولة.'; }
+  fgDone(); if (cool) fgCool(60);
 });
 async function doReset() {
   const p = $('#rs-p').value, er = $('#rs-err'); er.textContent = ''; if (!recov) return;
