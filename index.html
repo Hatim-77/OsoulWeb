@@ -190,6 +190,8 @@ tbody tr:hover td:first-child{background:#192026}}
 .qpaper tbody tr:hover td,.qpaper tbody tr:hover td:first-child{background:transparent}
 .qpaper .qtb tbody tr:not(.qg):not(.qb) td,.qpaper .qtb tbody tr:not(.qg):not(.qb):hover td,.qpaper .qtb tbody tr:not(.qg):not(.qb) td:first-child,.qpaper .qtb tbody tr:not(.qg):not(.qb):hover td:first-child{background:transparent!important}.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even) td,.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even):hover td,.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even) td:first-child,.qpaper .qtb tbody tr:not(.qg):not(.qb):nth-child(even):hover td:first-child{background:#e3e6e9!important}
 td.p{min-width:84px;padding:7px 8px;white-space:normal;line-height:1.3}
+.cat .tw td:first-child>div:first-child{line-height:1.4}.cat .tw td:first-child .no{margin-top:2px;line-height:1.3}
+@media (min-width:761px){.cat .tw th:first-child,.cat .tw td:first-child{min-width:230px;max-width:340px}}
 td.p b{font-variant-numeric:tabular-nums;font-size:17px;white-space:nowrap}
 table.dense td.p{min-width:68px;padding:6px 5px}
 table.dense td.p b{font-size:15.5px}
@@ -518,7 +520,7 @@ td.p .og{font-size:11.5px;color:var(--ink2)}td.p .og.w{color:var(--warn);font-we
     <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
     <div class="sidebot"><button type="button" class="accb" data-acc="1" title="فتح النظام المحاسبي" aria-label="فتح النظام المحاسبي"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>النظام المحاسبي</button>
     <div id="acct" hidden></div>
-    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="fs-b" hidden title="ملء الشاشة (للخروج اضغط Esc)" aria-label="ملء الشاشة"><svg viewBox="0 0 24 24" aria-hidden="true" id="fs-i"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 4.1</div></div></div>
+    <div class="sidefoot"><button type="button" class="gearb ib" id="gear" data-gear="1" hidden title="الإعدادات وصلاحيات الحسابات" aria-label="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3h0a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8v0a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button><button type="button" class="gearb ib" id="thm-b" title="تبديل المظهر: داكن / فاتح" aria-label="تبديل المظهر"><svg viewBox="0 0 24 24" aria-hidden="true" id="thm-i"></svg></button><div class="appver" id="appver" title="رقم إصدار التطبيق على هذا الجهاز">الإصدار 4.5</div></div></div>
   </aside>
   <main class="main">
     <div id="app"></div>
@@ -968,7 +970,7 @@ function viewResults() {
     }).join('');
     const cls = g.pct >= 30 ? 'hi' : (g.pct >= 10 ? 'mid' : 'lo');
     const names = g.best.map(id => files.find(f => f.id === id)).filter(Boolean).map(f => `<span class="bn" style="--c:${colorOf(f)}"><span class="dot"></span>${esc(f.name)}</span>`).join('');
-    return `<tr><td><div><span class="sn">${ix + 1}</span>${esc(g.desc)}</div>${g.no ? `<div class="no"${g.nos && g.nos.size > 1 ? ` title="${esc([...g.nos].join(' | '))}"` : ''}>${esc(g.no)}</div>` : ''}</td>${cells}${files.length > 1 ? `<td class="diff">${g.count > 1 ? `<b>${nf.format(g.diff)}</b> <span class="chip ${cls}">${g.pct.toFixed(0)}%</span>` : '<span class="mut">—</span>'}</td><td>${g.count > 1 ? names : '<span class="mut">—</span>'}</td>` : ''}</tr>`;
+    return `<tr><td><div title="${esc(g.desc)}"><span class="sn">${ix + 1}</span>${esc(g.desc)}</div>${g.no ? `<div class="no"${g.nos && g.nos.size > 1 ? ` title="${esc([...g.nos].join(' | '))}"` : ''}>${esc(g.no)}</div>` : ''}</td>${cells}${files.length > 1 ? `<td class="diff">${g.count > 1 ? `<b>${nf.format(g.diff)}</b> <span class="chip ${cls}">${g.pct.toFixed(0)}%</span>` : '<span class="mut">—</span>'}</td><td>${g.count > 1 ? names : '<span class="mut">—</span>'}</td>` : ''}</tr>`;
   };
   const thead = `<thead><tr><th>الصنف</th>${head}${files.length > 1 ? '<th>الفرق</th><th>الأرخص عند</th>' : ''}</tr></thead>`;
   /* تجميع الأصناف في أقسام: قسم لكل نوع، مغلق افتراضياً */
@@ -1298,15 +1300,6 @@ $('#reset').addEventListener('close', () => { if (recov) setTimeout(gate, 0); })
 $('#login').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
 gate();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) cloud.run(); });
-/* ملء الشاشة للابتوب: يخفي شريط المتصفح بالكامل، وزر Esc يخرج منه */
-(() => {
-  const b = document.getElementById('fs-b'); if (!b) return;
-  const ok = !!(document.fullscreenEnabled && document.documentElement.requestFullscreen) && matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if (!ok) return; b.hidden = false;
-  const icon = () => { const i = document.getElementById('fs-i'); if (i) i.innerHTML = document.fullscreenElement ? '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>' : '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'; b.title = document.fullscreenElement ? 'الخروج من ملء الشاشة' : 'ملء الشاشة (للخروج اضغط Esc)'; };
-  b.addEventListener('click', () => { try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen({ navigationUI: 'hide' }); } catch (_) { } });
-  document.addEventListener('fullscreenchange', icon);
-})();
 /* قفل تمرير الصفحة خلف النوافذ مع حفظ مكانك فيها: عند الإغلاق تعود الصفحة إلى الموضع نفسه */
 (() => {
   let n = 0, y = 0; const B = document.body;
@@ -9880,7 +9873,7 @@ try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) &&
 
 /* ---------- الدوائر الحكومية: قائمة مواقع تُفتح داخل التطبيق ---------- */
 { const GOV = [
-  ['وزارة الاستثمار', 'https://misa.gov.sa'], ['وزارة التجارة', 'https://mc.gov.sa'], ['هيئة الزكاة والضريبة والجمارك', 'https://zatca.gov.sa'],
+  ['وزارة الاستثمار', 'https://misa.gov.sa'], ['وزارة التجارة', 'https://mc.gov.sa'], ['الاستعلام عن متجر إلكتروني موثّق', 'https://eauthenticate.saudibusiness.gov.sa/inquiry'], ['هيئة الزكاة والضريبة والجمارك', 'https://zatca.gov.sa'],
   ['وزارة الموارد البشرية والتنمية الاجتماعية', 'https://hrsd.gov.sa'], ['منصة قوى', 'https://qiwa.sa'], ['أبشر', 'https://www.absher.sa'], ['مقيم', 'https://muqeem.sa'],
   ['منصة بلدي', 'https://balady.gov.sa'], ['المؤسسة العامة للتأمينات الاجتماعية', 'https://gosi.gov.sa'],
   ['منصة مدد', 'https://mudad.com.sa'], ['فسح', 'https://fasah.zatca.gov.sa'], ['غرفة جدة', 'https://www.jcci.org.sa'], ['وزارة النقل والخدمات اللوجستية', 'https://mot.gov.sa'],
